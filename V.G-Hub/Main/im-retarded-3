@@ -10,13 +10,13 @@ local function MakeDraggable(ClickObject, Object)
 	local DragInput = nil
 	local DragStart = nil
 	local StartPosition = nil
-	
+
 	ClickObject.InputBegan:Connect(function(Input)
 		if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 			Dragging = true
 			DragStart = Input.Position
 			StartPosition = Object.Position
-			
+
 			Input.Changed:Connect(function()
 				if Input.UserInputState == Enum.UserInputState.End then
 					Dragging = false
@@ -24,13 +24,13 @@ local function MakeDraggable(ClickObject, Object)
 			end)
 		end
 	end)
-	
+
 	ClickObject.InputChanged:Connect(function(Input)
 		if Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch then
 			DragInput = Input
 		end
 	end)
-	
+
 	UserInputService.InputChanged:Connect(function(Input)
 		if Input == DragInput and Dragging then
 			local Delta = Input.Position - DragStart
@@ -41,7 +41,7 @@ end
 
 function Library:CreateWindow(Config, Parent)
 	local WindowInit = {}
-    local Folder = game:GetObjects("rbxassetid://7141683860")[1]
+	local Folder = game:GetObjects("rbxassetid://7141683860")[1]
 	local Screen = Folder.Bracket:Clone()
 	local Main = Screen.Main
 	local Holder = Main.Holder
@@ -221,7 +221,7 @@ function Library:CreateWindow(Config, Parent)
 			Section.Container.ListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
 				Section.Size = UDim2.new(1,0,0,Section.Container.ListLayout.AbsoluteContentSize.Y + 15)
 			end)
-			
+
 			function SectionInit:CreateLabel(Name)
 				local Label = Folder.Label:Clone()
 				Label.Name = Name .. " L"
@@ -317,7 +317,7 @@ function Library:CreateWindow(Config, Parent)
 				Toggle.Parent = Section.Container
 				Toggle.Title.Text = Name
 				Toggle.Size = UDim2.new(1,-10,0,Toggle.Title.TextBounds.Y + 5)
-				
+
 				table.insert(Library.ColorTable, Toggle.Toggle)
 				local ToggleState = false
 
@@ -335,430 +335,430 @@ function Library:CreateWindow(Config, Parent)
 					ToggleState = not ToggleState
 					SetState(ToggleState)
 				end)
-        
-        function ToggleInit:SetState(value)
-            if typeof(value) == "boolean" then
-               SetState(value)
-            end
-        end)
+
+				function ToggleInit:SetState(value)
+					if typeof(value) == "boolean" then
+						SetState(value)
+					end
+				end
 
 				function ToggleInit:AddToolTip(Name)
-					if tostring(Name):gsub(" ", "") ~= "" then
-						Toggle.MouseEnter:Connect(function()
-							Screen.ToolTip.Text = Name
-							Screen.ToolTip.Size = UDim2.new(0,Screen.ToolTip.TextBounds.X + 5,0,Screen.ToolTip.TextBounds.Y + 5)
-							Screen.ToolTip.Visible = true
-						end)
+	if tostring(Name):gsub(" ", "") ~= "" then
+		Toggle.MouseEnter:Connect(function()
+			Screen.ToolTip.Text = Name
+			Screen.ToolTip.Size = UDim2.new(0,Screen.ToolTip.TextBounds.X + 5,0,Screen.ToolTip.TextBounds.Y + 5)
+			Screen.ToolTip.Visible = true
+		end)
 
-						Toggle.MouseLeave:Connect(function()
-							Screen.ToolTip.Visible = false
-						end)
-					end
-				end
-
-				if Default == nil then
-					function ToggleInit:SetState(State)
-						SetState(State)
-					end
-				else
-					SetState(DefaultLocal)
-				end
-
-				function ToggleInit:GetState(State)
-					return ToggleState
-				end
-
-				function ToggleInit:CreateKeybind(Bind,Callback)
-					local KeybindInit = {}
-					Bind = Bind or "NONE"
-
-					local WaitingForBind = false
-					local Selected = Bind
-					local Blacklist = {"W","A","S","D","Slash","Tab","Backspace","Escape","Space","Delete","Unknown","Backquote"}
-
-					Toggle.Keybind.Visible = true
-					Toggle.Keybind.Text = "[ " .. Bind .. " ]"
-
-					Toggle.Keybind.MouseButton1Click:Connect(function()
-						Toggle.Keybind.Text = "[ ... ]"
-						WaitingForBind = true
-					end)
-
-					Toggle.Keybind:GetPropertyChangedSignal("TextBounds"):Connect(function()
-						Toggle.Keybind.Size = UDim2.new(0,Toggle.Keybind.TextBounds.X,1,0)
-						Toggle.Title.Size = UDim2.new(1,-Toggle.Keybind.Size.X.Offset - 15,1,0)
-					end)
-
-					UserInputService.InputBegan:Connect(function(Input)
-						if WaitingForBind and Input.UserInputType == Enum.UserInputType.Keyboard then
-							local Key = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
-							if not table.find(Blacklist, Key) then
-								Toggle.Keybind.Text = "[ " .. Key .. " ]"
-								Selected = Key
-							else
-								Toggle.Keybind.Text = "[ NONE ]"
-								Selected = "NONE"
-							end
-							WaitingForBind = false
-						elseif Input.UserInputType == Enum.UserInputType.Keyboard then
-							local Key = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
-							if Key == Selected then
-								ToggleState = not ToggleState
-								SetState(ToggleState)
-								if Callback then
-									Callback(Key)
-								end
-							end
-						end
-					end)
-
-					function KeybindInit:SetBind(Key)
-						Toggle.Keybind.Text = "[ " .. Key .. " ]"
-						Selected = Key
-					end
-
-					function KeybindInit:GetBind()
-						return Selected
-					end
-
-					return KeybindInit
-				end
-				return ToggleInit
-			end
-			function SectionInit:CreateSlider(Name, Min, Max, Default, Precise, Callback)
-				local DefaultLocal = Default or 50
-				local SliderInit = {}
-				local Slider = Folder.Slider:Clone()
-				Slider.Name = Name .. " S"
-				Slider.Parent = Section.Container
-				
-				Slider.Title.Text = Name
-				Slider.Slider.Bar.Size = UDim2.new(Min / Max,0,1,0)
-				Slider.Slider.Bar.BackgroundColor3 = Config.Color
-				Slider.Value.PlaceholderText = tostring(Min / Max)
-				Slider.Title.Size = UDim2.new(1,0,0,Slider.Title.TextBounds.Y + 5)
-				Slider.Size = UDim2.new(1,-10,0,Slider.Title.TextBounds.Y + 15)
-				table.insert(Library.ColorTable, Slider.Slider.Bar)
-
-				local GlobalSliderValue = 0
-				local Dragging = false
-				local function Sliding(Input)
-                    local Position = UDim2.new(math.clamp((Input.Position.X - Slider.Slider.AbsolutePosition.X) / Slider.Slider.AbsoluteSize.X,0,1),0,1,0)
-                    Slider.Slider.Bar.Size = Position
-					local SliderPrecise = ((Position.X.Scale * Max) / Max) * (Max - Min) + Min
-					local SliderNonPrecise = math.floor(((Position.X.Scale * Max) / Max) * (Max - Min) + Min)
-                    local SliderValue = Precise and SliderNonPrecise or SliderPrecise
-					SliderValue = tonumber(string.format("%.2f", SliderValue))
-					GlobalSliderValue = SliderValue
-                    Slider.Value.PlaceholderText = tostring(SliderValue)
-                    Callback(GlobalSliderValue)
-                end
-				local function SetValue(Value)
-					GlobalSliderValue = Value
-					Slider.Slider.Bar.Size = UDim2.new(Value / Max,0,1,0)
-					Slider.Value.PlaceholderText = Value
-					Callback(Value)
-				end
-				Slider.Value.FocusLost:Connect(function()
-					if not tonumber(Slider.Value.Text) then
-						Slider.Value.Text = GlobalSliderValue
-					elseif Slider.Value.Text == "" or tonumber(Slider.Value.Text) <= Min then
-						Slider.Value.Text = Min
-					elseif Slider.Value.Text == "" or tonumber(Slider.Value.Text) >= Max then
-						Slider.Value.Text = Max
-					end
-		
-					GlobalSliderValue = Slider.Value.Text
-					Slider.Slider.Bar.Size = UDim2.new(Slider.Value.Text / Max,0,1,0)
-					Slider.Value.PlaceholderText = Slider.Value.Text
-					Callback(tonumber(Slider.Value.Text))
-					Slider.Value.Text = ""
-				end)
-
-				Slider.InputBegan:Connect(function(Input)
-                    if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-                        Sliding(Input)
-						Dragging = true
-                    end
-                end)
-
-				Slider.InputEnded:Connect(function(Input)
-                    if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-						Dragging = false
-                    end
-                end)
-
-				UserInputService.InputBegan:Connect(function(Input)
-					if Input.KeyCode == Enum.KeyCode.LeftControl then
-						Slider.Value.ZIndex = 4
-					end
-				end)
-
-				UserInputService.InputEnded:Connect(function(Input)
-					if Input.KeyCode == Enum.KeyCode.LeftControl then
-						Slider.Value.ZIndex = 3
-					end
-				end)
-
-				UserInputService.InputChanged:Connect(function(Input)
-					if Dragging and Input.UserInputType == Enum.UserInputType.MouseMovement then
-						Sliding(Input)
-					end
-				end)
-
-				function SliderInit:AddToolTip(Name)
-					if tostring(Name):gsub(" ", "") ~= "" then
-						Slider.MouseEnter:Connect(function()
-							Screen.ToolTip.Text = Name
-							Screen.ToolTip.Size = UDim2.new(0,Screen.ToolTip.TextBounds.X + 5,0,Screen.ToolTip.TextBounds.Y + 5)
-							Screen.ToolTip.Visible = true
-						end)
-
-						Slider.MouseLeave:Connect(function()
-							Screen.ToolTip.Visible = false
-						end)
-					end
-				end
-
-				if Default == nil then
-					function SliderInit:SetValue(Value)
-						GlobalSliderValue = Value
-						Slider.Slider.Bar.Size = UDim2.new(Value / Max,0,1,0)
-						Slider.Value.PlaceholderText = Value
-						Callback(Value)
-					end
-				else
-					SetValue(DefaultLocal)
-				end
-
-				function SliderInit:GetValue(Value)
-					return GlobalSliderValue
-				end
-
-				return SliderInit
-			end
-			function SectionInit:CreateDropdown(Name)
-				local DropdownInit = {}
-				local Dropdown = Folder.Dropdown:Clone()
-				Dropdown.Name = Name .. " D"
-				Dropdown.Parent = Section.Container
-
-				Dropdown.Title.Text = Name
-				Dropdown.Title.Size = UDim2.new(1,0,0,Dropdown.Title.TextBounds.Y + 5)
-				Dropdown.Container.Position = UDim2.new(0,0,0,Dropdown.Title.TextBounds.Y + 5)
-				Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Title.TextBounds.Y + 25)
-
-				local DropdownToggle = false
-
-				Dropdown.MouseButton1Click:Connect(function()
-					DropdownToggle = not DropdownToggle
-					if DropdownToggle then
-						Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y + Dropdown.Title.TextBounds.Y + 30)
-						Dropdown.Container.Holder.Visible = true
-					else
-						Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Title.TextBounds.Y + 25)
-						Dropdown.Container.Holder.Visible = false
-					end
-				end)
-
-				function DropdownInit:AddToolTip(Name)
-					if tostring(Name):gsub(" ", "") ~= "" then
-						Dropdown.MouseEnter:Connect(function()
-							Screen.ToolTip.Text = Name
-							Screen.ToolTip.Size = UDim2.new(0,Screen.ToolTip.TextBounds.X + 5,0,Screen.ToolTip.TextBounds.Y + 5)
-							Screen.ToolTip.Visible = true
-						end)
-
-						Dropdown.MouseLeave:Connect(function()
-							Screen.ToolTip.Visible = false
-						end)
-					end
-				end
-
-				function DropdownInit:AddOption(Name, Callback)
-					local OptionInit = {}
-					local Option = Folder.Option:Clone()
-					Option.Name = Name .. " O"
-					Option.Parent = Dropdown.Container.Holder.Container
-
-					Option.Title.Text = Name
-					Option.BackgroundColor3 = Config.Color
-					Option.Size = UDim2.new(1,0,0,Option.Title.TextBounds.Y + 5)
-					Dropdown.Container.Holder.Size = UDim2.new(1,-5,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y)
-					table.insert(Library.ColorTable, Option)
-
-					Option.MouseButton1Down:Connect(function()
-						Option.BackgroundTransparency = 0
-					end)
-
-					Option.MouseButton1Up:Connect(function()
-						Option.BackgroundTransparency = 1
-					end)
-
-					Option.MouseLeave:Connect(function()
-						Option.BackgroundTransparency = 1
-					end)
-
-					Option.MouseButton1Click:Connect(function()
-						Dropdown.Container.Value.Text = Name
-						Callback(Name)
-					end)
-
-					function OptionInit:SetOption()
-						Dropdown.Container.Value.Text = Name
-						Callback(Name)
-					end
-					function OptionInit:Remove()
-						Option:Destroy()
-						Dropdown.Container.Holder.Size = UDim2.new(1,-5,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y)
-						Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y + Dropdown.Title.TextBounds.Y + 30)
-					end
-					return OptionInit
-				end
-				function DropdownInit:ClearOptions()
-					for _, Option in pairs(Dropdown.Container.Holder.Container:GetChildren()) do
-						if Option:IsA("TextButton") then
-							Option:Destroy()
-						end
-					end
-					Dropdown.Container.Holder.Size = UDim2.new(1,-5,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y)
-					Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y + Dropdown.Title.TextBounds.Y + 30)
-				end
-				function DropdownInit:GetOption()
-					return Dropdown.Container.Value.Text
-				end
-				return DropdownInit
-			end
-			function SectionInit:CreateColorpicker(Name,Callback)
-				local ColorpickerInit = {}
-
-				local Colorpicker = Folder.Colorpicker:Clone()
-				local Pallete = Folder.Pallete:Clone()
-				Colorpicker.Name = Name .. " CP"
-				Colorpicker.Parent = Section.Container
-
-				Colorpicker.Title.Text = Name
-				Colorpicker.Size = UDim2.new(1,-10,0,Colorpicker.Title.TextBounds.Y + 5)
-
-				Pallete.Name = Name .. " P"
-				Pallete.Parent = Screen
-				Pallete.Position = UDim2.new(0,Colorpicker.Color.AbsolutePosition.X - 129,0,Colorpicker.Color.AbsolutePosition.Y + 52)
-
-				local ColorTable = {
-					Hue = 1,
-					Saturation = 0,
-					Value = 0
-				}
-				local ColorRender = nil
-				local HueRender = nil
-				local ColorpickerToggle = false
-
-				local function UpdateColor()
-					Colorpicker.Color.BackgroundColor3 = Color3.fromHSV(ColorTable.Hue,ColorTable.Saturation,ColorTable.Value)
-					Pallete.GradientPallete.BackgroundColor3 = Color3.fromHSV(ColorTable.Hue,1,1)
-					Pallete.Input.InputBox.PlaceholderText = "RGB: " .. math.round(Colorpicker.Color.BackgroundColor3.R* 255) .. "," .. math.round(Colorpicker.Color.BackgroundColor3.G * 255) .. "," .. math.round(Colorpicker.Color.BackgroundColor3.B * 255)
-					Callback(Colorpicker.Color.BackgroundColor3)
-				end
-
-				Colorpicker.MouseButton1Click:Connect(function()
-					ColorpickerToggle = not ColorpickerToggle
-					if ColorpickerToggle then
-						Pallete.Visible = true
-						Pallete.Position = UDim2.new(0,Colorpicker.Color.AbsolutePosition.X - 129,0,Colorpicker.Color.AbsolutePosition.Y + 52)
-					else
-						Pallete.Visible = false
-					end
-				end)
-
-				Pallete.GradientPallete.InputBegan:Connect(function(Input)
-					if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-                        if ColorRender then
-                            ColorRender:Disconnect()
-                        end
-						ColorRender = RunService.RenderStepped:Connect(function()
-							local Mouse = UserInputService:GetMouseLocation()
-							local ColorX = math.clamp(Mouse.X - Pallete.GradientPallete.AbsolutePosition.X, 0, Pallete.GradientPallete.AbsoluteSize.X) / Pallete.GradientPallete.AbsoluteSize.X
-                            local ColorY = math.clamp((Mouse.Y - 37) - Pallete.GradientPallete.AbsolutePosition.Y, 0, Pallete.GradientPallete.AbsoluteSize.Y) / Pallete.GradientPallete.AbsoluteSize.Y
-							Pallete.GradientPallete.Dot.Position = UDim2.new(ColorX,0,ColorY,0)
-							ColorTable.Saturation = ColorX
-							ColorTable.Value = 1 - ColorY
-							UpdateColor()
-						end)
-					end
-				end)
-
-				Pallete.GradientPallete.InputEnded:Connect(function(Input)
-					if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-                        if ColorRender then
-                            ColorRender:Disconnect()
-                        end
-					end
-				end)
-
-				Pallete.ColorSlider.InputBegan:Connect(function(Input)
-					if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-                        if HueRender then
-                            HueRender:Disconnect()
-                        end
-						HueRender = RunService.RenderStepped:Connect(function()
-							local Mouse = UserInputService:GetMouseLocation()
-							local HueX = math.clamp(Mouse.X - Pallete.ColorSlider.AbsolutePosition.X, 0, Pallete.ColorSlider.AbsoluteSize.X) / Pallete.ColorSlider.AbsoluteSize.X
-							ColorTable.Hue = 1 - HueX
-							UpdateColor()
-						end)
-                    end
-				end)
-
-				Pallete.ColorSlider.InputEnded:Connect(function(Input)
-					if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-                        if HueRender then
-                            HueRender:Disconnect()
-                        end
-                    end
-				end)
-
-				function ColorpickerInit:UpdateColor(Color)
-					local Hue, Saturation, Value = Color:ToHSV()
-					Colorpicker.Color.BackgroundColor3 = Color3.fromHSV(Hue,Saturation,Value)
-					Pallete.GradientPallete.BackgroundColor3 = Color3.fromHSV(Hue,1,1)
-					Pallete.Input.InputBox.PlaceholderText = "RGB: " .. math.round(Colorpicker.Color.BackgroundColor3.R* 255) .. "," .. math.round(Colorpicker.Color.BackgroundColor3.G * 255) .. "," .. math.round(Colorpicker.Color.BackgroundColor3.B * 255)
-					ColorTable = {
-						Hue = Hue,
-						Saturation = Saturation,
-						Value = Value
-					}
-					Callback(Color)
-				end
-
-				Pallete.Input.InputBox.FocusLost:Connect(function(Enter)
-					if Enter then
-						local ColorString = string.split(string.gsub(Pallete.Input.InputBox.Text," ", ""), ",")
-						ColorpickerInit:UpdateColor(Color3.fromRGB(ColorString[1],ColorString[2],ColorString[3]))
-						Pallete.Input.InputBox.Text = ""
-					end
-				end)
-
-				function ColorpickerInit:AddToolTip(Name)
-					if tostring(Name):gsub(" ", "") ~= "" then
-						Colorpicker.MouseEnter:Connect(function()
-							Screen.ToolTip.Text = Name
-							Screen.ToolTip.Size = UDim2.new(0,Screen.ToolTip.TextBounds.X + 5,0,Screen.ToolTip.TextBounds.Y + 5)
-							Screen.ToolTip.Visible = true
-						end)
-
-						Colorpicker.MouseLeave:Connect(function()
-							Screen.ToolTip.Visible = false
-						end)
-					end
-				end
-
-				return ColorpickerInit
-			end
-			return SectionInit
-		end
-		return TabInit
+		Toggle.MouseLeave:Connect(function()
+			Screen.ToolTip.Visible = false
+		end)
 	end
-	return WindowInit
+end
+
+if Default == nil then
+	function ToggleInit:SetState(State)
+		SetState(State)
+	end
+else
+	SetState(DefaultLocal)
+end
+
+function ToggleInit:GetState(State)
+	return ToggleState
+end
+
+function ToggleInit:CreateKeybind(Bind,Callback)
+	local KeybindInit = {}
+	Bind = Bind or "NONE"
+
+	local WaitingForBind = false
+	local Selected = Bind
+	local Blacklist = {"W","A","S","D","Slash","Tab","Backspace","Escape","Space","Delete","Unknown","Backquote"}
+
+	Toggle.Keybind.Visible = true
+	Toggle.Keybind.Text = "[ " .. Bind .. " ]"
+
+	Toggle.Keybind.MouseButton1Click:Connect(function()
+		Toggle.Keybind.Text = "[ ... ]"
+		WaitingForBind = true
+	end)
+
+	Toggle.Keybind:GetPropertyChangedSignal("TextBounds"):Connect(function()
+		Toggle.Keybind.Size = UDim2.new(0,Toggle.Keybind.TextBounds.X,1,0)
+		Toggle.Title.Size = UDim2.new(1,-Toggle.Keybind.Size.X.Offset - 15,1,0)
+	end)
+
+	UserInputService.InputBegan:Connect(function(Input)
+		if WaitingForBind and Input.UserInputType == Enum.UserInputType.Keyboard then
+			local Key = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
+			if not table.find(Blacklist, Key) then
+				Toggle.Keybind.Text = "[ " .. Key .. " ]"
+				Selected = Key
+			else
+				Toggle.Keybind.Text = "[ NONE ]"
+				Selected = "NONE"
+			end
+			WaitingForBind = false
+		elseif Input.UserInputType == Enum.UserInputType.Keyboard then
+			local Key = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
+			if Key == Selected then
+				ToggleState = not ToggleState
+				SetState(ToggleState)
+				if Callback then
+					Callback(Key)
+				end
+			end
+		end
+	end)
+
+	function KeybindInit:SetBind(Key)
+		Toggle.Keybind.Text = "[ " .. Key .. " ]"
+		Selected = Key
+	end
+
+	function KeybindInit:GetBind()
+		return Selected
+	end
+
+	return KeybindInit
+end
+return ToggleInit
+end
+function SectionInit:CreateSlider(Name, Min, Max, Default, Precise, Callback)
+	local DefaultLocal = Default or 50
+	local SliderInit = {}
+	local Slider = Folder.Slider:Clone()
+	Slider.Name = Name .. " S"
+	Slider.Parent = Section.Container
+
+	Slider.Title.Text = Name
+	Slider.Slider.Bar.Size = UDim2.new(Min / Max,0,1,0)
+	Slider.Slider.Bar.BackgroundColor3 = Config.Color
+	Slider.Value.PlaceholderText = tostring(Min / Max)
+	Slider.Title.Size = UDim2.new(1,0,0,Slider.Title.TextBounds.Y + 5)
+	Slider.Size = UDim2.new(1,-10,0,Slider.Title.TextBounds.Y + 15)
+	table.insert(Library.ColorTable, Slider.Slider.Bar)
+
+	local GlobalSliderValue = 0
+	local Dragging = false
+	local function Sliding(Input)
+		local Position = UDim2.new(math.clamp((Input.Position.X - Slider.Slider.AbsolutePosition.X) / Slider.Slider.AbsoluteSize.X,0,1),0,1,0)
+		Slider.Slider.Bar.Size = Position
+		local SliderPrecise = ((Position.X.Scale * Max) / Max) * (Max - Min) + Min
+		local SliderNonPrecise = math.floor(((Position.X.Scale * Max) / Max) * (Max - Min) + Min)
+		local SliderValue = Precise and SliderNonPrecise or SliderPrecise
+		SliderValue = tonumber(string.format("%.2f", SliderValue))
+		GlobalSliderValue = SliderValue
+		Slider.Value.PlaceholderText = tostring(SliderValue)
+		Callback(GlobalSliderValue)
+	end
+	local function SetValue(Value)
+		GlobalSliderValue = Value
+		Slider.Slider.Bar.Size = UDim2.new(Value / Max,0,1,0)
+		Slider.Value.PlaceholderText = Value
+		Callback(Value)
+	end
+	Slider.Value.FocusLost:Connect(function()
+		if not tonumber(Slider.Value.Text) then
+			Slider.Value.Text = GlobalSliderValue
+		elseif Slider.Value.Text == "" or tonumber(Slider.Value.Text) <= Min then
+			Slider.Value.Text = Min
+		elseif Slider.Value.Text == "" or tonumber(Slider.Value.Text) >= Max then
+			Slider.Value.Text = Max
+		end
+
+		GlobalSliderValue = Slider.Value.Text
+		Slider.Slider.Bar.Size = UDim2.new(Slider.Value.Text / Max,0,1,0)
+		Slider.Value.PlaceholderText = Slider.Value.Text
+		Callback(tonumber(Slider.Value.Text))
+		Slider.Value.Text = ""
+	end)
+
+	Slider.InputBegan:Connect(function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+			Sliding(Input)
+			Dragging = true
+		end
+	end)
+
+	Slider.InputEnded:Connect(function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+			Dragging = false
+		end
+	end)
+
+	UserInputService.InputBegan:Connect(function(Input)
+		if Input.KeyCode == Enum.KeyCode.LeftControl then
+			Slider.Value.ZIndex = 4
+		end
+	end)
+
+	UserInputService.InputEnded:Connect(function(Input)
+		if Input.KeyCode == Enum.KeyCode.LeftControl then
+			Slider.Value.ZIndex = 3
+		end
+	end)
+
+	UserInputService.InputChanged:Connect(function(Input)
+		if Dragging and Input.UserInputType == Enum.UserInputType.MouseMovement then
+			Sliding(Input)
+		end
+	end)
+
+	function SliderInit:AddToolTip(Name)
+		if tostring(Name):gsub(" ", "") ~= "" then
+			Slider.MouseEnter:Connect(function()
+				Screen.ToolTip.Text = Name
+				Screen.ToolTip.Size = UDim2.new(0,Screen.ToolTip.TextBounds.X + 5,0,Screen.ToolTip.TextBounds.Y + 5)
+				Screen.ToolTip.Visible = true
+			end)
+
+			Slider.MouseLeave:Connect(function()
+				Screen.ToolTip.Visible = false
+			end)
+		end
+	end
+
+	if Default == nil then
+		function SliderInit:SetValue(Value)
+			GlobalSliderValue = Value
+			Slider.Slider.Bar.Size = UDim2.new(Value / Max,0,1,0)
+			Slider.Value.PlaceholderText = Value
+			Callback(Value)
+		end
+	else
+		SetValue(DefaultLocal)
+	end
+
+	function SliderInit:GetValue(Value)
+		return GlobalSliderValue
+	end
+
+	return SliderInit
+end
+function SectionInit:CreateDropdown(Name)
+	local DropdownInit = {}
+	local Dropdown = Folder.Dropdown:Clone()
+	Dropdown.Name = Name .. " D"
+	Dropdown.Parent = Section.Container
+
+	Dropdown.Title.Text = Name
+	Dropdown.Title.Size = UDim2.new(1,0,0,Dropdown.Title.TextBounds.Y + 5)
+	Dropdown.Container.Position = UDim2.new(0,0,0,Dropdown.Title.TextBounds.Y + 5)
+	Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Title.TextBounds.Y + 25)
+
+	local DropdownToggle = false
+
+	Dropdown.MouseButton1Click:Connect(function()
+		DropdownToggle = not DropdownToggle
+		if DropdownToggle then
+			Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y + Dropdown.Title.TextBounds.Y + 30)
+			Dropdown.Container.Holder.Visible = true
+		else
+			Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Title.TextBounds.Y + 25)
+			Dropdown.Container.Holder.Visible = false
+		end
+	end)
+
+	function DropdownInit:AddToolTip(Name)
+		if tostring(Name):gsub(" ", "") ~= "" then
+			Dropdown.MouseEnter:Connect(function()
+				Screen.ToolTip.Text = Name
+				Screen.ToolTip.Size = UDim2.new(0,Screen.ToolTip.TextBounds.X + 5,0,Screen.ToolTip.TextBounds.Y + 5)
+				Screen.ToolTip.Visible = true
+			end)
+
+			Dropdown.MouseLeave:Connect(function()
+				Screen.ToolTip.Visible = false
+			end)
+		end
+	end
+
+	function DropdownInit:AddOption(Name, Callback)
+		local OptionInit = {}
+		local Option = Folder.Option:Clone()
+		Option.Name = Name .. " O"
+		Option.Parent = Dropdown.Container.Holder.Container
+
+		Option.Title.Text = Name
+		Option.BackgroundColor3 = Config.Color
+		Option.Size = UDim2.new(1,0,0,Option.Title.TextBounds.Y + 5)
+		Dropdown.Container.Holder.Size = UDim2.new(1,-5,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y)
+		table.insert(Library.ColorTable, Option)
+
+		Option.MouseButton1Down:Connect(function()
+			Option.BackgroundTransparency = 0
+		end)
+
+		Option.MouseButton1Up:Connect(function()
+			Option.BackgroundTransparency = 1
+		end)
+
+		Option.MouseLeave:Connect(function()
+			Option.BackgroundTransparency = 1
+		end)
+
+		Option.MouseButton1Click:Connect(function()
+			Dropdown.Container.Value.Text = Name
+			Callback(Name)
+		end)
+
+		function OptionInit:SetOption()
+			Dropdown.Container.Value.Text = Name
+			Callback(Name)
+		end
+		function OptionInit:Remove()
+			Option:Destroy()
+			Dropdown.Container.Holder.Size = UDim2.new(1,-5,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y)
+			Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y + Dropdown.Title.TextBounds.Y + 30)
+		end
+		return OptionInit
+	end
+	function DropdownInit:ClearOptions()
+		for _, Option in pairs(Dropdown.Container.Holder.Container:GetChildren()) do
+			if Option:IsA("TextButton") then
+				Option:Destroy()
+			end
+		end
+		Dropdown.Container.Holder.Size = UDim2.new(1,-5,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y)
+		Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y + Dropdown.Title.TextBounds.Y + 30)
+	end
+	function DropdownInit:GetOption()
+		return Dropdown.Container.Value.Text
+	end
+	return DropdownInit
+end
+function SectionInit:CreateColorpicker(Name,Callback)
+	local ColorpickerInit = {}
+
+	local Colorpicker = Folder.Colorpicker:Clone()
+	local Pallete = Folder.Pallete:Clone()
+	Colorpicker.Name = Name .. " CP"
+	Colorpicker.Parent = Section.Container
+
+	Colorpicker.Title.Text = Name
+	Colorpicker.Size = UDim2.new(1,-10,0,Colorpicker.Title.TextBounds.Y + 5)
+
+	Pallete.Name = Name .. " P"
+	Pallete.Parent = Screen
+	Pallete.Position = UDim2.new(0,Colorpicker.Color.AbsolutePosition.X - 129,0,Colorpicker.Color.AbsolutePosition.Y + 52)
+
+	local ColorTable = {
+		Hue = 1,
+		Saturation = 0,
+		Value = 0
+	}
+	local ColorRender = nil
+	local HueRender = nil
+	local ColorpickerToggle = false
+
+	local function UpdateColor()
+		Colorpicker.Color.BackgroundColor3 = Color3.fromHSV(ColorTable.Hue,ColorTable.Saturation,ColorTable.Value)
+		Pallete.GradientPallete.BackgroundColor3 = Color3.fromHSV(ColorTable.Hue,1,1)
+		Pallete.Input.InputBox.PlaceholderText = "RGB: " .. math.round(Colorpicker.Color.BackgroundColor3.R* 255) .. "," .. math.round(Colorpicker.Color.BackgroundColor3.G * 255) .. "," .. math.round(Colorpicker.Color.BackgroundColor3.B * 255)
+		Callback(Colorpicker.Color.BackgroundColor3)
+	end
+
+	Colorpicker.MouseButton1Click:Connect(function()
+		ColorpickerToggle = not ColorpickerToggle
+		if ColorpickerToggle then
+			Pallete.Visible = true
+			Pallete.Position = UDim2.new(0,Colorpicker.Color.AbsolutePosition.X - 129,0,Colorpicker.Color.AbsolutePosition.Y + 52)
+		else
+			Pallete.Visible = false
+		end
+	end)
+
+	Pallete.GradientPallete.InputBegan:Connect(function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+			if ColorRender then
+				ColorRender:Disconnect()
+			end
+			ColorRender = RunService.RenderStepped:Connect(function()
+				local Mouse = UserInputService:GetMouseLocation()
+				local ColorX = math.clamp(Mouse.X - Pallete.GradientPallete.AbsolutePosition.X, 0, Pallete.GradientPallete.AbsoluteSize.X) / Pallete.GradientPallete.AbsoluteSize.X
+				local ColorY = math.clamp((Mouse.Y - 37) - Pallete.GradientPallete.AbsolutePosition.Y, 0, Pallete.GradientPallete.AbsoluteSize.Y) / Pallete.GradientPallete.AbsoluteSize.Y
+				Pallete.GradientPallete.Dot.Position = UDim2.new(ColorX,0,ColorY,0)
+				ColorTable.Saturation = ColorX
+				ColorTable.Value = 1 - ColorY
+				UpdateColor()
+			end)
+		end
+	end)
+
+	Pallete.GradientPallete.InputEnded:Connect(function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+			if ColorRender then
+				ColorRender:Disconnect()
+			end
+		end
+	end)
+
+	Pallete.ColorSlider.InputBegan:Connect(function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+			if HueRender then
+				HueRender:Disconnect()
+			end
+			HueRender = RunService.RenderStepped:Connect(function()
+				local Mouse = UserInputService:GetMouseLocation()
+				local HueX = math.clamp(Mouse.X - Pallete.ColorSlider.AbsolutePosition.X, 0, Pallete.ColorSlider.AbsoluteSize.X) / Pallete.ColorSlider.AbsoluteSize.X
+				ColorTable.Hue = 1 - HueX
+				UpdateColor()
+			end)
+		end
+	end)
+
+	Pallete.ColorSlider.InputEnded:Connect(function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+			if HueRender then
+				HueRender:Disconnect()
+			end
+		end
+	end)
+
+	function ColorpickerInit:UpdateColor(Color)
+		local Hue, Saturation, Value = Color:ToHSV()
+		Colorpicker.Color.BackgroundColor3 = Color3.fromHSV(Hue,Saturation,Value)
+		Pallete.GradientPallete.BackgroundColor3 = Color3.fromHSV(Hue,1,1)
+		Pallete.Input.InputBox.PlaceholderText = "RGB: " .. math.round(Colorpicker.Color.BackgroundColor3.R* 255) .. "," .. math.round(Colorpicker.Color.BackgroundColor3.G * 255) .. "," .. math.round(Colorpicker.Color.BackgroundColor3.B * 255)
+		ColorTable = {
+			Hue = Hue,
+			Saturation = Saturation,
+			Value = Value
+		}
+		Callback(Color)
+	end
+
+	Pallete.Input.InputBox.FocusLost:Connect(function(Enter)
+		if Enter then
+			local ColorString = string.split(string.gsub(Pallete.Input.InputBox.Text," ", ""), ",")
+			ColorpickerInit:UpdateColor(Color3.fromRGB(ColorString[1],ColorString[2],ColorString[3]))
+			Pallete.Input.InputBox.Text = ""
+		end
+	end)
+
+	function ColorpickerInit:AddToolTip(Name)
+		if tostring(Name):gsub(" ", "") ~= "" then
+			Colorpicker.MouseEnter:Connect(function()
+				Screen.ToolTip.Text = Name
+				Screen.ToolTip.Size = UDim2.new(0,Screen.ToolTip.TextBounds.X + 5,0,Screen.ToolTip.TextBounds.Y + 5)
+				Screen.ToolTip.Visible = true
+			end)
+
+			Colorpicker.MouseLeave:Connect(function()
+				Screen.ToolTip.Visible = false
+			end)
+		end
+	end
+
+	return ColorpickerInit
+end
+return SectionInit
+end
+return TabInit
+end
+return WindowInit
 end
 
 return Library
