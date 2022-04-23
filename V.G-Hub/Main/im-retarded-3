@@ -337,7 +337,7 @@ function Library:CreateWindow(Config, Parent)
 				end)
 
 				function ToggleInit:SetState(value)
-					if typeof(value) == "boolean" then
+					if value and typeof(value) == "boolean" then
 						SetState(value)
 					end
 				end
@@ -611,7 +611,12 @@ function SectionInit:CreateDropdown(Name)
 		function OptionInit:Remove()
 			Option:Destroy()
 			Dropdown.Container.Holder.Size = UDim2.new(1,-5,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y)
-			Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y + Dropdown.Title.TextBounds.Y + 30)
+			if DropdownToggle then
+				Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y + Dropdown.Title.TextBounds.Y + 30)
+			else	
+				Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Title.TextBounds.Y + 25)
+				Dropdown.Container.Holder.Visible = false	
+			end
 		end
 		return OptionInit
 	end
