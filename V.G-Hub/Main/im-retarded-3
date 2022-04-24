@@ -426,7 +426,7 @@ end
 return ToggleInit
 end
 function SectionInit:CreateSlider(Name, Min, Max, Default, Precise, Callback)
-	local DefaultLocal = Default or 50
+	local DefaultLocal = Default or {0,Min}
 	local SliderInit = {}
 	local Slider = Folder.Slider:Clone()
 	Slider.Name = Name .. " S"
@@ -453,9 +453,9 @@ function SectionInit:CreateSlider(Name, Min, Max, Default, Precise, Callback)
 		Slider.Value.PlaceholderText = tostring(SliderValue)
 		Callback(GlobalSliderValue)
 	end
-	local function SetValue(Value)
+	local function SetValue(Porcentage,Value)
 		GlobalSliderValue = Value
-		Slider.Slider.Bar.Size = UDim2.new(Value / Max,0,1,0)
+		Slider.Slider.Bar.Size = UDim2.new(Porcentage / Max,0,1,0)
 		Slider.Value.PlaceholderText = Value
 		Callback(Value)
 	end
@@ -521,14 +521,14 @@ function SectionInit:CreateSlider(Name, Min, Max, Default, Precise, Callback)
 	end
 
 	if Default == nil then
-		function SliderInit:SetValue(Value)
-			GlobalSliderValue = Value
-			Slider.Slider.Bar.Size = UDim2.new(Value / Max,0,1,0)
-			Slider.Value.PlaceholderText = Value
-			Callback(Value)
+		function SliderInit:SetValue(Porcentage,Value)
+		GlobalSliderValue = Value
+		Slider.Slider.Bar.Size = UDim2.new(Porcentage / Max,0,1,0)
+		Slider.Value.PlaceholderText = Value
+		Callback(Value)
 		end
 	else
-		SetValue(DefaultLocal)
+		SetValue(DefaultLocal[1],DefaultLocal[2])	
 	end
 
 	function SliderInit:GetValue(Value)
