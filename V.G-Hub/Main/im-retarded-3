@@ -613,6 +613,7 @@ function SectionInit:CreateDropdown(Name)
 			Dropdown.Container.Holder.Size = UDim2.new(1,-5,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y)
 			if DropdownToggle then
 				Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y + Dropdown.Title.TextBounds.Y + 30)
+				Dropdown.Container.Holder.Visible = true		
 			else	
 				Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Title.TextBounds.Y + 25)
 				Dropdown.Container.Holder.Visible = false	
