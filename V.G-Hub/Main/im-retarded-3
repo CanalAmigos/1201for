@@ -321,14 +321,16 @@ function Library:CreateWindow(Config, Parent)
 				table.insert(Library.ColorTable, Toggle.Toggle)
 				local ToggleState = false
 
-				local function SetState(State)
+				local function SetState(State,Call)
 					if State then
 						Toggle.Toggle.BackgroundColor3 = Config.Color
 					elseif not State then
 						Toggle.Toggle.BackgroundColor3 = Color3.fromRGB(50,50,50)
 					end
 					ToggleState = State
-					Callback(State)
+					if Call ~= false then
+						Callback(State)
+					end
 				end
 
 				Toggle.MouseButton1Click:Connect(function()
@@ -336,9 +338,9 @@ function Library:CreateWindow(Config, Parent)
 					SetState(ToggleState)
 				end)
 
-				function ToggleInit:SetState(value)
+				function ToggleInit:SetState(value,call)
 					if value and typeof(value) == "boolean" then
-						SetState(value)
+						SetState(value,call)
 					end
 				end
 
@@ -616,10 +618,8 @@ function Library:CreateWindow(Config, Parent)
 						Dropdown.Container.Holder.Size = UDim2.new(1,-5,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y)
 						if DropdownToggle then
 							Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y + Dropdown.Title.TextBounds.Y + 30)
-							Dropdown.Container.Holder.Visible = true
 						else
 							Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Title.TextBounds.Y + 25)
-							Dropdown.Container.Holder.Visible = false
 						end
 					end
 					return OptionInit
