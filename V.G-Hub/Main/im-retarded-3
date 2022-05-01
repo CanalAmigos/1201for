@@ -625,7 +625,7 @@ function Library:CreateWindow(Config, Parent)
 					end
 					function OptionInit:TextColor(Color)
 						local RealColor = Color or DefaultColor
-						Dropdown.Title.TextColor3 = RealColor
+						Option.Title.TextColor3 = RealColor
 					end
 					return OptionInit
 				end
