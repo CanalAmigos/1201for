@@ -542,6 +542,7 @@ function Library:CreateWindow(Config, Parent)
 			function SectionInit:CreateDropdown(Name)
 				local DropdownInit = {}
 				local Dropdown = Folder.Dropdown:Clone()
+				local DefaultColor = Dropdown.Title.TextColor3
 				Dropdown.Name = Name .. " D"
 				Dropdown.Parent = Section.Container
 
@@ -621,6 +622,10 @@ function Library:CreateWindow(Config, Parent)
 						else
 							Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Title.TextBounds.Y + 25)
 						end
+					end
+					function OptionInit:TextColor(Color)
+						local RealColor = Color or DefaultColor
+						Dropdown.Title.TextColor3 = RealColor
 					end
 					return OptionInit
 				end
