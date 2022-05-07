@@ -41,7 +41,7 @@ end
 
 function Library:CreateWindow(Config, Parent)
 	local WindowInit = {}
-	local Folder = game:GetObjects("rbxassetid://7141683860")[1]
+	local Folder = game:GetObjects("rbxassetid://9566773078")[1]
 	local Screen = Folder.Bracket:Clone()
 	local Main = Screen.Main
 	local Holder = Main.Holder
@@ -613,6 +613,36 @@ function Library:CreateWindow(Config, Parent)
 					function OptionInit:SetOption()
 						Dropdown.Container.Value.Text = Name
 						Callback(Name)
+					end
+					function OptionInit:ViewPort(Object ,Camera)
+						local View = Folder.ViewPort:Clone()
+						View.Name = Name .. " V"
+						View.Parent = Holder
+						View.Visible = false
+						
+						View.Topbar.WindowName.Text = Name
+						
+						Option.MouseEnter:Connect(function()
+							View.Visible = true
+						end)
+						
+						Option.MouseLeave:Connect(function()
+							View.Visible = false
+						end)
+						
+						if Object then
+							local obcl = Object:Clone()
+							obcl.Parent = View.Holder.TBContainer.Holder.ViewportFrame.Objects
+							if Camera and Camera:IsA("Camera") then
+								local camcl = Camera:Clone()
+								View.Holder.TBContainer.Holder.view:Destroy()
+								camcl.Parent = View.Holder.TBContainer.Holder
+								View.Holder.TBContainer.Holder.ViewportFrame.CurrentCamera = camcl
+							else
+								View.Holder.TBContainer.Holder.ViewportFrame.CurrentCamera = View.Holder.TBContainer.Holder.view
+							end
+						end
+						return View
 					end
 					function OptionInit:Remove()
 						Option:Destroy()
