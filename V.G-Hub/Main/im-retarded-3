@@ -543,6 +543,7 @@ function Library:CreateWindow(Config, Parent)
 				local DropdownInit = {}
 				local Dropdown = Folder.Dropdown:Clone()
 				local DefaultColor = Dropdown.Title.TextColor3
+				local startingTick = tick()
 				Dropdown.Name = Name .. " D"
 				Dropdown.Parent = Section.Container
 
@@ -615,9 +616,10 @@ function Library:CreateWindow(Config, Parent)
 						Callback(Name)
 					end
 					function OptionInit:ViewPort(Object ,Camera)
+						local ViewPortInit = {}
 						local View = Folder.ViewPort:Clone()
 						View.Name = Name .. " V"
-						View.Parent = Holder
+						View.Parent = Main
 						View.Visible = false
 						
 						View.Topbar.WindowName.Text = Name
@@ -630,6 +632,24 @@ function Library:CreateWindow(Config, Parent)
 							View.Visible = false
 						end)
 						
+						function ViewPortInit:RotativeObject()
+							if Object and not Object:IsA("Model") then
+								while true do
+									local diff = tick() - startingTick
+									Object.CFrame = CFrame.Angles(0, math.rad(diff), 0)
+									RunService.RenderStepped:Wait()
+								end
+							else
+								while true do
+									local diff = tick() - startingTick
+									Object:SetPrimaryPartCFrame(CFrame.Angles(0, math.rad(diff), 0))
+									RunService.RenderStepped:Wait()
+								end
+							end
+						end
+						
+						local CurrentCamera = nil
+						
 						if Object then
 							local obcl = Object:Clone()
 							obcl.Parent = View.Holder.TBContainer.Holder.ViewportFrame.Objects
@@ -638,11 +658,28 @@ function Library:CreateWindow(Config, Parent)
 								View.Holder.TBContainer.Holder.view:Destroy()
 								camcl.Parent = View.Holder.TBContainer.Holder
 								View.Holder.TBContainer.Holder.ViewportFrame.CurrentCamera = camcl
+								CurrentCamera = camcl
+							elseif Camera and Camera:IsA("Part") then
+								View.Holder.TBContainer.Holder.view.CFrame = Camera.CFrame
+								View.Holder.TBContainer.Holder.ViewportFrame.CurrentCamera = View.Holder.TBContainer.Holder.view
+								CurrentCamera = View.Holder.TBContainer.Holder.view
 							else
 								View.Holder.TBContainer.Holder.ViewportFrame.CurrentCamera = View.Holder.TBContainer.Holder.view
+								CurrentCamera = View.Holder.TBContainer.Holder.view
 							end
 						end
-						return View
+						
+						function ViewPortInit:CameraCF(cframe)
+							if CurrentCamera and cframe then
+								if typeof(cframe) == "table" then
+									CurrentCamera.CFrame = CFrame.new(unpack(cframe))
+								else
+									CurrentCamera.CFrame = CFrame.new(cframe)
+								end
+							end
+						end
+						
+						return ViewPortInit
 					end
 					function OptionInit:Remove()
 						Option:Destroy()
