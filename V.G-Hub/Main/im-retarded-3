@@ -428,7 +428,7 @@ function Library:CreateWindow(Config, Parent)
 				return ToggleInit
 			end
 			function SectionInit:CreateSlider(Name, Min, Max, Default, Precise, Callback)
-				local DefaultLocal = Default or {0,Min}
+				local DefaultLocal = Default or Min or 0
 				local SliderInit = {}
 				local Slider = Folder.Slider:Clone()
 				Slider.Name = Name .. " S"
@@ -455,9 +455,11 @@ function Library:CreateWindow(Config, Parent)
 					Slider.Value.PlaceholderText = tostring(SliderValue)
 					Callback(GlobalSliderValue)
 				end
-				local function SetValue(Porcentage,Value)
+				local function SetValue(Value)
 					GlobalSliderValue = Value
-					Slider.Slider.Bar.Size = UDim2.new(Porcentage / Max,0,1,0)
+					local def = math.clamp(Value, Min, Max)
+					local Porcentage = (def - Min) / (Max - Min)
+					Slider.Slider.Bar.Size = UDim2.new(Porcentage,0,1,0)
 					Slider.Value.PlaceholderText = Value
 					Callback(Value)
 				end
@@ -523,14 +525,16 @@ function Library:CreateWindow(Config, Parent)
 				end
 
 				if Default == nil then
-					function SliderInit:SetValue(Porcentage,Value)
+					function SliderInit:SetValue(Value)
 						GlobalSliderValue = Value
-						Slider.Slider.Bar.Size = UDim2.new(Porcentage / Max,0,1,0)
+						local def = math.clamp(Value, Min, Max)
+						local Porcentage = (def - Min) / (Max - Min)
+						Slider.Slider.Bar.Size = UDim2.new(Porcentage,0,1,0)
 						Slider.Value.PlaceholderText = Value
 						Callback(Value)
 					end
 				else
-					SetValue(DefaultLocal[1],DefaultLocal[2])	
+					SetValue(DefaultLocal)	
 				end
 
 				function SliderInit:GetValue(Value)
@@ -539,8 +543,9 @@ function Library:CreateWindow(Config, Parent)
 
 				return SliderInit
 			end
-			function SectionInit:CreateDropdown(Name)
+			function SectionInit:CreateDropdown(Name, Table, CallBack)
 				local DropdownInit = {}
+				local DTable = Table or nil
 				local Dropdown = Folder.Dropdown:Clone()
 				local Startitick = tick()
 				local DefaultColor = Dropdown.Title.TextColor3
@@ -689,6 +694,7 @@ function Library:CreateWindow(Config, Parent)
 						
 						return ViewPortInit
 					end
+					
 					function OptionInit:Remove()
 						Option:Destroy()
 						Dropdown.Container.Holder.Size = UDim2.new(1,-5,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y)
@@ -704,6 +710,12 @@ function Library:CreateWindow(Config, Parent)
 					end
 					return OptionInit
 				end
+				if DTable then
+					table.foreach(DTable,function(_,v)
+						DropdownInit:AddOption(v, CallBack)
+					end)
+				end
+				
 				function DropdownInit:ClearOptions()
 					for _, Option in pairs(Dropdown.Container.Holder.Container:GetChildren()) do
 						if Option:IsA("TextButton") then
