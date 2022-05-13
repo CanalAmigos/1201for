@@ -711,8 +711,16 @@ function Library:CreateWindow(Config, Parent)
 					return OptionInit
 				end
 				
+				function DropdownInit:AddOptions(Table)
+					if typeof(Table) == "table" then
+						table.foreach(Table,function(i,v)
+							DropdownInit:AddOption(v, CallBack)
+						end)
+					end
+				end
+				
 				if DTable then
-					table.foreach(DTable,function(v)
+					table.foreach(DTable,function(i,v)
 						DropdownInit:AddOption(v, CallBack)
 					end)
 				end
