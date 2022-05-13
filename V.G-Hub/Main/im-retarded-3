@@ -527,7 +527,7 @@ function Library:CreateWindow(Config, Parent)
 				if Default == nil then
 					function SliderInit:SetValue(Value)
 						GlobalSliderValue = Value
-						local def = math.clamp(Value, Min, Max)
+						local def = math.clamp(GlobalSliderValue, Min, Max)
 						local Porcentage = (def - Min) / (Max - Min)
 						Slider.Slider.Bar.Size = UDim2.new(Porcentage,0,1,0)
 						Slider.Value.PlaceholderText = Value
@@ -710,8 +710,9 @@ function Library:CreateWindow(Config, Parent)
 					end
 					return OptionInit
 				end
+				
 				if DTable then
-					table.foreach(DTable,function(_,v)
+					table.foreach(DTable,function(v)
 						DropdownInit:AddOption(v, CallBack)
 					end)
 				end
