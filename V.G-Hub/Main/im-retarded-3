@@ -711,6 +711,10 @@ function Library:CreateWindow(Config, Parent)
 					return OptionInit
 				end
 				
+				function DropdownInit:SetText(txt)
+					Dropdown.Container.Value.Text = txt or "..."
+				end
+				
 				function DropdownInit:AddOptions(Table)
 					if typeof(Table) == "table" then
 						table.foreach(Table,function(i,v)
