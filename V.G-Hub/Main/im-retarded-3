@@ -370,9 +370,10 @@ function Library:CreateWindow(Config, Parent)
 					return ToggleState
 				end
 
-				function ToggleInit:CreateKeybind(Bind,Callback)
+				function ToggleInit:CreateKeybind(Bind,Lock,Callback)
 					local KeybindInit = {}
 					Bind = Bind or "NONE"
+					Lock = Lock or false
 
 					local WaitingForBind = false
 					local Selected = Bind
@@ -380,17 +381,19 @@ function Library:CreateWindow(Config, Parent)
 
 					Toggle.Keybind.Visible = true
 					Toggle.Keybind.Text = "[ " .. Bind .. " ]"
-
+					
 					Toggle.Keybind.MouseButton1Click:Connect(function()
-						Toggle.Keybind.Text = "[ ... ]"
-						WaitingForBind = true
+						if not Lock then
+							Toggle.Keybind.Text = "[ ... ]"
+							WaitingForBind = true
+						end
 					end)
 
 					Toggle.Keybind:GetPropertyChangedSignal("TextBounds"):Connect(function()
 						Toggle.Keybind.Size = UDim2.new(0,Toggle.Keybind.TextBounds.X,1,0)
 						Toggle.Title.Size = UDim2.new(1,-Toggle.Keybind.Size.X.Offset - 15,1,0)
 					end)
-
+					
 					UserInputService.InputBegan:Connect(function(Input)
 						if WaitingForBind and Input.UserInputType == Enum.UserInputType.Keyboard then
 							local Key = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
@@ -413,6 +416,15 @@ function Library:CreateWindow(Config, Parent)
 							end
 						end
 					end)
+					
+					function KeybindInit:Lock(Value)
+						Value = Value or true
+						if Value then
+							Lock = true
+						else
+							Lock = false
+						end
+					end
 
 					function KeybindInit:SetBind(Key)
 						Toggle.Keybind.Text = "[ " .. Key .. " ]"
@@ -662,24 +674,37 @@ function Library:CreateWindow(Config, Parent)
 							local Realdistance = Distance or 10
 							if CurrentCamera and Object then
 								if Object:IsA("Model") == false then
-									while true do
-										local diff = tick() - Startitick
-										CurrentCamera.CFrame = Object.CFrame * CFrame.new(0, 0, -Realdistance) * CFrame.Angles(0, math.rad(diff), 0)
-										RunService.RenderStepped:Wait()
-									end
+									spawn(function()
+										while true do
+											local diff = tick() - Startitick
+											CurrentCamera.CFrame = Object.CFrame * CFrame.new(0, 0, -Realdistance) * CFrame.Angles(0, math.rad(diff), 0)
+											RunService.RenderStepped:Wait()
+										end
+									end)
 								elseif Object:IsA("Model") and Object.PrimaryPart then
 									local primarypart = Object.PrimaryPart
 									if primarypart then
-										while true do
-											local diff = tick() - Startitick
-											CurrentCamera.CFrame = primarypart.CFrame * CFrame.new(0, 0, -Realdistance) * CFrame.Angles(0, math.rad(diff), 0)
-											RunService.RenderStepped:Wait()
-										end
+										spawn(function()
+											while true do
+												local diff = tick() - Startitick
+												CurrentCamera.CFrame = primarypart.CFrame * CFrame.new(0, 0, -Realdistance) * CFrame.Angles(0, math.rad(diff), 0)
+												RunService.RenderStepped:Wait()
+											end
+										end)
 									else
-										error("ViewPort["..Name.."] not found primarypart of model!")
+										return false,"ViewPort["..Name.."] not found primarypart of model!"
 									end
+								elseif Object:IsA("Model") then
+									return false,"ViewPort["..Name.."] not found primarypart of model!"
+								else
+									return false,"ViewPort["..Name.."] not a valid part or model!"
 								end
+							elseif CurrentCamera then
+								return false,"ViewPort["..Name.."] no object found!"
+							else
+								return false,"ViewPort["..Name.."] camera don't exist!"
 							end
+							return true,"ViewPort["..Name.."] no errors found!"
 						end
 						
 						function ViewPortInit:CameraCF(cframe)
@@ -724,9 +749,11 @@ function Library:CreateWindow(Config, Parent)
 				end
 				
 				if DTable then
-					table.foreach(DTable,function(i,v)
-						DropdownInit:AddOption(v, CallBack)
-					end)
+					if typeof(DTable) == "table" then
+						table.foreach(DTable,function(i,v)
+							DropdownInit:AddOption(v, CallBack)
+						end)
+					end
 				end
 				
 				function DropdownInit:ClearOptions()
