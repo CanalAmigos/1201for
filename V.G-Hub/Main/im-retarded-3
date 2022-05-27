@@ -670,41 +670,42 @@ function Library:CreateWindow(Config, Parent)
 							end
 						end
 						
+						local function setRotationEvent(model)
+							local currentAngle = 0
+							local modelCF, modelSize = model:GetBoundingBox()	
+
+							local rotInv = (modelCF - modelCF.p):inverse()
+							modelCF = modelCF * rotInv
+							modelSize = rotInv * modelSize
+							modelSize = Vector3.new(math.abs(modelSize.x), math.abs(modelSize.y), math.abs(modelSize.z))
+
+							local diagonal = 0
+							local maxExtent = math.max(modelSize.x, modelSize.y, modelSize.z)
+							local tan = math.tan(math.rad(CurrentCamera.FieldOfView/2))
+
+							if (maxExtent == modelSize.x) then
+								diagonal = math.sqrt(modelSize.y*modelSize.y + modelSize.z*modelSize.z)/2
+							elseif (maxExtent == modelSize.y) then
+								diagonal = math.sqrt(modelSize.x*modelSize.x + modelSize.z*modelSize.z)/2
+							else
+								diagonal = math.sqrt(modelSize.x*modelSize.x + modelSize.y*modelSize.y)/2
+							end
+
+							local minDist = (maxExtent/2)/tan + diagonal
+
+							return game:GetService("RunService").RenderStepped:Connect(function(dt)
+								currentAngle = currentAngle + 1*dt*40
+								CurrentCamera.CFrame = modelCF * CFrame.fromEulerAnglesYXZ(0, math.rad(currentAngle), 0) * CFrame.new(0, 0, minDist + 3)
+							end)
+						end
+						
 						function ViewPortInit:RotativeObject(Distance)
 							local Realdistance = Distance or 10
 							if CurrentCamera and Object then
-								if Object:IsA("Model") == false then
-									spawn(function()
-										while true do
-											local diff = tick() - Startitick
-											CurrentCamera.CFrame = Object.CFrame * CFrame.new(0, 0, -Realdistance) * CFrame.Angles(0, math.rad(diff), 0)
-											RunService.RenderStepped:Wait()
-										end
-									end)
-								elseif Object:IsA("Model") and Object.PrimaryPart then
-									local primarypart = Object.PrimaryPart
-									if primarypart then
-										spawn(function()
-											while true do
-												local diff = tick() - Startitick
-												CurrentCamera.CFrame = primarypart.CFrame * CFrame.new(0, 0, -Realdistance) * CFrame.Angles(0, math.rad(diff), 0)
-												RunService.RenderStepped:Wait()
-											end
-										end)
-									else
-										return false,"ViewPort["..Name.."] not found primarypart of model!"
-									end
-								elseif Object:IsA("Model") then
-									return false,"ViewPort["..Name.."] not found primarypart of model!"
-								else
-									return false,"ViewPort["..Name.."] not a valid part or model!"
+								if Object:IsA("Model") then
+									setRotationEvent(Object)
 								end
-							elseif CurrentCamera then
-								return false,"ViewPort["..Name.."] no object found!"
-							else
-								return false,"ViewPort["..Name.."] camera don't exist!"
 							end
-							return true,"ViewPort["..Name.."] no errors found!"
 						end
 						
 						function ViewPortInit:CameraCF(cframe)
