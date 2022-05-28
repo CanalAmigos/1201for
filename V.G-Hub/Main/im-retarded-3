@@ -518,15 +518,25 @@ function Library:CreateWindow(Config, Parent)
 					Callback(Value)
 				end
 				Slider.Value.FocusLost:Connect(function()
-					if not tonumber(Slider.Value.Text) then
-						Slider.Value.Text = GlobalSliderValue
-					elseif Slider.Value.Text == "" or tonumber(Slider.Value.Text) <= Min then
-						Slider.Value.Text = Min
-					elseif Slider.Value.Text == "" or tonumber(Slider.Value.Text) >= Max then
-						Slider.Value.Text = Max
+					if Simboltrue then
+						if not tonumber(Slider.Value.Text) then
+							Slider.Value.Text = GlobalSliderValue..tostring(Simbol)
+						elseif Slider.Value.Text == "" or tonumber(Slider.Value.Text) <= Min then
+							Slider.Value.Text = Min..tostring(Simbol)
+						elseif Slider.Value.Text == "" or tonumber(Slider.Value.Text) >= Max then
+							Slider.Value.Text = Max..tostring(Simbol)
+						end
+					else
+						if not tonumber(Slider.Value.Text) then
+							Slider.Value.Text = GlobalSliderValue
+						elseif Slider.Value.Text == "" or tonumber(Slider.Value.Text) <= Min then
+							Slider.Value.Text = Min
+						elseif Slider.Value.Text == "" or tonumber(Slider.Value.Text) >= Max then
+							Slider.Value.Text = Max
+						end
 					end
 
-					GlobalSliderValue = Slider.Value.Text
+					GlobalSliderValue = string.gsub(Slider.Value.Text,tostring(Simbol),"")
 					Slider.Slider.Bar.Size = UDim2.new(Slider.Value.Text / Max,0,1,0)
 					Slider.Value.PlaceholderText = Slider.Value.Text
 					Callback(tonumber(Slider.Value.Text))
