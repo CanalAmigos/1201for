@@ -538,7 +538,7 @@ function Library:CreateWindow(Config, Parent)
 
 					GlobalSliderValue = string.gsub(Slider.Value.Text,tostring(Simbol),"")
 					Slider.Slider.Bar.Size = UDim2.new(Slider.Value.Text / Max,0,1,0)
-					Slider.Value.PlaceholderText = Slider.Value.Text
+					Slider.Value.PlaceholderText = Slider.Value.Text..tostring(Simbol)
 					Callback(tonumber(Slider.Value.Text))
 					Slider.Value.Text = ""
 				end)
