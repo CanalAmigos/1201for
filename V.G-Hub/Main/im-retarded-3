@@ -470,8 +470,12 @@ function Library:CreateWindow(Config, Parent)
 			function SectionInit:CreateSlider(Name, Min, Max, Default, Precise, Callback, Simbo)
 				local DefaultLocal = Default or Min or 0
 				local SliderInit = {}
-				local Simboltrue = Simbo[1] or false
-				local Simbol = Simbo[2] or ""
+				local Simboltrue = false
+				local Simbol = ""
+				if Simbo and typeof(Simbo) == "table" then
+					local Simboltrue = Simbo[1] or false
+					local Simbol = Simbo[2] or ""
+				end
 				local Slider = Folder.Slider:Clone()
 				Slider.Name = Name .. " S"
 				Slider.Parent = Section.Container
