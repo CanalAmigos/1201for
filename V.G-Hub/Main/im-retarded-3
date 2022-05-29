@@ -735,8 +735,13 @@ function Library:CreateWindow(Config, Parent)
 					return OptionInit
 				end
 				
-				function DropdownInit:SetText(txt)
-					Dropdown.Container.Value.Text = txt or "..."
+				function DropdownInit:SetText(txt,call)
+					local call = call or false
+					local txt = txt or "..."
+					Dropdown.Container.Value.Text = txt
+					if call then
+						CallBack(txt)
+					end
 				end
 				
 				function DropdownInit:AddOptions(Table)
