@@ -701,7 +701,7 @@ function Library:CreateWindow(Config, Parent)
 						function ViewPortInit:RotativeObject()
 							if CurrentCamera and Object then
 								if Object:IsA("Model") then
-									setRotationEvent(Object)
+									setRotationEvent(CurrentCamera,Object)
 								end
 							end
 						end
