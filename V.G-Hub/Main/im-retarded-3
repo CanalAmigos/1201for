@@ -599,6 +599,7 @@ function Library:CreateWindow(Config, Parent)
 				function DropdownInit:AddOption(Name, Callback)
 					local OptionInit = {}
 					local Option = Folder.Option:Clone()
+					local Rotation = nil
 					Option.Name = Name .. " O"
 					Option.Parent = Dropdown.Container.Holder.Container
 					if DropdownToggle then
@@ -704,8 +705,15 @@ function Library:CreateWindow(Config, Parent)
 						function ViewPortInit:RotativeObject()
 							if CurrentCamera and Object then
 								if Object:IsA("Model") then
-									setRotationEvent()
+									Rotation = setRotationEvent()
 								end
+							end
+						end
+						
+						function ViewPortInit:RemoveRotate()
+							if Rotation then
+								Rotation:Disconnect()
+								Rotation = nil
 							end
 						end
 						
