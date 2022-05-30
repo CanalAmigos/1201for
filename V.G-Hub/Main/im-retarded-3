@@ -443,14 +443,14 @@ function Library:CreateWindow(Config, Parent)
 				local DefaultLocal = Default or Min or 0
 				local SliderInit = {}
 				local Slider = Folder.Slider:Clone()
-				local Simbol = tostring(Simbol)
+				local Simbol = Simbol or ""
 				Slider.Name = Name .. " S"
 				Slider.Parent = Section.Container
 
 				Slider.Title.Text = Name
 				Slider.Slider.Bar.Size = UDim2.new(Min / Max,0,1,0)
 				Slider.Slider.Bar.BackgroundColor3 = Config.Color
-				Slider.Value.PlaceholderText = tostring(Min / Max)..Simbol or ""
+				Slider.Value.PlaceholderText = tostring(Min / Max)..Simbol
 				Slider.Title.Size = UDim2.new(1,0,0,Slider.Title.TextBounds.Y + 5)
 				Slider.Size = UDim2.new(1,-10,0,Slider.Title.TextBounds.Y + 15)
 				table.insert(Library.ColorTable, Slider.Slider.Bar)
@@ -465,7 +465,7 @@ function Library:CreateWindow(Config, Parent)
 					local SliderValue = Precise and SliderNonPrecise or SliderPrecise
 					SliderValue = tonumber(string.format("%.2f", SliderValue))
 					GlobalSliderValue = SliderValue
-					Slider.Value.PlaceholderText = tostring(SliderValue)..Simbol or ""
+					Slider.Value.PlaceholderText = tostring(SliderValue)..Simbol
 					Callback(GlobalSliderValue)
 				end
 				local function SetValue(Value)
@@ -473,7 +473,7 @@ function Library:CreateWindow(Config, Parent)
 					local def = math.clamp(Value, Min, Max)
 					local Porcentage = (def - Min) / (Max - Min)
 					Slider.Slider.Bar.Size = UDim2.new(Porcentage,0,1,0)
-					Slider.Value.PlaceholderText = Value..Simbol or ""
+					Slider.Value.PlaceholderText = Value..Simbol
 					Callback(Value)
 				end
 				Slider.Value.FocusLost:Connect(function()
@@ -487,7 +487,7 @@ function Library:CreateWindow(Config, Parent)
 
 					GlobalSliderValue = Slider.Value.Text
 					Slider.Slider.Bar.Size = UDim2.new(Slider.Value.Text / Max,0,1,0)
-					Slider.Value.PlaceholderText = Slider.Value.Text..Simbol or ""
+					Slider.Value.PlaceholderText = Slider.Value.Text..Simbol
 					Callback(tonumber(Slider.Value.Text))
 					Slider.Value.Text = ""
 				end)
@@ -543,7 +543,7 @@ function Library:CreateWindow(Config, Parent)
 						local def = math.clamp(GlobalSliderValue, Min, Max)
 						local Porcentage = (def - Min) / (Max - Min)
 						Slider.Slider.Bar.Size = UDim2.new(Porcentage,0,1,0)
-						Slider.Value.PlaceholderText = Value..Simbol or ""
+						Slider.Value.PlaceholderText = Value..Simbol
 						Callback(Value)
 					end
 				else
