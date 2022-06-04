@@ -147,6 +147,64 @@ function Library:CreateWindow(Config, Parent)
 			Screen.ToolTip.Position = UDim2.new(0,UserInputService:GetMouseLocation().X + 10,0,UserInputService:GetMouseLocation().Y - 5)
 		end
 	end)
+	
+	function WindowInit:Save(table_,name,path)
+		if type(writefile) == "function" then
+			name = name or Config.WindowName
+			path = path or ""
+			if table_ and typeof(table_) == "table" then
+				local Save = {}
+				for i,v in pairs(table_) do
+					Save[i] = {["Name"] = v.n or nil,["Value"] = v.v or nil}
+				end
+				local CheckStatus = {true}
+				for i,v in pairs(Save) do
+					if v.Name then
+						continue
+					else 
+						CheckStatus[1] = false
+						CheckStatus[#CheckStatus+1] = "No name found in {"..tostring(v).."}"
+						table.remove(Save,i)
+					end
+				end
+				if CheckStatus[1] == false then
+					for i,v in pairs(CheckStatus) do
+						if i > 1 then
+							print("["..i.."]: "..v)
+						end
+					end
+				end
+				local encode = game:GetService("HttpService"):JSONEncode(Save)
+				local s,e = pcall(function()
+					writefile(path..name..".json",encode)
+				end)
+				if not s then
+					print("[WritefileError]: "..e)
+				end
+			end
+		end
+		return
+	end
+	
+	function WindowInit:LoadSave(table_,name,path)
+		if type(isfile) == "function" and type(readfile) == "function" then
+			name = name or Config.WindowName
+			path = path or ""
+			if not isfile(path..name..".json") then return end
+			if table_ and typeof(table_) == "table" then
+				local decode = game:GetService("HttpService"):JSONDecode(readfile(path..name..".json"))
+				local s,e = pcall(function()
+					for _,v in pairs(decode) do
+						table_[v.Name].v = v.Value
+					end
+				end)
+				if not s then
+					print("[LoadFileError]: "..e)
+				end
+			end
+		end
+		return
+	end
 
 	function WindowInit:CreateTab(Name)
 		local TabInit = {}
