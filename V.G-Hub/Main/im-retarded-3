@@ -195,7 +195,7 @@ function Library:CreateWindow(Config, Parent)
 				local decode = game:GetService("HttpService"):JSONDecode(readfile(path..name..".json"))
 				local s,e = pcall(function()
 					for _,v in pairs(decode) do
-						table_[v.Name].v = v.Value
+						table_[v.Name].v = v.Value or table_[v.Name].v
 					end
 				end)
 				if not s then
