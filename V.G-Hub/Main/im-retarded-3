@@ -147,7 +147,7 @@ function Library:CreateWindow(Config, Parent)
 			Screen.ToolTip.Position = UDim2.new(0,UserInputService:GetMouseLocation().X + 10,0,UserInputService:GetMouseLocation().Y - 5)
 		end
 	end)
-	
+
 	function WindowInit:Save(table_,name,path)
 		if type(writefile) == "function" then
 			name = name or Config.WindowName
@@ -157,21 +157,11 @@ function Library:CreateWindow(Config, Parent)
 				for i,v in pairs(table_) do
 					Save[i] = {["Name"] = v.n or nil,["Value"] = v.v or nil}
 				end
-				local CheckStatus = {true}
 				for i,v in pairs(Save) do
-					if v.Name then
+					if v.Name and v.Value then
 						continue
-					else 
-						CheckStatus[1] = false
-						CheckStatus[#CheckStatus+1] = "No name found in {"..tostring(v).."}"
+					else
 						table.remove(Save,i)
-					end
-				end
-				if CheckStatus[1] == false then
-					for i,v in pairs(CheckStatus) do
-						if i > 1 then
-							print("["..i.."]: "..v)
-						end
 					end
 				end
 				local encode = game:GetService("HttpService"):JSONEncode(Save)
@@ -182,10 +172,11 @@ function Library:CreateWindow(Config, Parent)
 					print("[WritefileError]: "..e)
 				end
 			end
+			return true
 		end
-		return
+		return false
 	end
-	
+
 	function WindowInit:LoadSave(table_,name,path)
 		if type(isfile) == "function" and type(readfile) == "function" then
 			name = name or Config.WindowName
@@ -202,8 +193,9 @@ function Library:CreateWindow(Config, Parent)
 					print("[LoadFileError]: "..e)
 				end
 			end
+			return true
 		end
-		return
+		return false
 	end
 
 	function WindowInit:CreateTab(Name)
@@ -439,7 +431,7 @@ function Library:CreateWindow(Config, Parent)
 
 					Toggle.Keybind.Visible = true
 					Toggle.Keybind.Text = "[ " .. Bind .. " ]"
-					
+
 					Toggle.Keybind.MouseButton1Click:Connect(function()
 						if not Lock then
 							Toggle.Keybind.Text = "[ ... ]"
@@ -451,7 +443,7 @@ function Library:CreateWindow(Config, Parent)
 						Toggle.Keybind.Size = UDim2.new(0,Toggle.Keybind.TextBounds.X,1,0)
 						Toggle.Title.Size = UDim2.new(1,-Toggle.Keybind.Size.X.Offset - 15,1,0)
 					end)
-					
+
 					UserInputService.InputBegan:Connect(function(Input)
 						if WaitingForBind and Input.UserInputType == Enum.UserInputType.Keyboard then
 							local Key = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
@@ -474,7 +466,7 @@ function Library:CreateWindow(Config, Parent)
 							end
 						end
 					end)
-					
+
 					function KeybindInit:Lock(Value)
 						Value = Value or true
 						if Value then
@@ -698,19 +690,19 @@ function Library:CreateWindow(Config, Parent)
 						View.Name = Name .. " V"
 						View.Parent = Main
 						View.Visible = false
-						
+
 						View.Topbar.WindowName.Text = Name
-						
+
 						Option.MouseEnter:Connect(function()
 							View.Visible = true
 						end)
-						
+
 						Option.MouseLeave:Connect(function()
 							View.Visible = false
 						end)
-						
+
 						local CurrentCamera = nil
-						
+
 						if Object then
 							local obcl = Object:Clone()
 							obcl.Parent = View.Holder.TBContainer.Holder.ViewportFrame.Objects
@@ -729,7 +721,7 @@ function Library:CreateWindow(Config, Parent)
 								CurrentCamera = View.Holder.TBContainer.Holder.view
 							end
 						end
-						
+
 						local function setRotationEvent()
 							local camera = CurrentCamera
 							local model = Object
@@ -760,7 +752,7 @@ function Library:CreateWindow(Config, Parent)
 								camera.CFrame = modelCF * CFrame.fromEulerAnglesYXZ(0, math.rad(currentAngle), 0) * CFrame.new(0, 0, minDist + 3)
 							end)
 						end
-						
+
 						function ViewPortInit:RotativeObject()
 							if CurrentCamera and Object then
 								if Object:IsA("Model") then
@@ -768,14 +760,14 @@ function Library:CreateWindow(Config, Parent)
 								end
 							end
 						end
-						
+
 						function ViewPortInit:RemoveRotate()
 							if Rotation then
 								Rotation:Disconnect()
 								Rotation = nil
 							end
 						end
-						
+
 						function ViewPortInit:CameraCF(cframe)
 							if CurrentCamera and cframe then
 								if typeof(cframe) == "table" then
@@ -785,10 +777,10 @@ function Library:CreateWindow(Config, Parent)
 								end
 							end
 						end
-						
+
 						return ViewPortInit
 					end
-					
+
 					function OptionInit:Remove()
 						Option:Destroy()
 						Dropdown.Container.Holder.Size = UDim2.new(1,-5,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y)
@@ -804,7 +796,7 @@ function Library:CreateWindow(Config, Parent)
 					end
 					return OptionInit
 				end
-				
+
 				function DropdownInit:SetText(txt,call)
 					local call = call or false
 					local txt = txt or "..."
@@ -813,7 +805,7 @@ function Library:CreateWindow(Config, Parent)
 						CallBack(txt)
 					end
 				end
-				
+
 				function DropdownInit:AddOptions(Table)
 					if typeof(Table) == "table" then
 						table.foreach(Table,function(i,v)
@@ -821,7 +813,7 @@ function Library:CreateWindow(Config, Parent)
 						end)
 					end
 				end
-				
+
 				if DTable then
 					if typeof(DTable) == "table" then
 						table.foreach(DTable,function(i,v)
@@ -829,7 +821,7 @@ function Library:CreateWindow(Config, Parent)
 						end)
 					end
 				end
-				
+
 				function DropdownInit:ClearOptions()
 					for _, Option in pairs(Dropdown.Container.Holder.Container:GetChildren()) do
 						if Option:IsA("TextButton") then
