@@ -158,7 +158,7 @@ function Library:CreateWindow(Config, Parent)
 					Save[i] = {["Name"] = v.n or nil,["Value"] = v.v or nil}
 				end
 				for i,v in pairs(Save) do
-					if v.Name and v.Value then
+					if v.Name or v.Value then
 						continue
 					else
 						table.remove(Save,i)
