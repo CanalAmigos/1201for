@@ -204,21 +204,21 @@ function library:CreateGui(title)
 			
 			userIn.InputBegan:Connect(function(Input)
 				if WaitingForBind and Input.UserInputType == Enum.UserInputType.Keyboard then
-					local Key = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
-					if not table.find(Blacklist, Key) then
-						Key.Text = "[ "..Key.." ]"
-						Selected = Key
+					local Keyy = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
+					if not table.find(Blacklist, Keyy) then
+						Key.Text = "[ "..Keyy.." ]"
+						Selected = Keyy
 					else
 						Key.Text = "[ NONE ]"
 						Selected = "NONE"
 					end
 					WaitingForBind = false
 				elseif Input.UserInputType == Enum.UserInputType.Keyboard then
-					local Key = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
-					if Key == Selected then
+					local Keyy = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
+					if Keyy == Selected then
 						toggle()
 						if callback then
-							callback(Key)
+							callback(Keyy)
 						end
 					end
 				end
@@ -233,9 +233,9 @@ function library:CreateGui(title)
 				end
 			end
 
-			function KeybindInit:SetBind(Key)
-				Key.Text = "[ "..Key.." ]"
-				Selected = Key
+			function KeybindInit:SetBind(Keyy)
+				Key.Text = "[ "..Keyy.." ]"
+				Selected = Keyy
 			end
 
 			function KeybindInit:GetBind()
@@ -280,14 +280,16 @@ function library:CreateGui(title)
 		Box.ClearTextOnFocus = false
 		Box.TextSize = 14.000
 		Box.TextWrapped = true
-		Box:GetAttributeChangedSignal("Text"):Connect(function()
-			local value
-			if onlynumbers then
-				value = Box.Text:gsub('%D+', '')
-			else
-				value = Box.Text
+		Box.Changed:Connect(function(v)
+			if v == "Text" then
+				local value
+				if onlynumbers then
+					value = Box.Text:gsub('%D+', '')
+				else
+					value = Box.Text
+				end
+				callback(value)
 			end
-			callback(value)
 		end)
 
 		UICorner_2.Parent = Box
