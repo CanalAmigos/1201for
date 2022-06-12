@@ -18,6 +18,7 @@ function library:CreateGui(title)
 	local Title = Instance.new("TextLabel")
 	local UICorner_3 = Instance.new("UICorner")
 	local UIText = Instance.new("UITextSizeConstraint")
+	local Togglekey = "RightControl"
 	
 	local Gui = {}
 
@@ -76,11 +77,17 @@ function library:CreateGui(title)
 	
 	userIn.InputBegan:Connect(function(key)
 		if key.UserInputType == Enum.UserInputType.Keyboard then
-			if key.KeyCode == Enum.KeyCode.LeftControl then
+			if key.KeyCode == Enum.KeyCode[Togglekey] then
 				Main.Visible = not Main.Visible
 			end
 		end
 	end)
+	
+	function Gui:ChangeToggleKey(key)
+		if Enum.KeyCode[key] then
+			Togglekey = tostring(key)
+		end
+	end
 	
 	function Gui:CreateToggle(title,value,callback)
 		local title = title or "[Toggle]"
