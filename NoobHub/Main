@@ -109,7 +109,7 @@ function library:CreateGui(title)
 		Toggle.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
 		Toggle.BorderColor3 = Color3.fromRGB(27, 42, 53)
 		Toggle.Position = UDim2.new(0.0185185187, 0, 0, 0)
-		Toggle.Size = UDim2.new(0, 260, 0, 50)
+		Toggle.Size = UDim2.new(0.963, 0,0.167, 0)
 		Toggle.Font = Enum.Font.SourceSansSemibold
 		Toggle.Text = ""
 		Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -142,7 +142,7 @@ function library:CreateGui(title)
 		Key.Parent = Toggle
 		Key.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
 		Key.Position = UDim2.new(0.557692409, 0, 0.200000003, 0)
-		Key.Size = UDim2.new(0, 60, 0, 30)
+		Key.Size = UDim2.new(0.231, 0,0.6, 0)
 		Key.Visible = false
 		Key.Font = Enum.Font.SourceSansSemibold
 		Key.Text = "[ ... ]"
@@ -264,7 +264,7 @@ function library:CreateGui(title)
 		TextBox.Parent = Holder
 		TextBox.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
 		TextBox.Position = UDim2.new(0.0240740739, 0, 0.186666667, 0)
-		TextBox.Size = UDim2.new(0, 260, 0, 70)
+		TextBox.Size = UDim2.new(0.963, 0,0.233, 0)
 
 		UICorner.Parent = TextBox
 
@@ -327,7 +327,7 @@ function library:CreateGui(title)
 		Label.Name = "Label"
 		Label.Parent = Holder
 		Label.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
-		Label.Size = UDim2.new(0, 260, 0, 50)
+		Label.Size = UDim2.new(0.963, 0,0.167, 0)
 
 		UICorner.Parent = Label
 
@@ -371,7 +371,7 @@ function library:CreateGui(title)
 		Separator.Parent = Holder
 		Separator.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
 		Separator.Position = UDim2.new(0.0407407396, 0, 0.379999995, 0)
-		Separator.Size = UDim2.new(0, 260, 0, 30)
+		Separator.Size = UDim2.new(0.963, 0,0.1, 0)
 
 		UICorner.Parent = Separator
 
