@@ -74,6 +74,14 @@ function library:CreateGui(title)
 	UIText.Name = "UIText"
 	UIText.Parent = Title
 	
+	userIn.InputBegan:Connect(function(key)
+		if key.UserInputType == Enum.UserInputType.Keyboard then
+			if key.KeyCode == Enum.KeyCode.LeftControl then
+				Main.Visible = not Main.Visible
+			end
+		end
+	end)
+	
 	function Gui:CreateToggle(title,value,callback)
 		local title = title or "[Toggle]"
 		local value = value or false
