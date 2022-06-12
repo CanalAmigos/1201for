@@ -49,6 +49,7 @@ function library:CreateGui(title)
 	Holder.Name = "Holder"
 	Holder.Parent = Main_2
 	Holder.Active = true
+	Holder.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	Holder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Holder.BackgroundTransparency = 1.000
 	Holder.BorderSizePixel = 0
