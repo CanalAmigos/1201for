@@ -145,7 +145,7 @@ function library:CreateGui(title)
 		Key.Size = UDim2.new(0, 60, 0, 30)
 		Key.Visible = false
 		Key.Font = Enum.Font.SourceSansSemibold
-		Key.Text = "[ . . . ]"
+		Key.Text = "[ ... ]"
 		Key.TextColor3 = Color3.fromRGB(255, 255, 255)
 		Key.TextSize = 14.000
 		Key.TextWrapped = true
