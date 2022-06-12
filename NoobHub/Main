@@ -162,7 +162,7 @@ function library:CreateGui(title)
 		Title.Position = UDim2.new(0.0269230772, 0, 0, 0)
 		Title.Size = UDim2.new(0.761538446, 0, 1, 0)
 		Title.Font = Enum.Font.SourceSansSemibold
-		Title.Text = "Title"
+		Title.Text = title
 		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 		Title.TextSize = 21.000
 		Title.TextWrapped = true
@@ -217,8 +217,8 @@ function library:CreateGui(title)
 					local Keyy = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
 					if Keyy == Selected then
 						toggle()
-						if callback then
-							callback(Keyy)
+						if Callback then
+							Callback(Keyy)
 						end
 					end
 				end
