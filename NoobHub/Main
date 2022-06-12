@@ -57,7 +57,7 @@ function library:CreateGui(title)
 	UIListLayout.Parent = Holder
 	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	UIListLayout.Padding = UDim.new(0.0199999996, 0)
+	UIListLayout.Padding = UDim.new(0, 6)
 
 	Title.Name = "Title"
 	Title.Parent = Main_2
