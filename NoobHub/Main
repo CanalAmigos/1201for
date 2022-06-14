@@ -552,7 +552,7 @@ function library:CreateGui(title)
 		ColorChanger.Font = Enum.Font.SourceSansSemibold
 		ColorChanger.Text = ""
 		ColorChanger.TextColor3 = Color3.fromRGB(255, 255, 255)
-		ColorChanger.TextSize = 21.000
+		ColorChanger.TextSize = 21
 		ColorChanger.TextXAlignment = Enum.TextXAlignment.Left
 		ColorChanger.MouseButton1Click:Connect(function()
 			if ColorPicker.Visible == false then
@@ -577,7 +577,7 @@ function library:CreateGui(title)
 		Color.Position = UDim2.new(0.838461578, 0, 0.199999988, 0)
 		Color.Size = UDim2.new(0.115384616, 0, 0.600000024, 0)
 		Color.Image = "rbxassetid://7072706620"
-		Color.ImageTransparency = 1.000
+		Color.ImageTransparency = 1
 		Color.MouseButton1Click:Connect(function()
 			if ColorPicker.Visible == false then
 				Preview.BackgroundColor3 = Color.BackgroundColor3
@@ -603,7 +603,7 @@ function library:CreateGui(title)
 		Title.Font = Enum.Font.SourceSansSemibold
 		Title.Text = "Title"
 		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-		Title.TextSize = 21.000
+		Title.TextSize = 21
 		Title.TextWrapped = true
 		Title.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -626,6 +626,55 @@ function library:CreateGui(title)
 			callback(color)
 		end
 		return ColorPikerL
+	end
+	function Gui:CreateButton(text,callback)
+		local text = text or "[Button]"
+		local callback = callback or function() end
+		
+		local Button = Instance.new("TextButton")
+		local UICorner = Instance.new("UICorner")
+		local Title = Instance.new("TextLabel")
+		local UIText = Instance.new("UITextSizeConstraint")
+		
+		local ButtonL = {}
+
+		Button.Name = "Button"
+		Button.Parent = Holder
+		Button.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
+		Button.BorderColor3 = Color3.fromRGB(27, 42, 53)
+		Button.Position = UDim2.new(0.0185185187, 0, 0, 0)
+		Button.Size = UDim2.new(0.962962985, 0, 0.166666672, 0)
+		Button.Font = Enum.Font.SourceSansSemibold
+		Button.Text = ""
+		Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Button.TextSize = 21
+		Button.TextXAlignment = Enum.TextXAlignment.Left
+		Button.MouseButton1Click:Connect(function()
+			callback()
+		end)
+
+		UICorner.Parent = Button
+
+		Title.Name = "Title"
+		Title.Parent = Button
+		Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Title.BackgroundTransparency = 1.000
+		Title.Position = UDim2.new(0.0269230772, 0, 0, 0)
+		Title.Size = UDim2.new(1, 0, 1, 0)
+		Title.Font = Enum.Font.SourceSansSemibold
+		Title.Text = text
+		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Title.TextSize = 21
+		Title.TextWrapped = true
+
+		UIText.Name = "UIText"
+		UIText.Parent = Title
+		
+		function ButtonL:SetText(txt)
+			local txt = txt or "[Button]"
+			Title.Text = txt
+		end
+		return ButtonL
 	end
 	return Gui
 end
