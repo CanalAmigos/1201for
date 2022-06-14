@@ -576,8 +576,8 @@ function library:CreateGui(title)
 		Color.BorderColor3 = Color3.fromRGB(27, 42, 53)
 		Color.Position = UDim2.new(0.838461578, 0, 0.199999988, 0)
 		Color.Size = UDim2.new(0.115384616, 0, 0.600000024, 0)
-		Color.Image = "rbxassetid://7072706620"
 		Color.ImageTransparency = 1
+		Color.AutoButtonColor = false
 		Color.MouseButton1Click:Connect(function()
 			if ColorPicker.Visible == false then
 				Preview.BackgroundColor3 = Color.BackgroundColor3
