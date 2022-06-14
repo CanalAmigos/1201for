@@ -51,7 +51,7 @@ function library:CreateGui(title)
 	Holder.Active = true
 	Holder.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	Holder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Holder.BackgroundTransparency = 1.000
+	Holder.BackgroundTransparency = 1
 	Holder.BorderSizePixel = 0
 	Holder.Size = UDim2.new(1, 0, 1, 0)
 	Holder.ScrollBarThickness = 0
@@ -69,7 +69,7 @@ function library:CreateGui(title)
 	Title.Font = Enum.Font.SourceSansSemibold
 	Title.Text = title
 	Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Title.TextSize = 35.000
+	Title.TextSize = 35
 	Title.Selectable = true
 	Title.Draggable = true
 
@@ -131,7 +131,7 @@ function library:CreateGui(title)
 		Toggle.Font = Enum.Font.SourceSansSemibold
 		Toggle.Text = ""
 		Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
-		Toggle.TextSize = 21.000
+		Toggle.TextSize = 21
 		Toggle.TextXAlignment = Enum.TextXAlignment.Left
 		Toggle.MouseButton1Click:Connect(function()
 			toggle()
@@ -163,11 +163,14 @@ function library:CreateGui(title)
 		Key.Size = UDim2.new(0.231, 0,0.6, 0)
 		Key.Visible = false
 		Key.Font = Enum.Font.SourceSansSemibold
-		Key.Text = "[ ... ]"
+		Key.Text = "[ . . . ]"
 		Key.TextColor3 = Color3.fromRGB(255, 255, 255)
-		Key.TextSize = 14.000
+		Key.TextSize = 14
 		Key.TextWrapped = true
-
+		Key.AutomaticSize = Enum.AutomaticSize.X
+		Key.AnchorPoint = Vector2.new(0.2, 0)
+		
+		UICorner_3.CornerRadius = UDim.new(0, 5)
 		UICorner_3.Parent = Key
 
 		UIText_2.Name = "UIText"
@@ -176,13 +179,13 @@ function library:CreateGui(title)
 		Title.Name = "Title"
 		Title.Parent = Toggle
 		Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Title.BackgroundTransparency = 1.000
+		Title.BackgroundTransparency = 1
 		Title.Position = UDim2.new(0.0269230772, 0, 0, 0)
-		Title.Size = UDim2.new(0.761538446, 0, 1, 0)
+		Title.Size = UDim2.new(0.484615564, 0, 1, 0)
 		Title.Font = Enum.Font.SourceSansSemibold
 		Title.Text = title
 		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-		Title.TextSize = 21.000
+		Title.TextSize = 21
 		Title.TextWrapped = true
 		Title.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -202,7 +205,7 @@ function library:CreateGui(title)
 			end
 		end
 		function ToggleL:AddKey(Bind,Lock,Callback)
-			local KeybindInit = {}
+			local KeybindL = {}
 			Bind = Bind or "NONE"
 			Lock = Lock or false
 			
@@ -215,7 +218,7 @@ function library:CreateGui(title)
 			
 			Key.MouseButton1Click:Connect(function()
 				if not Lock then
-					Key.Text = "[ ... ]"
+					Key.Text = "[ . . . ]"
 					WaitingForBind = true
 				end
 			end)
@@ -242,7 +245,7 @@ function library:CreateGui(title)
 				end
 			end)
 			
-			function KeybindInit:Lock(Value)
+			function KeybindL:Lock(Value)
 				Value = Value or true
 				if Value then
 					Lock = true
@@ -251,16 +254,17 @@ function library:CreateGui(title)
 				end
 			end
 
-			function KeybindInit:SetBind(Keyy)
+			function KeybindL:SetBind(Keyy)
+				local Keyy = Keyy or "NONE"
 				Key.Text = "[ "..Keyy.." ]"
 				Selected = Keyy
 			end
 
-			function KeybindInit:GetBind()
+			function KeybindL:GetBind()
 				return Selected
 			end
 
-			return KeybindInit
+			return KeybindL
 		end
 		return ToggleL
 	end
@@ -296,7 +300,7 @@ function library:CreateGui(title)
 		Box.TextColor3 = Color3.fromRGB(255, 255, 255)
 		Box.TextScaled = true
 		Box.ClearTextOnFocus = false
-		Box.TextSize = 14.000
+		Box.TextSize = 14
 		Box.TextWrapped = true
 		Box.Changed:Connect(function(v)
 			if v == "Text" then
@@ -315,13 +319,13 @@ function library:CreateGui(title)
 		Title.Name = "Title"
 		Title.Parent = TextBox
 		Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Title.BackgroundTransparency = 1.000
+		Title.BackgroundTransparency = 1
 		Title.Position = UDim2.new(0.0252469312, 0, 0, 0)
 		Title.Size = UDim2.new(0.926923096, 0, 0.45714286, 0)
 		Title.Font = Enum.Font.SourceSansSemibold
 		Title.Text = title
 		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-		Title.TextSize = 21.000
+		Title.TextSize = 21
 		Title.TextWrapped = true
 		Title.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -354,13 +358,13 @@ function library:CreateGui(title)
 		Text.Name = "Text"
 		Text.Parent = Label
 		Text.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Text.BackgroundTransparency = 1.000
+		Text.BackgroundTransparency = 1
 		Text.Position = UDim2.new(0.0269230772, 0, 0, 0)
 		Text.Size = UDim2.new(0.97307694, 0, 1, 0)
 		Text.Font = Enum.Font.SourceSansSemibold
 		Text.Text = text
 		Text.TextColor3 = Color3.fromRGB(255, 255, 255)
-		Text.TextSize = 21.000
+		Text.TextSize = 21
 		Text.TextWrapped = true
 		Text.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -397,12 +401,12 @@ function library:CreateGui(title)
 
 		TextLabel.Parent = Separator
 		TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		TextLabel.BackgroundTransparency = 1.000
+		TextLabel.BackgroundTransparency = 1
 		TextLabel.Size = UDim2.new(1, 0, 1, 0)
 		TextLabel.Font = Enum.Font.SourceSansSemibold
 		TextLabel.Text = text
 		TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-		TextLabel.TextSize = 21.000
+		TextLabel.TextSize = 21
 		TextLabel.TextWrapped = true
 
 		UIText.Name = "UIText"
