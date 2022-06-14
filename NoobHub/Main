@@ -1,6 +1,7 @@
 local Tween = game:GetService("TweenService")
 local pls = game:GetService("Players")
 local userIn = game:GetService("UserInputService")
+local Rs = game:GetService("RunService")
 local pl = pls.LocalPlayer
 local Mouse = pl:GetMouse()
 
@@ -12,11 +13,24 @@ function library:CreateGui(title)
 	local Main = Instance.new("Frame")
 	local UICorner = Instance.new("UICorner")
 	local Main_2 = Instance.new("Frame")
+	
+	local ColorPicker = Instance.new("Frame")
+	local RGB = Instance.new("ImageLabel")
+	local Marker = Instance.new("Frame")
+	local Value = Instance.new("ImageLabel")
+	local Marker_2 = Instance.new("Frame")
 	local UICorner_2 = Instance.new("UICorner")
+	local Preview = Instance.new("ImageLabel")
+	local UICorner_3 = Instance.new("UICorner")
+	local selectedColor = Color3.fromHSV(0, 0, 1)
+	local colorData = {1,1,1}
+	local mouse1down = false
+	
+	local UICorner_3_ = Instance.new("UICorner")
 	local Holder = Instance.new("ScrollingFrame")
 	local UIListLayout = Instance.new("UIListLayout")
 	local Title = Instance.new("TextLabel")
-	local UICorner_3 = Instance.new("UICorner")
+	local UICorner_4 = Instance.new("UICorner")
 	local UIText = Instance.new("UITextSizeConstraint")
 	local Togglekey = "RightControl"
 	
@@ -34,7 +48,114 @@ function library:CreateGui(title)
 	Main.Position = UDim2.new(0.371, 0,0.406, 0)
 	Main.Size = UDim2.new(0, 280, 0, 345)
 
-	UICorner.Parent = Main
+	UICorner_2.Parent = Main
+	
+	local function setColor(hue,sat,val)
+		colorData = {hue or colorData[1],sat or colorData[2],val or colorData[3]}
+		selectedColor = Color3.fromHSV(colorData[1],colorData[2],colorData[3])
+		Preview.BackgroundColor3 = selectedColor
+		Value.ImageColor3 = Color3.fromHSV(colorData[1],colorData[2],1)
+	end
+	
+	local function inBounds(frame)
+		local x,y = Mouse.X - frame.AbsolutePosition.X,Mouse.Y - frame.AbsolutePosition.Y
+		local maxX,maxY = frame.AbsoluteSize.X,frame.AbsoluteSize.Y
+		if x >= 0 and y >= 0 and x <= maxX and y <= maxY then
+			return x/maxX,y/maxY
+		end
+	end
+
+	local function updateRGB()
+		if mouse1down then
+			local x,y = inBounds(RGB)
+			if x and y then
+				Marker.Position = UDim2.new(x,0,y,0)
+				setColor(1 - x,1 - y)
+			end
+
+			local x,y = inBounds(Value)
+			if x and y then
+				Marker_2.Position = UDim2.new(0.5,0,y,0)
+				setColor(nil,nil,1 - y)
+			end
+		end
+	end
+	
+	Mouse.Move:connect(updateRGB)
+	Mouse.Button1Down:connect(function()mouse1down = true end)
+	Mouse.Button1Up:connect(function()mouse1down = false end)
+	
+	--//////////////////////////////////////////////////////////
+
+	ColorPicker.Name = "ColorPicker"
+	ColorPicker.Parent = Main
+	ColorPicker.AnchorPoint = Vector2.new(0.5, 0.5)
+	ColorPicker.BackgroundColor3 = Color3.fromRGB(57, 57, 57)
+	ColorPicker.Position = UDim2.new(1.30714285, 0, 0.17637682, 0)
+	ColorPicker.Size = UDim2.new(0, 145, 0, 145)
+	ColorPicker.Visible = false
+	ColorPicker.SizeConstraint = Enum.SizeConstraint.RelativeXX
+	
+	UICorner_3_.Parent = ColorPicker
+
+	RGB.Name = "RGB"
+	RGB.Parent = ColorPicker
+	RGB.AnchorPoint = Vector2.new(0.5, 0)
+	RGB.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	RGB.BorderColor3 = Color3.fromRGB(27, 42, 53)
+	RGB.BorderSizePixel = 0
+	RGB.Position = UDim2.new(0.400000006, 0, 0.100000001, 0)
+	RGB.Size = UDim2.new(0.600000024, 0, 0.600000024, 0)
+	RGB.ZIndex = 4
+	RGB.Image = "rbxassetid://1433361550"
+	RGB.SliceCenter = Rect.new(10, 10, 90, 90)
+
+	Marker.Name = "Marker"
+	Marker.Parent = RGB
+	Marker.AnchorPoint = Vector2.new(0.5, 0.5)
+	Marker.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Marker.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Marker.Position = UDim2.new(0.5, 0, 1, 0)
+	Marker.Size = UDim2.new(0, 4, 0, 4)
+	Marker.ZIndex = 5
+
+	Value.Name = "Value"
+	Value.Parent = ColorPicker
+	Value.AnchorPoint = Vector2.new(0.5, 0)
+	Value.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	Value.BorderColor3 = Color3.fromRGB(27, 42, 53)
+	Value.BorderSizePixel = 0
+	Value.Position = UDim2.new(0.850000024, 0, 0.100000001, 0)
+	Value.Size = UDim2.new(0.100000001, 0, 0.600000024, 0)
+	Value.ZIndex = 4
+	Value.Image = "rbxassetid://359311684"
+	Value.SliceCenter = Rect.new(10, 10, 90, 90)
+
+	Marker_2.Name = "Marker"
+	Marker_2.Parent = Value
+	Marker_2.AnchorPoint = Vector2.new(0.5, 0.5)
+	Marker_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Marker_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Marker_2.Position = UDim2.new(0.5, 0, 0, 0)
+	Marker_2.Size = UDim2.new(1, 4, 0, 2)
+	Marker_2.ZIndex = 5
+
+	
+
+	Preview.Name = "Preview"
+	Preview.Parent = ColorPicker
+	Preview.AnchorPoint = Vector2.new(0.5, 0)
+	Preview.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Preview.BorderColor3 = Color3.fromRGB(27, 42, 53)
+	Preview.BorderSizePixel = 0
+	Preview.Position = UDim2.new(0.5, 0, 0.800000012, 0)
+	Preview.Size = UDim2.new(0.600000024, 0, 0.100000001, 0)
+	Preview.ZIndex = 4
+	Preview.SliceCenter = Rect.new(10, 10, 90, 90)
+
+	UICorner_2.Parent = Preview
+	
+	--//////////////////////////////////////////////////////////
 
 	Main_2.Name = "Main"
 	Main_2.Parent = Main
@@ -44,7 +165,7 @@ function library:CreateGui(title)
 	Main_2.Position = UDim2.new(0.0160714388, 0, 0.11486537, 0)
 	Main_2.Size = UDim2.new(0.964285731, 0, 0.869565189, 0)
 
-	UICorner_2.Parent = Main_2
+	UICorner_3.Parent = Main_2
 
 	Holder.Name = "Holder"
 	Holder.Parent = Main_2
@@ -73,7 +194,7 @@ function library:CreateGui(title)
 	Title.Selectable = true
 	Title.Draggable = true
 
-	UICorner_3.Parent = Title
+	UICorner_4.Parent = Title
 
 	UIText.Name = "UIText"
 	UIText.Parent = Title
@@ -101,12 +222,11 @@ function library:CreateGui(title)
 		
 		local Toggle = Instance.new("TextButton")
 		local UICorner = Instance.new("UICorner")
-		local UIText = Instance.new("UITextSizeConstraint")
 		local Check = Instance.new("ImageButton")
 		local UICorner_2 = Instance.new("UICorner")
 		local Key = Instance.new("TextButton")
 		local UICorner_3 = Instance.new("UICorner")
-		local UIText_2 = Instance.new("UITextSizeConstraint")
+		local UIText = Instance.new("UITextSizeConstraint")
 		local Title = Instance.new("TextLabel")
 		local UIText_3 = Instance.new("UITextSizeConstraint")
 		
@@ -139,15 +259,12 @@ function library:CreateGui(title)
 
 		UICorner.Parent = Toggle
 
-		UIText.Name = "UIText"
-		UIText.Parent = Toggle
-
 		Check.Name = "Check"
 		Check.Parent = Toggle
 		Check.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
 		Check.BorderColor3 = Color3.fromRGB(27, 42, 53)
 		Check.Position = UDim2.new(0.838461578, 0, 0.199999988, 0)
-		Check.Size = UDim2.new(0.11923077, 0, 0.600000024, 0)
+		Check.Size = UDim2.new(0.115384616, 0, 0.600000024, 0)
 		Check.Image = "rbxassetid://7072706620"
 		Check.ImageTransparency = 1
 		Check.MouseButton1Click:Connect(function()
@@ -173,8 +290,8 @@ function library:CreateGui(title)
 		UICorner_3.CornerRadius = UDim.new(0, 5)
 		UICorner_3.Parent = Key
 
-		UIText_2.Name = "UIText"
-		UIText_2.Parent = Key
+		UIText.Name = "UIText"
+		UIText.Parent = Key
 
 		Title.Name = "Title"
 		Title.Parent = Toggle
@@ -417,6 +534,105 @@ function library:CreateGui(title)
 			TextLabel.Text = txt
 		end
 		return SeparatorL
+	end
+	function Gui:CreateColorPiker(title,color,callback)
+		local title = title or "[ColorPiker]"
+		local color = color or Color3.fromHSV(0, 0, 1)
+		local callback = callback or function() end
+		local Open = false
+		
+		local ColorPikerL = {}
+		
+		local ColorChanger = Instance.new("TextButton")
+		local UICorner = Instance.new("UICorner")
+		local Color = Instance.new("ImageButton")
+		local UICorner_2 = Instance.new("UICorner")
+		local Title = Instance.new("TextLabel")
+		local UIText = Instance.new("UITextSizeConstraint")
+		
+		ColorChanger.Name = "ColorChanger"
+		ColorChanger.Parent = Holder
+		ColorChanger.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
+		ColorChanger.BorderColor3 = Color3.fromRGB(27, 42, 53)
+		ColorChanger.Position = UDim2.new(0.0185185187, 0, 0, 0)
+		ColorChanger.Size = UDim2.new(0.962962985, 0, 0.166666672, 0)
+		ColorChanger.Font = Enum.Font.SourceSansSemibold
+		ColorChanger.Text = ""
+		ColorChanger.TextColor3 = Color3.fromRGB(255, 255, 255)
+		ColorChanger.TextSize = 21.000
+		ColorChanger.TextXAlignment = Enum.TextXAlignment.Left
+		ColorChanger.MouseButton1Click:Connect(function()
+			if ColorPicker.Visible == false then
+				Preview.BackgroundColor3 = Color.BackgroundColor3
+				ColorPicker.Visible = true
+				Open = true
+			else
+				if Open then
+					Color.BackgroundColor3 = Preview.BackgroundColor3
+					ColorPicker.Visible = false
+					Open = false
+				end
+			end
+		end)
+
+		UICorner.Parent = ColorChanger
+
+		Color.Name = "Color"
+		Color.Parent = ColorChanger
+		Color.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Color.BorderColor3 = Color3.fromRGB(27, 42, 53)
+		Color.Position = UDim2.new(0.838461578, 0, 0.199999988, 0)
+		Color.Size = UDim2.new(0.115384616, 0, 0.600000024, 0)
+		Color.Image = "rbxassetid://7072706620"
+		Color.ImageTransparency = 1.000
+		Color.MouseButton1Click:Connect(function()
+			if ColorPicker.Visible == false then
+				Preview.BackgroundColor3 = Color.BackgroundColor3
+				ColorPicker.Visible = true
+				Open = true
+			else
+				if Open then
+					Color.BackgroundColor3 = Preview.BackgroundColor3
+					ColorPicker.Visible = false
+					Open = false
+				end
+			end
+		end)
+
+		UICorner_2.Parent = Color
+
+		Title.Name = "Title"
+		Title.Parent = ColorChanger
+		Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Title.BackgroundTransparency = 1.000
+		Title.Position = UDim2.new(0.0269230772, 0, 0, 0)
+		Title.Size = UDim2.new(0.788461745, 0, 1, 0)
+		Title.Font = Enum.Font.SourceSansSemibold
+		Title.Text = "Title"
+		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Title.TextSize = 21.000
+		Title.TextWrapped = true
+		Title.TextXAlignment = Enum.TextXAlignment.Left
+
+		UIText.Name = "UIText"
+		UIText.Parent = Title
+		
+		spawn(function()
+			while true do
+				Rs.RenderStepped:Wait()
+				if Open then
+					Color.BackgroundColor3 = Preview.BackgroundColor3
+					callback(Color.BackgroundColor3)
+				end
+			end
+		end)
+		
+		function ColorPikerL:SetColor(color)
+			local color = color or Color3.new(1, 1, 1)
+			Color.BackgroundColor3 = color
+			callback(color)
+		end
+		return ColorPikerL
 	end
 	return Gui
 end
