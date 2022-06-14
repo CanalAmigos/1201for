@@ -495,7 +495,6 @@ function library:CreateGui(title)
 		local text = text or ""
 		
 		local Separator = Instance.new("Frame")
-		local Inside = Instance.new("Frame")
 		local UICorner = Instance.new("UICorner")
 		local TextLabel = Instance.new("TextLabel")
 		local UIText = Instance.new("UITextSizeConstraint")
@@ -504,20 +503,13 @@ function library:CreateGui(title)
 
 		Separator.Name = "Separator"
 		Separator.Parent = Holder
-		Separator.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Separator.BackgroundTransparency = 1
+		Separator.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
 		Separator.Position = UDim2.new(0.0407407396, 0, 0.379999995, 0)
-		Separator.Size = UDim2.new(0.963, 0, 0.150000006, 0)
+		Separator.Size = UDim2.new(0.962962985, 0, 0.100000001, 0)
 
-		Inside.Name = "Inside"
-		Inside.Parent = Separator
-		Inside.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
-		Inside.Position = UDim2.new(0, 0, 0.300000012, 0)
-		Inside.Size = UDim2.new(0.999980867, 0, 0.680000007, 0)
+		UICorner.Parent = Separator
 
-		UICorner.Parent = Inside
-
-		TextLabel.Parent = Inside
+		TextLabel.Parent = Separator
 		TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 		TextLabel.BackgroundTransparency = 1
 		TextLabel.Size = UDim2.new(1, 0, 1, 0)
