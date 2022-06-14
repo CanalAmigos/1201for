@@ -528,9 +528,9 @@ function library:CreateGui(title)
 		end
 		return SeparatorL
 	end
-	function Gui:CreateColorPiker(title,color,callback)
+	function Gui:CreateColorPiker(title,hsv,callback)
 		local title = title or "[ColorPiker]"
-		local color = color or Color3.fromHSV(0, 0, 1)
+		local color = hsv or Color3.fromHSV(0, 0, 1)
 		local callback = callback or function() end
 		local Open = false
 		
