@@ -1,3 +1,4 @@
+
 local Tween = game:GetService("TweenService")
 local pls = game:GetService("Players")
 local userIn = game:GetService("UserInputService")
@@ -528,9 +529,10 @@ function library:CreateGui(title)
 		end
 		return SeparatorL
 	end
-	function Gui:CreateColorPiker(title,hsv,callback)
+	function Gui:CreateColorPiker(title,hsv,doRGB,callback)
 		local title = title or "[ColorPiker]"
 		local color = hsv or Color3.fromHSV(0, 0, 1)
+		local doRGB = doRGB or false
 		local callback = callback or function() end
 		local Open = false
 		
@@ -610,12 +612,21 @@ function library:CreateGui(title)
 		UIText.Name = "UIText"
 		UIText.Parent = Title
 		
+		local function hsv2rgb(hsv)
+			local color = hsv
+			return Color3.fromRGB(math.floor((color.R*255)+0.5),math.floor((color.G*255)+0.5),math.floor((color.B*255)+0.5))
+		end
+		
 		spawn(function()
 			while true do
 				Rs.RenderStepped:Wait()
 				if Open then
 					Color.BackgroundColor3 = Preview.BackgroundColor3
-					callback(Color.BackgroundColor3)
+					if not doRGB then
+						callback(Color.BackgroundColor3)
+					else
+						callback(hsv2rgb(Color.BackgroundColor3))
+					end
 				end
 			end
 		end)
