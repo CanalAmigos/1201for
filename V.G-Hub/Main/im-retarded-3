@@ -276,6 +276,7 @@ function Library:CreateWindow(Config, Parent)
 				local Label = Folder.Label:Clone()
 				Label.Name = Name .. " L"
 				Label.Parent = Section.Container
+				Label.RichText = true
 				Label.Text = Name
 				Label.Size = UDim2.new(1,-10,0,Label.TextBounds.Y)
 			end
