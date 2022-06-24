@@ -158,7 +158,8 @@ function Library:CreateWindow(Config, Parent)
 			path = path or ""
 			if table_ and typeof(table_) == "table" then
 				local Save = {}
-				for i,v in pairs(table_) do
+				local i = 0
+				for _,v in pairs(table_) do i+=1
 					if type(v) ~= "table" then continue end
 					Save[i] = {["Name"] = v.n or nil,["Value"] = v.v or nil}
 				end
@@ -166,7 +167,7 @@ function Library:CreateWindow(Config, Parent)
 					if v.Name and v.Value then
 						continue
 					else
-						Save[i] = nil
+						v = nil; table.remove(Save,i)
 					end
 				end
 				local encode = game:GetService("HttpService"):JSONEncode(Save)
@@ -192,8 +193,9 @@ function Library:CreateWindow(Config, Parent)
 				local decode = game:GetService("HttpService"):JSONDecode(readfile(path.."/"..name..".json"))
 				local s,e = pcall(function()
 					for _,v in pairs(decode) do
-						if type(table_[v.Name]) ~= "table" then table_[v.Name] = {} end
-						table_[v.Name].v = v.Value or table_[v.Name].v
+						if type(v) ~= "table" then continue
+						elseif type(table_[v.Name]) ~= "table" then table_[v.Name] = {} end
+						table_[v.Name].v = v.Value or table_[v.Name].v or nil
 					end
 				end)
 				if not s then
