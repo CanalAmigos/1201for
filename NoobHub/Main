@@ -531,6 +531,7 @@ function library:CreateGui(title)
 		UIListL.Parent = Holder_
 		UIListL.HorizontalAlignment = Enum.HorizontalAlignment.Center
 		UIListL.SortOrder = Enum.SortOrder.LayoutOrder
+		UIListL.Padding = UDim.new(0,-1)
 
 		Open.Name = "Open"
 		Open.Parent = DropDown
@@ -587,6 +588,12 @@ function library:CreateGui(title)
 				Open.Text = text
 				Toggle(false)
 				callback(text)
+			end)
+			TextButton.MouseEnter:Connect(function()
+				TextButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+			end)
+			TextButton.MouseLeave:Connect(function()
+				TextButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 			end)
 
 			UIText.Name = "UIText"
