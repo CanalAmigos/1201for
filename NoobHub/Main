@@ -612,6 +612,10 @@ function library:CreateGui(title)
 					TextButton.Text = text
 				end
 			end
+			
+			function ItemL:GetText()
+				return TextButton.Text
+			end
 			return ItemL
 		end
 		
@@ -632,13 +636,15 @@ function library:CreateGui(title)
 		function DropDownL:AddOptions(table_,callback_)
 			local table_ = table_ or {}
 			local callback_ = callback_ or callback
+			local Return = {}
 			if type(table_) == "table" then
 				for i,v in pairs(table_) do
 					if v:gsub(" ","") ~= "" then
-						AddItem(v)
+						Return[i] = AddItem(v)
 					end
 				end
 			end
+			return Return
 		end
 		
 		function DropDownL:SetText(text,call)
