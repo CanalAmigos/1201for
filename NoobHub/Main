@@ -471,7 +471,7 @@ function library:CreateGui(title)
 		
 		local function Toggle(value)
 			if value == nil then
-				if Holder_.Size.Y.Offset > 0 then
+				if Toggled then
 					Value = false
 				else
 					Value = true
@@ -484,7 +484,7 @@ function library:CreateGui(title)
 						v.Visible = true
 					end
 				end
-				Tween:Create(Icon,TweenInfo.new(0.5,Enum.EasingStyle.Linear,Enum.EasingDirection.In),{Rotation = 90}):Play()
+				Tween:Create(Icon,TweenInfo.new(0.2,Enum.EasingStyle.Linear,Enum.EasingDirection.In),{Rotation = 90}):Play()
 			else
 				Toggled = false
 				for _,v in ipairs(Holder_:GetChildren()) do
@@ -492,7 +492,7 @@ function library:CreateGui(title)
 						v.Visible = false
 					end
 				end
-				Tween:Create(Icon,TweenInfo.new(0.5,Enum.EasingStyle.Linear,Enum.EasingDirection.Out),{Rotation = -90}):Play()
+				Tween:Create(Icon,TweenInfo.new(0.2,Enum.EasingStyle.Linear,Enum.EasingDirection.Out),{Rotation = -90}):Play()
 			end
 		end
 		
