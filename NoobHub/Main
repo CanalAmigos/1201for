@@ -224,6 +224,16 @@ function library:CreateGui(title)
 		local Title = Instance.new("TextLabel")
 		local UIText_3 = Instance.new("UITextSizeConstraint")
 		
+		if value then
+				Check.BackgroundColor3 = Color3.fromRGB(255, 0, 127)
+				Check.ImageTransparency = 0
+				callback(true)
+			else
+				Check.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
+				Check.ImageTransparency = 1
+				callback(false)
+			end
+		
 		local function toggle()
 			if Check.ImageTransparency == 1 then
 				Check.BackgroundColor3 = Color3.fromRGB(255, 0, 127)
@@ -636,6 +646,7 @@ function library:CreateGui(title)
 			Color.BackgroundColor3 = color
 			callback(color)
 		end
+		ColorPikerL:SetColor(if not doRGB then color else hsv2rgb(color))
 		return ColorPikerL
 	end
 	function Gui:CreateButton(text,callback)
