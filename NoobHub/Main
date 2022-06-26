@@ -878,7 +878,7 @@ function library:CreateGui(title)
 		Title.Parent = Button
 		Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 		Title.BackgroundTransparency = 1
-		Title.Position = UDim2.new(0.0269230772, 0, 0, 0)
+		Title.Position = UDim2.new(0, 0, 0, 0)
 		Title.Size = UDim2.new(1, 0, 1, 0)
 		Title.Font = Enum.Font.SourceSansSemibold
 		Title.Text = text
