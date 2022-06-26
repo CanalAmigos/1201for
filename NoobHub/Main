@@ -1,6 +1,6 @@
-
 local Tween = game:GetService("TweenService")
 local pls = game:GetService("Players")
+local Ds = game:GetService("Debris")
 local userIn = game:GetService("UserInputService")
 local Rs = game:GetService("RunService")
 local pl = pls.LocalPlayer
@@ -29,11 +29,11 @@ function library:CreateGui(title)
 	local UICorner_4 = Instance.new("UICorner")
 	local UIText = Instance.new("UITextSizeConstraint")
 	local Togglekey = "RightControl"
-
+	
 	local selectedColor = Color3.fromHSV(0, 0, 1)
 	local colorData = {1,1,1}
 	local mouse1down = false
-
+	
 	local Gui = {}
 
 	Ui.Name = "[[{Ui}]]"
@@ -49,14 +49,14 @@ function library:CreateGui(title)
 	Main.Size = UDim2.new(0, 280, 0, 345)
 
 	UICorner.Parent = Main
-
+	
 	local function setColor(hue,sat,val)
 		colorData = {hue or colorData[1],sat or colorData[2],val or colorData[3]}
 		selectedColor = Color3.fromHSV(colorData[1],colorData[2],colorData[3])
 		Preview.BackgroundColor3 = selectedColor
 		Value.ImageColor3 = Color3.fromHSV(colorData[1],colorData[2],1)
 	end
-
+	
 	local function inBounds(frame)
 		local x,y = Mouse.X - frame.AbsolutePosition.X,Mouse.Y - frame.AbsolutePosition.Y
 		local maxX,maxY = frame.AbsoluteSize.X,frame.AbsoluteSize.Y
@@ -80,7 +80,7 @@ function library:CreateGui(title)
 			end
 		end
 	end
-
+	
 	Mouse.Move:connect(updateRGB)
 	Mouse.Button1Down:connect(function()mouse1down = true end)
 	Mouse.Button1Up:connect(function()mouse1down = false end)
@@ -93,7 +93,7 @@ function library:CreateGui(title)
 	ColorPicker.Size = UDim2.new(0, 145, 0, 145)
 	ColorPicker.Visible = false
 	ColorPicker.SizeConstraint = Enum.SizeConstraint.RelativeXX
-
+	
 	UICorner_2.Parent = ColorPicker
 
 	RGB.Name = "RGB"
@@ -174,7 +174,7 @@ function library:CreateGui(title)
 	UIListLayout.Parent = Holder
 	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	UIListLayout.Padding = UDim.new(0, 6)
+	UIListLayout.Padding = UDim.new(0, 6) -- 40
 
 	Title.Name = "Title"
 	Title.Parent = Main_2
@@ -185,6 +185,7 @@ function library:CreateGui(title)
 	Title.Text = title
 	Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Title.TextSize = 35
+	Title.TextWrapped = true
 	Title.Selectable = true
 	Title.Draggable = true
 
@@ -192,7 +193,7 @@ function library:CreateGui(title)
 
 	UIText.Name = "UIText"
 	UIText.Parent = Title
-
+	
 	userIn.InputBegan:Connect(function(key)
 		if key.UserInputType == Enum.UserInputType.Keyboard then
 			if key.KeyCode == Enum.KeyCode[Togglekey] then
@@ -200,20 +201,20 @@ function library:CreateGui(title)
 			end
 		end
 	end)
-
+	
 	function Gui:ChangeToggleKey(key)
 		if Enum.KeyCode[key] then
 			Togglekey = tostring(key)
 		end
 	end
-
+	
 	function Gui:CreateToggle(title,value,callback)
 		local title = title or "[Toggle]"
 		local value = value or false
 		local callback = callback or function() end
-
+		
 		local ToggleL = {}
-
+		
 		local Toggle = Instance.new("TextButton")
 		local UICorner = Instance.new("UICorner")
 		local Check = Instance.new("ImageButton")
@@ -223,7 +224,7 @@ function library:CreateGui(title)
 		local UIText = Instance.new("UITextSizeConstraint")
 		local Title = Instance.new("TextLabel")
 		local UIText_3 = Instance.new("UITextSizeConstraint")
-
+		
 		local function toggle()
 			if Check.ImageTransparency == 1 then
 				Check.BackgroundColor3 = Color3.fromRGB(255, 0, 127)
@@ -266,7 +267,7 @@ function library:CreateGui(title)
 		end)
 
 		UICorner_2.Parent = Check
-
+		
 		Key.Name = "Key"
 		Key.Parent = Toggle
 		Key.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
@@ -280,7 +281,7 @@ function library:CreateGui(title)
 		Key.TextWrapped = true
 		Key.AutomaticSize = Enum.AutomaticSize.X
 		Key.AnchorPoint = Vector2.new(0.2, 0)
-
+		
 		UICorner_3.CornerRadius = UDim.new(0, 5)
 		UICorner_3.Parent = Key
 
@@ -302,7 +303,7 @@ function library:CreateGui(title)
 
 		UIText_3.Name = "UIText"
 		UIText_3.Parent = Title
-
+		
 		function ToggleL:SetValue(value)
 			local value = value or false
 			if value then
@@ -320,21 +321,21 @@ function library:CreateGui(title)
 			local KeybindL = {}
 			Bind = Bind or "NONE"
 			Lock = Lock or false
-
+			
 			local WaitingForBind = false
 			local Selected = Bind
 			local Blacklist = {"W","A","S","D","Slash","Tab","Backspace","Escape","Space","Delete","Unknown","Backquote"}
-
+			
 			Key.Visible = true
 			Key.Text = "[ "..Bind.." ]"
-
+			
 			Key.MouseButton1Click:Connect(function()
 				if not Lock then
 					Key.Text = "[ . . . ]"
 					WaitingForBind = true
 				end
 			end)
-
+			
 			userIn.InputBegan:Connect(function(Input)
 				if WaitingForBind and Input.UserInputType == Enum.UserInputType.Keyboard then
 					local Keyy = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
@@ -356,7 +357,7 @@ function library:CreateGui(title)
 					end
 				end
 			end)
-
+			
 			function KeybindL:Lock(Value)
 				Value = Value or true
 				if Value then
@@ -384,9 +385,9 @@ function library:CreateGui(title)
 		local title = title or "[TextBox]"
 		local onlynumbers = onlynumbers or false
 		local callback = callback or function() end
-
+		
 		local TextBoxL = {}
-
+		
 		local TextBox = Instance.new("Frame")
 		local UICorner = Instance.new("UICorner")
 		local Box = Instance.new("TextBox")
@@ -443,21 +444,219 @@ function library:CreateGui(title)
 
 		UIText.Name = "UIText"
 		UIText.Parent = Title
-
+		
 		function TextBoxL:SetText(txt)
 			local txt = txt or ""
 			Box.Text = txt
 		end
 		return TextBoxL
 	end
+	function Gui:CreateDropDown(title,items,callback)
+		local title = title or "[DropDown]"
+		local items = items or {}
+		local callback = callback or function() end
+		local Toggled = false
+		
+		local DropDownL = {}
+		
+		local DropDown = Instance.new("Frame")
+		local UICorner = Instance.new("UICorner")
+		local Title = Instance.new("TextLabel")
+		local UIText = Instance.new("UITextSizeConstraint")
+		local Holder_ = Instance.new("Frame")
+		local UIListL = Instance.new("UIListLayout")
+		local Open = Instance.new("TextButton")
+		local Icon = Instance.new("TextLabel")
+		local UICorner_2 = Instance.new("UICorner")
+		
+		local function Toggle(value)
+			if not value then
+				if Holder_.Size.Y.Offset > 0 then
+					Value = false
+				else
+					Value = true
+				end
+			end
+			if Value then
+				Toggled = true
+				for _,v in ipairs(Holder_:GetChildren()) do
+					if v:IsA("TextButton") and v.Visible == false then
+						v.Visible = true
+					end
+				end
+				Tween:Create(Icon,TweenInfo.new(0.5,Enum.EasingStyle.Linear,Enum.EasingDirection.In),{Rotation = 90}):Play()
+			else
+				Toggled = false
+				for _,v in ipairs(Holder_:GetChildren()) do
+					if v:IsA("TextButton") and v.Visible == true then
+						v.Visible = false
+					end
+				end
+				Tween:Create(Icon,TweenInfo.new(0.5,Enum.EasingStyle.Linear,Enum.EasingDirection.Out),{Rotation = -90}):Play()
+			end
+		end
+		
+		DropDown.Name = "DropDown"
+		DropDown.Parent = Holder
+		DropDown.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
+		DropDown.Position = UDim2.new(0.0185185187, 0, 0.373333335, 0)
+		DropDown.Size = UDim2.new(0.962962985, 0, 0.263333321, 0)
+
+		UICorner.Parent = DropDown
+
+		Title.Name = "Title"
+		Title.Parent = DropDown
+		Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Title.BackgroundTransparency = 1
+		Title.Position = UDim2.new(0, 6, 0, 0)
+		Title.Size = UDim2.new(0, 241, 0, 32)
+		Title.Font = Enum.Font.SourceSansSemibold
+		Title.Text = "Title"
+		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Title.TextSize = 21
+		Title.TextWrapped = true
+		Title.TextXAlignment = Enum.TextXAlignment.Left
+
+		UIText.Name = "UIText"
+		UIText.Parent = Title
+
+		Holder_.Name = "Holder"
+		Holder_.Parent = DropDown
+		Holder_.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Holder_.BackgroundTransparency = 1
+		Holder_.Position = UDim2.new(0, 0, 0, 75)
+		Holder_.Size = UDim2.new(1, 0, 0, 0)
+
+		UIListL.Name = "UIListL"
+		UIListL.Parent = Holder_
+		UIListL.HorizontalAlignment = Enum.HorizontalAlignment.Center
+		UIListL.SortOrder = Enum.SortOrder.LayoutOrder
+
+		Open.Name = "Open"
+		Open.Parent = DropDown
+		Open.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
+		Open.Position = UDim2.new(0, 11, 0, 32)
+		Open.Size = UDim2.new(0, 238, 0, 32)
+		Open.Font = Enum.Font.SciFi
+		Open.Text = "..."
+		Open.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Open.TextScaled = true
+		Open.TextSize = 14
+		Open.TextWrapped = true
+		Open.MouseButton1Click:Connect(function()
+			Toggle()
+		end)
+
+		Icon.Name = "Icon"
+		Icon.Parent = Open
+		Icon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Icon.BackgroundTransparency = 1
+		Icon.Position = UDim2.new(0.860000014, 0, 0, 0)
+		Icon.Rotation = -90
+		Icon.Size = UDim2.new(0, 32, 0, 32)
+		Icon.Font = Enum.Font.SciFi
+		Icon.Text = ">"
+		Icon.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Icon.TextSize = 20
+
+		UICorner_2.Parent = Open
+		
+		local function AddItem(text)
+			local text = text or "..."
+			
+			local ItemL = {}
+			
+			local TextButton = Instance.new("TextButton")
+			local UIText = Instance.new("UITextSizeConstraint")
+			
+			TextButton.Name = text
+			TextButton.Parent = Holder_
+			TextButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+			TextButton.BorderSizePixel = 0
+			TextButton.Position = UDim2.new(0, 0, 0, 76)
+			TextButton.Size = UDim2.new(0.899999976, 0, 0, 40)
+			TextButton.AutoButtonColor = false
+			TextButton.RichText = true
+			TextButton.Font = Enum.Font.SourceSans
+			TextButton.Text = text
+			TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+			TextButton.TextSize = 18
+			TextButton.TextWrapped = true
+			TextButton.Visible = Toggled or false
+			TextButton.MouseButton1Click:Connect(function()
+				Open.Text = text
+				Toggle(false)
+				callback(text)
+			end)
+
+			UIText.Name = "UIText"
+			UIText.Parent = TextButton
+			
+			function ItemL:Remove()
+				Ds:AddItem(TextButton,0)
+			end
+			
+			function ItemL:ChangeText(txt)
+				local txt = txt or "..."
+				if txt:gsub(" ","") ~= "" then
+					TextButton.Text = text
+				end
+			end
+			return ItemL
+		end
+		
+		for i,v in pairs(items) do
+			if v:gsub(" ","") ~= "" then
+				AddItem(v)
+			end
+		end
+		
+		function DropDownL:AddOption(text,callback_)
+			local text = text or "..."
+			local callback_ = callback_ or callback
+			if text:gsub(" ","") ~= "" then
+				return AddItem(text)
+			end
+		end
+		
+		function DropDownL:AddOptions(table_,callback_)
+			local table_ = table_ or {}
+			local callback_ = callback_ or callback
+			if type(table_) == "table" then
+				for i,v in pairs(table_) do
+					if v:gsub(" ","") ~= "" then
+						AddItem(v)
+					end
+				end
+			end
+		end
+		
+		function DropDownL:SetText(text,call)
+			local text = text or "..."
+			local call = call or false
+			Open.Text = text
+			if call then
+				callback(text)
+			end
+		end
+		
+		function DropDownL:Reset()
+			for _,v in ipairs(Holder_:GetChildren()) do
+				if v:IsA("TextButton") then
+					Ds:AddItem(v,0)
+				end
+			end
+		end
+		return DropDownL
+	end
 	function Gui:CreateLabel(text)
 		local text = text or "[Label]"
-
+		
 		local Label = Instance.new("Frame")
 		local UICorner = Instance.new("UICorner")
 		local Text = Instance.new("TextLabel")
 		local UIText = Instance.new("UITextSizeConstraint")
-
+		
 		local LabelL = {}
 
 		Label.Name = "Label"
@@ -482,7 +681,7 @@ function library:CreateGui(title)
 
 		UIText.Name = "UIText"
 		UIText.Parent = Text
-
+		
 		function LabelL:TextColor(color)
 			local color = color or Color3.fromRGB(255, 255, 255)
 			Text.TextColor3 = color
@@ -495,12 +694,12 @@ function library:CreateGui(title)
 	end
 	function Gui:CreateSeparator(text)
 		local text = text or ""
-
+		
 		local Separator = Instance.new("Frame")
 		local UICorner = Instance.new("UICorner")
 		local TextLabel = Instance.new("TextLabel")
 		local UIText = Instance.new("UITextSizeConstraint")
-
+		
 		local SeparatorL = {}
 
 		Separator.Name = "Separator"
@@ -523,7 +722,7 @@ function library:CreateGui(title)
 
 		UIText.Name = "UIText"
 		UIText.Parent = TextLabel
-
+		
 		function SeparatorL:SetText(txt)
 			local txt = txt or ""
 			TextLabel.Text = txt
@@ -536,16 +735,16 @@ function library:CreateGui(title)
 		local doRGB = doRGB or false
 		local callback = callback or function() end
 		local Open = false
-
+		
 		local ColorPikerL = {}
-
+		
 		local ColorChanger = Instance.new("TextButton")
 		local UICorner = Instance.new("UICorner")
 		local Color = Instance.new("ImageButton")
 		local UICorner_2 = Instance.new("UICorner")
 		local Title = Instance.new("TextLabel")
 		local UIText = Instance.new("UITextSizeConstraint")
-
+		
 		ColorChanger.Name = "ColorChanger"
 		ColorChanger.Parent = Holder
 		ColorChanger.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
@@ -600,7 +799,7 @@ function library:CreateGui(title)
 		Title.Name = "Title"
 		Title.Parent = ColorChanger
 		Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Title.BackgroundTransparency = 1.000
+		Title.BackgroundTransparency = 1
 		Title.Position = UDim2.new(0.0269230772, 0, 0, 0)
 		Title.Size = UDim2.new(0.788461745, 0, 1, 0)
 		Title.Font = Enum.Font.SourceSansSemibold
@@ -612,12 +811,12 @@ function library:CreateGui(title)
 
 		UIText.Name = "UIText"
 		UIText.Parent = Title
-
+		
 		local function hsv2rgb(hsv)
 			local color = hsv
 			return Color3.fromRGB(math.floor((color.R*255)+0.5),math.floor((color.G*255)+0.5),math.floor((color.B*255)+0.5))
 		end
-
+		
 		spawn(function()
 			while true do
 				Rs.RenderStepped:Wait()
@@ -631,7 +830,7 @@ function library:CreateGui(title)
 				end
 			end
 		end)
-
+		
 		function ColorPikerL:SetColor(color)
 			local color = color or Color3.new(1, 1, 1)
 			Color.BackgroundColor3 = color
@@ -643,12 +842,12 @@ function library:CreateGui(title)
 	function Gui:CreateButton(text,callback)
 		local text = text or "[Button]"
 		local callback = callback or function() end
-
+		
 		local Button = Instance.new("TextButton")
 		local UICorner = Instance.new("UICorner")
 		local Title = Instance.new("TextLabel")
 		local UIText = Instance.new("UITextSizeConstraint")
-
+		
 		local ButtonL = {}
 
 		Button.Name = "Button"
@@ -671,7 +870,7 @@ function library:CreateGui(title)
 		Title.Name = "Title"
 		Title.Parent = Button
 		Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Title.BackgroundTransparency = 1.000
+		Title.BackgroundTransparency = 1
 		Title.Position = UDim2.new(0.0269230772, 0, 0, 0)
 		Title.Size = UDim2.new(1, 0, 1, 0)
 		Title.Font = Enum.Font.SourceSansSemibold
@@ -682,7 +881,7 @@ function library:CreateGui(title)
 
 		UIText.Name = "UIText"
 		UIText.Parent = Title
-
+		
 		function ButtonL:SetText(txt)
 			local txt = txt or "[Button]"
 			Title.Text = txt
