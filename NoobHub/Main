@@ -174,10 +174,11 @@ function library:CreateGui(title)
 	UIListLayout.Parent = Holder
 	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	UIListLayout.Padding = UDim.new(0, 6) -- 40
+	UIListLayout.Padding = UDim.new(0, 6)
 
 	Title.Name = "Title"
 	Title.Parent = Main_2
+	Title.Active = true
 	Title.BackgroundColor3 = Color3.fromRGB(57, 57, 57)
 	Title.Position = UDim2.new(-0.0170000009, 0, -0.170000002, 0)
 	Title.Size = UDim2.new(1.03703701, 0, 0.166666672, 0)
@@ -472,12 +473,12 @@ function library:CreateGui(title)
 		local function Toggle(value)
 			if value == nil then
 				if Toggled then
-					Value = false
+					value = false
 				else
-					Value = true
+					value = true
 				end
 			end
-			if Value then
+			if value then
 				Toggled = true
 				for _,v in ipairs(Holder_:GetChildren()) do
 					if v:IsA("TextButton") and v.Visible == false then
