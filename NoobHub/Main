@@ -470,7 +470,7 @@ function library:CreateGui(title)
 		local UICorner_2 = Instance.new("UICorner")
 		
 		local function Toggle(value)
-			if not value then
+			if value == nil then
 				if Holder_.Size.Y.Offset > 0 then
 					Value = false
 				else
