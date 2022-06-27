@@ -532,7 +532,7 @@ function library:CreateGui(title)
 		Holder_.BackgroundTransparency = 1
 		Holder_.Position = UDim2.new(0, 0, 0, 75)
 		Holder_.Size = UDim2.new(1, 0, 0, 0)
-
+		
 		UIListL.Name = "UIListL"
 		UIListL.Parent = Holder_
 		UIListL.HorizontalAlignment = Enum.HorizontalAlignment.Center
@@ -540,7 +540,7 @@ function library:CreateGui(title)
 		UIListL.Padding = UDim.new(0,-1)
 		UIListL.Changed:Connect(function(v)
 			if v == "AbsoluteContentSize" then
-				Holder_.Size = UDim2.new(1, 0, 0.05, UIListL.AbsoluteContentSize.Y)
+				Holder_.Size = UDim2.new(1, 0, 0, UIListL.AbsoluteContentSize.Y + 4)
 			end
 		end)
 
