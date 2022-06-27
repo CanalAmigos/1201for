@@ -495,6 +495,7 @@ function library:CreateGui(title)
 						v.Visible = false
 					end
 				end
+				Holder_.Size = UDim2.new(1, 0, 0, 0)
 				Tween:Create(Icon,TweenInfo.new(0.2,Enum.EasingStyle.Linear,Enum.EasingDirection.Out),{Rotation = -90}):Play()
 			end
 		end
