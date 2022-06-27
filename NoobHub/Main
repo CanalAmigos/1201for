@@ -675,6 +675,8 @@ function library:CreateGui(title)
 		local Precise = Precise or false
 		local callback = callback or function() end
 		local simbol = simbol or ""
+		local Dragging = false
+		local GlobalSliderValue = 0
 		
 		local Slider = Instance.new("Frame")
 		local UICorner = Instance.new("UICorner")
@@ -684,14 +686,8 @@ function library:CreateGui(title)
 		local UICorner_2 = Instance.new("UICorner")
 		local Control = Instance.new("Frame")
 		local UICorner_3 = Instance.new("UICorner")
-		
-		--local Position = Instance.new("Frame")
-		
 		local Value = Instance.new("TextLabel")
 		local UIText_2 = Instance.new("UITextSizeConstraint")
-		
-		local Dragging = false
-		local GlobalSliderValue = 0
 		
 		local SliderL = {}
 		
@@ -745,9 +741,7 @@ function library:CreateGui(title)
 		BarFull.Position = UDim2.new(0.0384615399, 0, 0.628571451, 0)
 		BarFull.Size = UDim2.new(0.915384591, 0, 0.285714298, 0)
 		BarFull.Text = ""
-		BarFull.MouseButton1Down:Connect(function()
-			
-		end)
+		BarFull.AutoButtonColor = false
 
 		UICorner_2.CornerRadius = UDim.new(0, 10)
 		UICorner_2.Parent = BarFull
@@ -756,7 +750,24 @@ function library:CreateGui(title)
 		Control.Parent = BarFull
 		Control.BackgroundColor3 = Color3.fromRGB(57, 57, 57)
 		Control.Size = UDim2.new(Min / Max,0,1,0)
-		--Control.AutomaticSize = Enum.AutomaticSize.X
+		
+		UICorner_3.Parent = Control
+
+		Value.Name = "Value"
+		Value.Parent = Slider
+		Value.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Value.BackgroundTransparency = 1
+		Value.Position = UDim2.new(0.702170014, 0, 0, 0)
+		Value.Size = UDim2.new(0.25, 0, 0.45714286, 0)
+		Value.Font = Enum.Font.SourceSansSemibold
+		Value.Text = tostring(Min / Max)..simbol
+		Value.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Value.TextSize = 21
+		Value.TextWrapped = true
+		Value.TextXAlignment = Enum.TextXAlignment.Right
+
+		UIText_2.Name = "UIText"
+		UIText_2.Parent = Value
 		
 		BarFull.InputBegan:Connect(function(Input)
 			if Input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -774,33 +785,6 @@ function library:CreateGui(title)
 				Sliding(Input)
 			end
 		end)
-
-		UICorner_3.Parent = Control
-		
-		--[[
-		Position.Name = "Position"
-		Position.Parent = Control
-		Position.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Position.BackgroundTransparency = 1.000
-		Position.Position = UDim2.new(0, 0, 0, -5)
-		Position.Size = UDim2.new(0, 0, 0, 30)
-		]]--
-		
-		Value.Name = "Value"
-		Value.Parent = Slider
-		Value.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Value.BackgroundTransparency = 1
-		Value.Position = UDim2.new(0.702170014, 0, 0, 0)
-		Value.Size = UDim2.new(0.25, 0, 0.45714286, 0)
-		Value.Font = Enum.Font.SourceSansSemibold
-		Value.Text = tostring(Min / Max)..simbol
-		Value.TextColor3 = Color3.fromRGB(255, 255, 255)
-		Value.TextSize = 21
-		Value.TextWrapped = true
-		Value.TextXAlignment = Enum.TextXAlignment.Right
-
-		UIText_2.Name = "UIText"
-		UIText_2.Parent = Value
 		
 		function SliderL:SetValue(value)
 			GlobalSliderValue = value or GlobalSliderValue
