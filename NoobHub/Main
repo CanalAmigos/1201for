@@ -506,7 +506,6 @@ function library:CreateGui(title)
 		DropDown.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
 		DropDown.Position = UDim2.new(0.0185185187, 0, 0.373333335, 0)
 		DropDown.Size = UDim2.new(0.962962985, 0, 0.263333321, 0)
-		DropDown.AutomaticSize = Enum.AutomaticSize.Y
 
 		UICorner.Parent = DropDown
 
@@ -533,13 +532,12 @@ function library:CreateGui(title)
 		Holder_.BackgroundTransparency = 1
 		Holder_.Position = UDim2.new(0, 0, 0, 75)
 		Holder_.Size = UDim2.new(1, 0, 0, 0)
+		Holder_.AutomaticSize = Enum.AutomaticSize.Y
 		Holder_.ChildAdded:Connect(function()
-			Holder_.Size = UDim2.new(1, 0, 0, 0)
-			Holder_.Size = UDim2.new(1, 0, 0.04, UIListL.AbsoluteContentSize.Y)
+			Holder_.Size = UDim2.new(1, 0, 0, 0); Holder_.Size = UDim2.new(1, 0, 0.04, UIListL.AbsoluteContentSize.Y)
 		end)
 		Holder_.ChildRemoved:Connect(function()
-			Holder_.Size = UDim2.new(1, 0, 0, 0)
-			Holder_.Size = UDim2.new(1, 0, 0.04, UIListL.AbsoluteContentSize.Y)
+			Holder_.Size = UDim2.new(1, 0, 0, 0); Holder_.Size = UDim2.new(1, 0, 0.04, UIListL.AbsoluteContentSize.Y)
 		end)
 		
 		UIListL.Name = "UIListL"
