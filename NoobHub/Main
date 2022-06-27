@@ -668,6 +668,157 @@ function library:CreateGui(title)
 		end
 		return DropDownL
 	end
+	function Gui:CreateSlider(title,Max,Min,def,Precise,callback,simbol)
+		local title = title or "[Slider]"
+		local Max = Max or def or 0
+		local Min = Min or def or 0
+		local Precise = Precise or false
+		local callback = callback or function() end
+		local simbol = simbol or ""
+		
+		local Slider = Instance.new("Frame")
+		local UICorner = Instance.new("UICorner")
+		local Title = Instance.new("TextLabel")
+		local UIText = Instance.new("UITextSizeConstraint")
+		local BarFull = Instance.new("TextButton")
+		local UICorner_2 = Instance.new("UICorner")
+		local Control = Instance.new("Frame")
+		local UICorner_3 = Instance.new("UICorner")
+		
+		--local Position = Instance.new("Frame")
+		
+		local Value = Instance.new("TextLabel")
+		local UIText_2 = Instance.new("UITextSizeConstraint")
+		
+		local Dragging = false
+		local GlobalSliderValue = 0
+		
+		local SliderL = {}
+		
+		local function Sliding(Input)
+			local Position = UDim2.new(math.clamp((Input.Position.X - BarFull.AbsolutePosition.X) / BarFull.AbsoluteSize.X,0,1),0,1,0)
+			Control.Size = Position
+			local SliderPrecise = ((Position.X.Scale * Max) / Max) * (Max - Min) + Min
+			local SliderNonPrecise = math.floor(((Position.X.Scale * Max) / Max) * (Max - Min) + Min)
+			local SliderValue = Precise and SliderNonPrecise or SliderPrecise
+			SliderValue = tonumber(string.format("%.2f", SliderValue))
+			GlobalSliderValue = SliderValue
+			Value.Text = tostring(SliderValue)..simbol
+			callback(GlobalSliderValue)
+		end
+		local function SetValue(Value)
+			GlobalSliderValue = Value
+			local def = math.clamp(Value, Min, Max)
+			local Porcentage = (def - Min) / (Max - Min)
+			Control.Size = UDim2.new(Porcentage,0,1,0)
+			Value.Text = Value..simbol
+			callback(Value)
+		end
+
+		Slider.Name = "Slider"
+		Slider.Parent = Holder
+		Slider.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
+		Slider.Position = UDim2.new(0.0240740739, 0, 0.186666667, 0)
+		Slider.Size = UDim2.new(0.962962985, 0, 0.233333334, 0)
+
+		UICorner.Parent = Slider
+
+		Title.Name = "Title"
+		Title.Parent = Slider
+		Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Title.BackgroundTransparency = 1
+		Title.Position = UDim2.new(0.0252469573, 0, 0, 0)
+		Title.Size = UDim2.new(0.676923096, 0, 0.45714286, 0)
+		Title.Font = Enum.Font.SourceSansSemibold
+		Title.Text = "Title"
+		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Title.TextSize = 21
+		Title.TextWrapped = true
+		Title.TextXAlignment = Enum.TextXAlignment.Left
+
+		UIText.Name = "UIText"
+		UIText.Parent = Title
+
+		BarFull.Name = "BarFull"
+		BarFull.Parent = Slider
+		BarFull.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		BarFull.Position = UDim2.new(0.0384615399, 0, 0.628571451, 0)
+		BarFull.Size = UDim2.new(0.915384591, 0, 0.285714298, 0)
+		BarFull.Text = ""
+		BarFull.MouseButton1Down:Connect(function()
+			
+		end)
+
+		UICorner_2.CornerRadius = UDim.new(0, 10)
+		UICorner_2.Parent = BarFull
+
+		Control.Name = "Control"
+		Control.Parent = BarFull
+		Control.BackgroundColor3 = Color3.fromRGB(57, 57, 57)
+		Control.Size = UDim2.new(Min / Max,0,1,0)
+		Control.AutomaticSize = Enum.AutomaticSize.X
+		Control.InputBegan:Connect(function(Input)
+			if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+				Sliding(Input)
+				Dragging = true
+			end
+		end)
+		userIn.InputEnded:Connect(function(Input)
+			if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+				Dragging = false
+			end
+		end)
+		userIn.InputChanged:Connect(function(Input)
+			if Dragging and Input.UserInputType == Enum.UserInputType.MouseMovement then
+				Sliding(Input)
+			end
+		end)
+		
+		Rs.RenderStepped:Connect(function()
+			
+		end)
+
+		UICorner_3.Parent = Control
+		
+		--[[
+		Position.Name = "Position"
+		Position.Parent = Control
+		Position.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Position.BackgroundTransparency = 1.000
+		Position.Position = UDim2.new(0, 0, 0, -5)
+		Position.Size = UDim2.new(0, 0, 0, 30)
+		]]--
+		
+		Value.Name = "Value"
+		Value.Parent = Slider
+		Value.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Value.BackgroundTransparency = 1
+		Value.Position = UDim2.new(0.702170014, 0, 0, 0)
+		Value.Size = UDim2.new(0.25, 0, 0.45714286, 0)
+		Value.Font = Enum.Font.SourceSansSemibold
+		Value.Text = tostring(Min / Max)..simbol
+		Value.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Value.TextSize = 21
+		Value.TextWrapped = true
+		Value.TextXAlignment = Enum.TextXAlignment.Right
+
+		UIText_2.Name = "UIText"
+		UIText_2.Parent = Value
+		
+		function SliderL:SetValue(value)
+			GlobalSliderValue = value or GlobalSliderValue
+			local def = math.clamp(GlobalSliderValue, Min, Max)
+			local Porcentage = (def - Min) / (Max - Min)
+			Control.Size = UDim2.new(Porcentage,0,1,0)
+			Value.Text = value..simbol
+			callback(value)
+		end
+		
+		function SliderL:GetValue(Value)
+			return GlobalSliderValue
+		end
+		return SliderL
+	end
 	function Gui:CreateLabel(text)
 		local text = text or "[Label]"
 		
