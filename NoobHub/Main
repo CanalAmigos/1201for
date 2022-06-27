@@ -472,7 +472,6 @@ function library:CreateGui(title)
 		local Icon = Instance.new("TextLabel")
 		local UICorner_2 = Instance.new("UICorner")
 		
-		local quant = false
 		local function Toggle(value)
 			if value == nil then
 				if Toggled then
@@ -496,7 +495,6 @@ function library:CreateGui(title)
 						v.Visible = false
 					end
 				end
-				quant = false; DropDown.Size = UDim2.new(0.962962985, 0, 0.263333321, 0)
 				Tween:Create(Icon,TweenInfo.new(0.2,Enum.EasingStyle.Linear,Enum.EasingDirection.Out),{Rotation = -90}):Play()
 			end
 		end
@@ -506,6 +504,7 @@ function library:CreateGui(title)
 		DropDown.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
 		DropDown.Position = UDim2.new(0.0185185187, 0, 0.373333335, 0)
 		DropDown.Size = UDim2.new(0.962962985, 0, 0.263333321, 0)
+		DropDown.AutomaticSize = Enum.AutomaticSize.Y
 
 		UICorner.Parent = DropDown
 
@@ -539,15 +538,6 @@ function library:CreateGui(title)
 		UIListL.HorizontalAlignment = Enum.HorizontalAlignment.Center
 		UIListL.SortOrder = Enum.SortOrder.LayoutOrder
 		UIListL.Padding = UDim.new(0,-1)
-		UIListL.Changed:Connect(function(v)
-			if v == "AbsoluteContentSize" then
-				if quant then
-					DropDown.Size = UDim2.new(0.962962985, 0, 0.263333321, 0) + UDim2.new(0,0,0,UIListL.AbsoluteContentSize.Y)
-				else
-					quant = true; DropDown.Size = UDim2.new(0.962962985, 0, 0.263333321, 0) + UDim2.new(0,0,0.04,UIListL.AbsoluteContentSize.Y)
-				end
-			end
-		end)
 
 		Open.Name = "Open"
 		Open.Parent = DropDown
