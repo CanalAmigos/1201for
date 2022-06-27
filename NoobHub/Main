@@ -539,7 +539,7 @@ function library:CreateGui(title)
 		UIListL.Padding = UDim.new(0,-1)
 		UIListL.Changed:Connect(function(v)
 			if v == "AbsoluteContentSize" then
-				Holder_.Size = UDim2.new(1, 0, 0 ,UIListL.AbsoluteContentSize.Y + 10)
+				Holder_.Size.Y = UDim.new(0,UIListL.AbsoluteContentSize.Y) + UDim.new(0,5)
 			end
 		end)
 
