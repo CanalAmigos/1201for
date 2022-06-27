@@ -544,7 +544,7 @@ function library:CreateGui(title)
 				if quant then
 					DropDown.Size = UDim2.new(0.962962985, 0, 0.263333321, 0) + UDim2.new(0,0,0,UIListL.AbsoluteContentSize.Y)
 				else
-					quant = true; DropDown.Size = UDim2.new(0.962962985, 0, 0.263333321, 0) + UDim2.new(0,0,0,UIListL.AbsoluteContentSize.Y + 4)
+					quant = true; DropDown.Size = UDim2.new(0.962962985, 0, 0.263333321, 0) + UDim2.new(0,0,0.04,UIListL.AbsoluteContentSize.Y)
 				end
 			end
 		end)
