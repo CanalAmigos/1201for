@@ -42,11 +42,14 @@ function library:CreateGui(title)
 
 	Main.Name = "Main"
 	Main.Parent = Ui
+	Main.Active = true
 	Main.BackgroundColor3 = Color3.fromRGB(57, 57, 57)
 	Main.BorderColor3 = Color3.fromRGB(0, 255, 255)
 	Main.BorderSizePixel = 0
 	Main.Position = UDim2.new(0.371, 0,0.406, 0)
 	Main.Size = UDim2.new(0, 280, 0, 345)
+	Title.Selectable = true
+	Title.Draggable = true
 
 	UICorner.Parent = Main
 	
@@ -178,7 +181,6 @@ function library:CreateGui(title)
 
 	Title.Name = "Title"
 	Title.Parent = Main_2
-	Title.Active = true
 	Title.BackgroundColor3 = Color3.fromRGB(57, 57, 57)
 	Title.Position = UDim2.new(-0.0170000009, 0, -0.170000002, 0)
 	Title.Size = UDim2.new(1.03703701, 0, 0.166666672, 0)
@@ -187,8 +189,6 @@ function library:CreateGui(title)
 	Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Title.TextSize = 35
 	Title.TextWrapped = true
-	Title.Selectable = true
-	Title.Draggable = true
 
 	UICorner_4.Parent = Title
 
