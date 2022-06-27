@@ -299,6 +299,7 @@ function library:CreateGui(title)
 		Title.Text = title
 		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 		Title.TextSize = 21
+		Title.RichText = true
 		Title.TextWrapped = true
 		Title.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -440,6 +441,7 @@ function library:CreateGui(title)
 		Title.Text = title
 		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 		Title.TextSize = 21
+		Title.RichText = true
 		Title.TextWrapped = true
 		Title.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -516,6 +518,7 @@ function library:CreateGui(title)
 		Title.Text = title
 		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 		Title.TextSize = 21
+		Title.RichText = true
 		Title.TextWrapped = true
 		Title.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -824,6 +827,7 @@ function library:CreateGui(title)
 		Title.Text = title
 		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 		Title.TextSize = 21
+		Title.RichText = true
 		Title.TextWrapped = true
 		Title.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -895,6 +899,7 @@ function library:CreateGui(title)
 		Title.Text = text
 		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 		Title.TextSize = 21
+		Title.RichText = true
 		Title.TextWrapped = true
 
 		UIText.Name = "UIText"
