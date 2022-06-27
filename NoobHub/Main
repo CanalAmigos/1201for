@@ -730,7 +730,7 @@ function library:CreateGui(title)
 		Title.Position = UDim2.new(0.0252469573, 0, 0, 0)
 		Title.Size = UDim2.new(0.676923096, 0, 0.45714286, 0)
 		Title.Font = Enum.Font.SourceSansSemibold
-		Title.Text = "Title"
+		Title.Text = title
 		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 		Title.TextSize = 21
 		Title.TextWrapped = true
@@ -756,8 +756,9 @@ function library:CreateGui(title)
 		Control.Parent = BarFull
 		Control.BackgroundColor3 = Color3.fromRGB(57, 57, 57)
 		Control.Size = UDim2.new(Min / Max,0,1,0)
-		Control.AutomaticSize = Enum.AutomaticSize.X
-		Control.InputBegan:Connect(function(Input)
+		--Control.AutomaticSize = Enum.AutomaticSize.X
+		
+		BarFull.InputBegan:Connect(function(Input)
 			if Input.UserInputType == Enum.UserInputType.MouseButton1 then
 				Sliding(Input)
 				Dragging = true
@@ -772,10 +773,6 @@ function library:CreateGui(title)
 			if Dragging and Input.UserInputType == Enum.UserInputType.MouseMovement then
 				Sliding(Input)
 			end
-		end)
-		
-		Rs.RenderStepped:Connect(function()
-			
 		end)
 
 		UICorner_3.Parent = Control
