@@ -169,6 +169,7 @@ function Library:CreateWindow(Config, Parent)
 						table.remove(Save.objects,_i)
 					end
 				end
+				table.sort(Save.objects, function(a, b) return a:lower() < b:lower() end)
 				local encode = game:GetService("HttpService"):JSONEncode(Save)
 				local s,e = pcall(function()
 					writefile(path.."/"..name..".json",encode)
