@@ -153,20 +153,20 @@ function Library:CreateWindow(Config, Parent)
 
 	function WindowInit:Save(table_,name,path)
 		if type(writefile) == "function" then
-			table_ = table_ or {}
-			name = name or Config.WindowName
-			path = path or ""
+			local table_ = table_ or {}
+			local name = name or Config.WindowName
+			local path = path or ""
 			if table_ and typeof(table_) == "table" then
-				local Save = {}
+				local Save = {version = 1.82,objects={}}
 				for i,v in pairs(table_) do
-					Save[i] = v
+					Save.objects[i] = v
 				end
-				local i = 0
-				for I,v in pairs(Save) do i+=1
-					if v and I then
+				local _i = 0
+				for i,v in pairs(Save.objects) do _i+=1
+					if v and i then
 				    	continue
 					else
-						table.remove(Save,i)
+						table.remove(Save.objects,_i)
 					end
 				end
 				local encode = game:GetService("HttpService"):JSONEncode(Save)
@@ -175,6 +175,7 @@ function Library:CreateWindow(Config, Parent)
 				end)
 				if not s then
 					warn("[WritefileError]: "..e)
+					return false
 				end
 			end
 			return true
@@ -184,20 +185,23 @@ function Library:CreateWindow(Config, Parent)
 
 	function WindowInit:LoadSave(table_,name,path)
 		if type(isfile) == "function" and type(readfile) == "function" then
-			table_ = table_ or {}
-			name = name or Config.WindowName
-			path = path or ""
+			local table_ = table_ or {}
+			local name = name or Config.WindowName
+			local path = path or ""
 			if not isfile(path.."/"..name..".json") then return end
 			if table_ and typeof(table_) == "table" then
 				local decode = game:GetService("HttpService"):JSONDecode(readfile(path.."/"..name..".json"))
 				local s,e = pcall(function()
-					for i,v in pairs(decode) do
-						if not v or not i then continue end
-						table_[i] = v
+					if tonumber(decode.version) == 1.82 then
+						for i,v in pairs(decode.objects) do
+							if not v or not i then continue end
+							table_[i] = v
+						end
 					end
 				end)
 				if not s then
-					warn("[LoadFileError]: "..e)
+					warn("[LoadSaveError]: "..e)
+					return false
 				end
 			end
 			return true
