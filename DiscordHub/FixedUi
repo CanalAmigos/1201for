@@ -1,6 +1,7 @@
 local DiscordLib = {}
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
+local Debris = game:GetService("Debris")
 local RunService = game:GetService("RunService")
 local LocalPlayer = game:GetService("Players").LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
@@ -1515,7 +1516,9 @@ function DiscordLib:Window(text)
 
 	end)
 
-	function DiscordLib:Notification(titletext, desctext, btntext)
+	function DiscordLib:Notification(titletext, desctext, btntext, duration)
+		local skip = false
+		
 		local NotificationHolderMain = Instance.new("TextButton")
 		local Notification = Instance.new("Frame")
 		local NotificationCorner = Instance.new("UICorner")
@@ -1606,56 +1609,66 @@ function DiscordLib:Window(text)
 		Text2.TextColor3 = Color3.fromRGB(171, 172, 176)
 		Text2.TextSize = 14.000
 		Text2.TextWrapped = true
+		
+		if string.gsub(btntext," ","") ~= "" then
+			AlrightBtn.Name = "AlrightBtn"
+			AlrightBtn.Parent = Notification
+			AlrightBtn.BackgroundColor3 = Color3.fromRGB(114, 137, 228)
+			AlrightBtn.Position = UDim2.new(0.0332369953, 0, 0.789141417, 0)
+			AlrightBtn.Size = UDim2.new(0, 322, 0, 27)
+			AlrightBtn.Font = Enum.Font.Gotham
+			AlrightBtn.Text = btntext
+			AlrightBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+			AlrightBtn.TextSize = 13.000
+			AlrightBtn.AutoButtonColor = false
 
-		AlrightBtn.Name = "AlrightBtn"
-		AlrightBtn.Parent = Notification
-		AlrightBtn.BackgroundColor3 = Color3.fromRGB(114, 137, 228)
-		AlrightBtn.Position = UDim2.new(0.0332369953, 0, 0.789141417, 0)
-		AlrightBtn.Size = UDim2.new(0, 322, 0, 27)
-		AlrightBtn.Font = Enum.Font.Gotham
-		AlrightBtn.Text = btntext
-		AlrightBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-		AlrightBtn.TextSize = 13.000
-		AlrightBtn.AutoButtonColor = false
+			AlrightCorner.CornerRadius = UDim.new(0, 4)
+			AlrightCorner.Name = "AlrightCorner"
+			AlrightCorner.Parent = AlrightBtn
 
-		AlrightCorner.CornerRadius = UDim.new(0, 4)
-		AlrightCorner.Name = "AlrightCorner"
-		AlrightCorner.Parent = AlrightBtn
+			AlrightBtn.MouseButton1Click:Connect(function()
+				skip = true
+			end)
 
-		AlrightBtn.MouseButton1Click:Connect(function()
-			TweenService:Create(
-				NotificationHolderMain,
-				TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-				{BackgroundTransparency = 1}
-			):Play()
-			TweenService:Create(Text1,TweenInfo.new(.15,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
-			TweenService:Create(Text2,TweenInfo.new(.15,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
-			TweenService:Create(AlrightBtn,TweenInfo.new(.15,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
-			Notification:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .2, true)
-			TweenService:Create(
-				Notification,
-				TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-				{BackgroundTransparency = 1}
-			):Play()
-			wait(.2)
-			NotificationHolderMain:Destroy()
+			AlrightBtn.MouseEnter:Connect(function()
+				TweenService:Create(
+					AlrightBtn,
+					TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+					{BackgroundColor3 = Color3.fromRGB(103,123,196)}
+				):Play()
+			end)
+
+			AlrightBtn.MouseLeave:Connect(function()
+				TweenService:Create(
+					AlrightBtn,
+					TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+					{BackgroundColor3 = Color3.fromRGB(114, 137, 228)}
+				):Play()
+			end)
+		end
+		
+		spawn(function()
+			wait(duration)
+			skip = true
 		end)
-
-		AlrightBtn.MouseEnter:Connect(function()
-			TweenService:Create(
-				AlrightBtn,
-				TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-				{BackgroundColor3 = Color3.fromRGB(103,123,196)}
-			):Play()
-		end)
-
-		AlrightBtn.MouseLeave:Connect(function()
-			TweenService:Create(
-				AlrightBtn,
-				TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-				{BackgroundColor3 = Color3.fromRGB(114, 137, 228)}
-			):Play()
-		end)
+		
+		repeat RunService.RenderStepped:Wait() until skip
+		TweenService:Create(
+			NotificationHolderMain,
+			TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+			{BackgroundTransparency = 1}
+		):Play()
+		TweenService:Create(Text1,TweenInfo.new(.15,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
+		TweenService:Create(Text2,TweenInfo.new(.15,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
+		TweenService:Create(AlrightBtn,TweenInfo.new(.15,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
+		Notification:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .2, true)
+		TweenService:Create(
+			Notification,
+			TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+			{BackgroundTransparency = 1}
+		):Play()
+		wait(.2)
+		Debris:AddItem(NotificationHolderMain,0)
 	end
 
 	MakeDraggable(TopFrame, MainFrame)
