@@ -87,6 +87,13 @@ Discord.Name = "Discord"
 Discord.Parent = game.CoreGui
 Discord.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
+function DiscordLib:Destroy()
+	for i,v in next, DiscordLib do
+		Debris:AddItem(v,0)
+	end
+	DiscordLib = nil
+end
+
 function DiscordLib:Window(text)
 	local currentservertoggled = ""
 	local minimized = false
