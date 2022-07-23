@@ -87,13 +87,6 @@ Discord.Name = "Discord"
 Discord.Parent = game.CoreGui
 Discord.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-function DiscordLib:Destroy()
-	for i,v in next, DiscordLib do
-		Debris:AddItem(v,0)
-	end
-	DiscordLib = nil
-end
-
 function DiscordLib:Window(text)
 	local currentservertoggled = ""
 	local minimized = false
@@ -3042,7 +3035,7 @@ function DiscordLib:Window(text)
 				ColorpickerTitle.Position = UDim2.new(0, 5, 0, 0)
 				ColorpickerTitle.Size = UDim2.new(0, 200, 0, 29)
 				ColorpickerTitle.Font = Enum.Font.Gotham
-				ColorpickerTitle.Text = "Colorpicker"
+				ColorpickerTitle.Text = text
 				ColorpickerTitle.TextColor3 = Color3.fromRGB(127, 131, 137)
 				ColorpickerTitle.TextSize = 14.000
 				ColorpickerTitle.TextXAlignment = Enum.TextXAlignment.Left
@@ -3146,7 +3139,7 @@ function DiscordLib:Window(text)
 
 				PresetClr.BackgroundColor3 = preset
 				Color.BackgroundColor3 = preset
-				pcall(callback, PresetClr.BackgroundColor3)
+				pcall(callback, preset)
 
 				Color.InputBegan:Connect(
 					function(input)
