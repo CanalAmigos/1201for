@@ -1658,9 +1658,9 @@ function DiscordLib:Window(text)
 			TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 			{BackgroundTransparency = 1}
 		):Play()
-		TweenService:Create(Text1,TweenInfo.new(.15,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
-		TweenService:Create(Text2,TweenInfo.new(.15,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
-		TweenService:Create(AlrightBtn,TweenInfo.new(.15,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
+		TweenService:Create(Text1,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
+		TweenService:Create(Text2,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
+		TweenService:Create(AlrightBtn,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
 		Notification:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .2, true)
 		TweenService:Create(
 			Notification,
