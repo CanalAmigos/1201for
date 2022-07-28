@@ -317,13 +317,10 @@ function DiscordLib:Window(text)
 			MinimizeBtn.BackgroundColor3 = Color3.fromRGB(32, 34, 37)
 		end
 	)
-	
 	local pos
 	MinimizeBtn.MouseButton1Click:Connect(
 		function()
-			minimized = not minimized
 			if minimized == false then
-				pos = MainFrame.Position - UDim2.new(0,0,0,35)
 				MainFrame:TweenSize(
 					UDim2.new(0, 681, 0, 22),
 					Enum.EasingDirection.Out,
@@ -331,16 +328,6 @@ function DiscordLib:Window(text)
 					.3,
 					true
 				)
-				wait(.3)
-				if not minimized then
-					MainFrame:TweenPosition(
-						pos,
-						Enum.EasingDirection.InOut,
-						Enum.EasingStyle.Linear,
-						.1,
-						true
-					)
-				end
 			else
 				MainFrame:TweenSize(
 					UDim2.new(0, 681, 0, 396),
@@ -350,21 +337,11 @@ function DiscordLib:Window(text)
 					true
 				)
 				wait(.3)
-				if minimized then
-					MainFrame:TweenPosition(
-						pos + UDim2.new(0,0,0,35),
-						Enum.EasingDirection.InOut,
-						Enum.EasingStyle.Linear,
-						.1,
-						true
-					)
+				if MainFrame.Position.Y.Offset < 0-321 then
+					MainFrame.Position.Y = UDim.new(0,-321)
 				end
 			end
-			spawn(function()
-				while minimized do RunService.RenderStepped:Wait()
-					pos = MainFrame.Position - UDim2.new(0,0,0,35)
-				end
-			end)
+			minimized = not minimized
 		end
 	)
 
