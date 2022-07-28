@@ -322,7 +322,7 @@ function DiscordLib:Window(text)
 	MinimizeBtn.MouseButton1Click:Connect(
 		function()
 			if minimized == false then
-				pos = MainFrame.Position + Vector3.new(0,0,-35)
+				pos = MainFrame.Position + UDim2.new(0,0,0,-35)
 				MainFrame:TweenSize(
 					UDim2.new(0, 681, 0, 22),
 					Enum.EasingDirection.Out,
@@ -351,7 +351,7 @@ function DiscordLib:Window(text)
 				wait(.3)
 				if minimized then
 					MainFrame:TweenPosition(
-						pos + Vector3.new(0,0,35),
+						pos + UDim2.new(0,0,0,35),
 						Enum.EasingDirection.InOut,
 						Enum.EasingStyle.Linear,
 						.1,
