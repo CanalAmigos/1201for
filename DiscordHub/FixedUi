@@ -337,8 +337,8 @@ function DiscordLib:Window(text)
 					true
 				)
 				wait(.3)
-				if MainFrame.Position.Y.Offset < 0-321 then
-					MainFrame.Position = UDim2.new(0,MainFrame.Position.X.Offset,0,0-321)
+				if MainFrame.Position.Y.Offset < 0 then
+					MainFrame.Position = UDim2.new(0,MainFrame.Position.X.Offset,0,0)
 				end
 			end
 			minimized = not minimized
