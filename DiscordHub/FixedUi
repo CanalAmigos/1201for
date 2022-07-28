@@ -289,6 +289,8 @@ function DiscordLib:Window(text)
 	CloseBtn.MouseButton1Click:Connect(
 		function()
 			MainFrame:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .3, true)
+			wait(.3)
+			Debris:AddItem(Discord,0)
 		end
 	)
 
@@ -315,10 +317,13 @@ function DiscordLib:Window(text)
 			MinimizeBtn.BackgroundColor3 = Color3.fromRGB(32, 34, 37)
 		end
 	)
-
+	
+	local pos = {}
 	MinimizeBtn.MouseButton1Click:Connect(
 		function()
 			if minimized == false then
+				pos[1] = TopFrame.Position
+				pos[2] = MainFrame.Position
 				MainFrame:TweenSize(
 					UDim2.new(0, 681, 0, 22),
 					Enum.EasingDirection.Out,
@@ -326,6 +331,15 @@ function DiscordLib:Window(text)
 					.3,
 					true
 				)
+				if not minimized then
+					MainFrame:TweenPosition(
+						pos[1],
+						Enum.EasingDirection.InOut,
+						Enum.EasingStyle.Linear,
+						.3,
+						true
+					)
+				end
 			else
 				MainFrame:TweenSize(
 					UDim2.new(0, 681, 0, 396),
@@ -334,6 +348,15 @@ function DiscordLib:Window(text)
 					.3,
 					true
 				)
+				if minimized then
+					MainFrame:TweenPosition(
+						pos[2],
+						Enum.EasingDirection.InOut,
+						Enum.EasingStyle.Linear,
+						.3,
+						true
+					)
+				end
 			end
 			minimized = not minimized
 		end
