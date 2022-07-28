@@ -321,8 +321,9 @@ function DiscordLib:Window(text)
 	local pos
 	MinimizeBtn.MouseButton1Click:Connect(
 		function()
+			minimized = not minimized
 			if minimized == false then
-				pos = MainFrame.Position + UDim2.new(0,0,0,-35)
+				pos = MainFrame.Position - UDim2.new(0,0,0,35)
 				MainFrame:TweenSize(
 					UDim2.new(0, 681, 0, 22),
 					Enum.EasingDirection.Out,
@@ -359,7 +360,11 @@ function DiscordLib:Window(text)
 					)
 				end
 			end
-			minimized = not minimized
+			spawn(function()
+				while minimized do RunService.RenderStepped:Wait()
+					pos = MainFrame.Position - UDim2.new(0,0,0,35)
+				end
+			end)
 		end
 	)
 
