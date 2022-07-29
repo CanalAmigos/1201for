@@ -1523,158 +1523,161 @@ function DiscordLib:Window(text)
 	end)
 
 	function DiscordLib:Notification(titletext, desctext, btntext, duration)
-		local skip = false
-		
-		local NotificationHolderMain = Instance.new("TextButton")
-		local Notification = Instance.new("Frame")
-		local NotificationCorner = Instance.new("UICorner")
-		local UnderBar = Instance.new("Frame")
-		local UnderBarCorner = Instance.new("UICorner")
-		local UnderBarFrame = Instance.new("Frame")
-		local Text1 = Instance.new("TextLabel")
-		local Text2 = Instance.new("TextLabel")
-		local AlrightBtn = Instance.new("TextButton")
-		local AlrightCorner = Instance.new("UICorner")
+		spawn(function()
+			local skip = false
 
-		NotificationHolderMain.Name = "NotificationHolderMain"
-		NotificationHolderMain.Parent = MainFrame
-		NotificationHolderMain.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
-		NotificationHolderMain.BackgroundTransparency = 1
-		NotificationHolderMain.BorderSizePixel = 0
-		NotificationHolderMain.Position = UDim2.new(0, 0, 0.0560000017, 0)
-		NotificationHolderMain.Size = UDim2.new(0, 681, 0, 374)
-		NotificationHolderMain.AutoButtonColor = false
-		NotificationHolderMain.Font = Enum.Font.SourceSans
-		NotificationHolderMain.Text = ""
-		NotificationHolderMain.TextColor3 = Color3.fromRGB(0, 0, 0)
-		NotificationHolderMain.TextSize = 14.000
-		TweenService:Create(
-			NotificationHolderMain,
-			TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-			{BackgroundTransparency = 0.2}
-		):Play()
+			local NotificationHolderMain = Instance.new("TextButton")
+			local Notification = Instance.new("Frame")
+			local NotificationCorner = Instance.new("UICorner")
+			local UnderBar = Instance.new("Frame")
+			local UnderBarCorner = Instance.new("UICorner")
+			local UnderBarFrame = Instance.new("Frame")
+			local Text1 = Instance.new("TextLabel")
+			local Text2 = Instance.new("TextLabel")
+			local AlrightBtn = Instance.new("TextButton")
+			local AlrightCorner = Instance.new("UICorner")
+
+			NotificationHolderMain.Name = "NotificationHolderMain"
+			NotificationHolderMain.Parent = MainFrame
+			NotificationHolderMain.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
+			NotificationHolderMain.BackgroundTransparency = 1
+			NotificationHolderMain.BorderSizePixel = 0
+			NotificationHolderMain.Position = UDim2.new(0, 0, 0.0560000017, 0)
+			NotificationHolderMain.Size = UDim2.new(0, 681, 0, 374)
+			NotificationHolderMain.AutoButtonColor = false
+			NotificationHolderMain.Font = Enum.Font.SourceSans
+			NotificationHolderMain.Text = ""
+			NotificationHolderMain.TextColor3 = Color3.fromRGB(0, 0, 0)
+			NotificationHolderMain.TextSize = 14.000
+			TweenService:Create(
+				NotificationHolderMain,
+				TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+				{BackgroundTransparency = 0.2}
+			):Play()
 
 
-		Notification.Name = "Notification"
-		Notification.Parent = NotificationHolderMain
-		Notification.AnchorPoint = Vector2.new(0.5, 0.5)
-		Notification.BackgroundColor3 = Color3.fromRGB(54, 57, 63)
-		Notification.ClipsDescendants = true
-		Notification.Position = UDim2.new(0.524819076, 0, 0.469270051, 0)
-		Notification.Size = UDim2.new(0, 0, 0, 0)
-		Notification.BackgroundTransparency = 1
+			Notification.Name = "Notification"
+			Notification.Parent = NotificationHolderMain
+			Notification.AnchorPoint = Vector2.new(0.5, 0.5)
+			Notification.BackgroundColor3 = Color3.fromRGB(54, 57, 63)
+			Notification.ClipsDescendants = true
+			Notification.Position = UDim2.new(0.524819076, 0, 0.469270051, 0)
+			Notification.Size = UDim2.new(0, 0, 0, 0)
+			Notification.BackgroundTransparency = 1
 
-		Notification:TweenSize(UDim2.new(0, 346, 0, 176), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .2, true)
+			Notification:TweenSize(UDim2.new(0, 346, 0, 176), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .2, true)
 
-		TweenService:Create(
-			Notification,
-			TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-			{BackgroundTransparency = 0}
-		):Play()
+			TweenService:Create(
+				Notification,
+				TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+				{BackgroundTransparency = 0}
+			):Play()
 
-		NotificationCorner.CornerRadius = UDim.new(0, 5)
-		NotificationCorner.Name = "NotificationCorner"
-		NotificationCorner.Parent = Notification
+			NotificationCorner.CornerRadius = UDim.new(0, 5)
+			NotificationCorner.Name = "NotificationCorner"
+			NotificationCorner.Parent = Notification
 
-		UnderBar.Name = "UnderBar"
-		UnderBar.Parent = Notification
-		UnderBar.BackgroundColor3 = Color3.fromRGB(47, 49, 54)
-		UnderBar.Position = UDim2.new(-0.000297061284, 0, 0.945048928, 0)
-		UnderBar.Size = UDim2.new(0, 346, 0, 10)
+			UnderBar.Name = "UnderBar"
+			UnderBar.Parent = Notification
+			UnderBar.BackgroundColor3 = Color3.fromRGB(47, 49, 54)
+			UnderBar.Position = UDim2.new(-0.000297061284, 0, 0.945048928, 0)
+			UnderBar.Size = UDim2.new(0, 346, 0, 10)
 
-		UnderBarCorner.CornerRadius = UDim.new(0, 5)
-		UnderBarCorner.Name = "UnderBarCorner"
-		UnderBarCorner.Parent = UnderBar
+			UnderBarCorner.CornerRadius = UDim.new(0, 5)
+			UnderBarCorner.Name = "UnderBarCorner"
+			UnderBarCorner.Parent = UnderBar
 
-		UnderBarFrame.Name = "UnderBarFrame"
-		UnderBarFrame.Parent = UnderBar
-		UnderBarFrame.BackgroundColor3 = Color3.fromRGB(47, 49, 54)
-		UnderBarFrame.BorderSizePixel = 0
-		UnderBarFrame.Position = UDim2.new(-0.000297061284, 0, -3.76068449, 0)
-		UnderBarFrame.Size = UDim2.new(0, 346, 0, 40)
+			UnderBarFrame.Name = "UnderBarFrame"
+			UnderBarFrame.Parent = UnderBar
+			UnderBarFrame.BackgroundColor3 = Color3.fromRGB(47, 49, 54)
+			UnderBarFrame.BorderSizePixel = 0
+			UnderBarFrame.Position = UDim2.new(-0.000297061284, 0, -3.76068449, 0)
+			UnderBarFrame.Size = UDim2.new(0, 346, 0, 40)
 
-		Text1.Name = "Text1"
-		Text1.Parent = Notification
-		Text1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Text1.BackgroundTransparency = 1.000
-		Text1.Position = UDim2.new(-0.000594122568, 0, 0.0202020202, 0)
-		Text1.Size = UDim2.new(0, 346, 0, 68)
-		Text1.Font = Enum.Font.GothamSemibold
-		Text1.Text = titletext
-		Text1.TextColor3 = Color3.fromRGB(255, 255, 255)
-		Text1.TextSize = 20.000
+			Text1.Name = "Text1"
+			Text1.Parent = Notification
+			Text1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+			Text1.BackgroundTransparency = 1.000
+			Text1.Position = UDim2.new(-0.000594122568, 0, 0.0202020202, 0)
+			Text1.Size = UDim2.new(0, 346, 0, 68)
+			Text1.Font = Enum.Font.GothamSemibold
+			Text1.Text = titletext
+			Text1.TextColor3 = Color3.fromRGB(255, 255, 255)
+			Text1.TextSize = 20.000
 
-		Text2.Name = "Text2"
-		Text2.Parent = Notification
-		Text2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Text2.BackgroundTransparency = 1.000
-		Text2.Position = UDim2.new(0.106342293, 0, 0.317724228, 0)
-		Text2.Size = UDim2.new(0, 272, 0, 63)
-		Text2.Font = Enum.Font.Gotham
-		Text2.Text = desctext
-		Text2.TextColor3 = Color3.fromRGB(171, 172, 176)
-		Text2.TextSize = 14.000
-		Text2.TextWrapped = true
-		
-		if string.gsub(btntext," ","") ~= "" then
-			AlrightBtn.Name = "AlrightBtn"
-			AlrightBtn.Parent = Notification
-			AlrightBtn.BackgroundColor3 = Color3.fromRGB(114, 137, 228)
-			AlrightBtn.Position = UDim2.new(0.0332369953, 0, 0.789141417, 0)
-			AlrightBtn.Size = UDim2.new(0, 322, 0, 27)
-			AlrightBtn.Font = Enum.Font.Gotham
-			AlrightBtn.Text = btntext
-			AlrightBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-			AlrightBtn.TextSize = 13.000
-			AlrightBtn.AutoButtonColor = false
+			Text2.Name = "Text2"
+			Text2.Parent = Notification
+			Text2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+			Text2.BackgroundTransparency = 1.000
+			Text2.Position = UDim2.new(0.106342293, 0, 0.317724228, 0)
+			Text2.Size = UDim2.new(0, 272, 0, 63)
+			Text2.Font = Enum.Font.Gotham
+			Text2.Text = desctext
+			Text2.TextColor3 = Color3.fromRGB(171, 172, 176)
+			Text2.TextSize = 14.000
+			Text2.TextWrapped = true
 
-			AlrightCorner.CornerRadius = UDim.new(0, 4)
-			AlrightCorner.Name = "AlrightCorner"
-			AlrightCorner.Parent = AlrightBtn
+			if string.gsub(btntext," ","") ~= "" then
+				AlrightBtn.Name = "AlrightBtn"
+				AlrightBtn.Parent = Notification
+				AlrightBtn.BackgroundColor3 = Color3.fromRGB(114, 137, 228)
+				AlrightBtn.Position = UDim2.new(0.0332369953, 0, 0.789141417, 0)
+				AlrightBtn.Size = UDim2.new(0, 322, 0, 27)
+				AlrightBtn.Font = Enum.Font.Gotham
+				AlrightBtn.Text = btntext
+				AlrightBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+				AlrightBtn.TextSize = 13.000
+				AlrightBtn.AutoButtonColor = false
 
-			AlrightBtn.MouseButton1Click:Connect(function()
+				AlrightCorner.CornerRadius = UDim.new(0, 4)
+				AlrightCorner.Name = "AlrightCorner"
+				AlrightCorner.Parent = AlrightBtn
+
+				AlrightBtn.MouseButton1Click:Connect(function()
+					skip = true
+				end)
+
+				AlrightBtn.MouseEnter:Connect(function()
+					TweenService:Create(
+						AlrightBtn,
+						TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+						{BackgroundColor3 = Color3.fromRGB(103,123,196)}
+					):Play()
+				end)
+
+				AlrightBtn.MouseLeave:Connect(function()
+					TweenService:Create(
+						AlrightBtn,
+						TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+						{BackgroundColor3 = Color3.fromRGB(114, 137, 228)}
+					):Play()
+				end)
+			end
+
+			spawn(function()
+				wait(duration or 5)
 				skip = true
 			end)
 
-			AlrightBtn.MouseEnter:Connect(function()
-				TweenService:Create(
-					AlrightBtn,
-					TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-					{BackgroundColor3 = Color3.fromRGB(103,123,196)}
-				):Play()
-			end)
-
-			AlrightBtn.MouseLeave:Connect(function()
-				TweenService:Create(
-					AlrightBtn,
-					TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-					{BackgroundColor3 = Color3.fromRGB(114, 137, 228)}
-				):Play()
-			end)
-		end
-		
-		spawn(function()
-			wait(duration or 5)
-			skip = true
+			repeat RunService.RenderStepped:Wait() until skip
+			TweenService:Create(
+				NotificationHolderMain,
+				TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+				{BackgroundTransparency = 1}
+			):Play()
+			TweenService:Create(Text1,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
+			TweenService:Create(Text2,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
+			TweenService:Create(AlrightBtn,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
+			Notification:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .2, true)
+			TweenService:Create(
+				Notification,
+				TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+				{BackgroundTransparency = 1}
+			):Play()
+			wait(.2)
+			Debris:AddItem(NotificationHolderMain,0)
 		end)
-		
-		repeat RunService.RenderStepped:Wait() until skip
-		TweenService:Create(
-			NotificationHolderMain,
-			TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-			{BackgroundTransparency = 1}
-		):Play()
-		TweenService:Create(Text1,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
-		TweenService:Create(Text2,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
-		TweenService:Create(AlrightBtn,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
-		Notification:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .2, true)
-		TweenService:Create(
-			Notification,
-			TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-			{BackgroundTransparency = 1}
-		):Play()
-		wait(.2)
-		Debris:AddItem(NotificationHolderMain,0)
+		return
 	end
 
 	MakeDraggable(TopFrame, MainFrame)
@@ -2261,7 +2264,7 @@ function DiscordLib:Window(text)
 				local ToggleFrameCircle = Instance.new("Frame")
 				local ToggleFrameCircleCorner = Instance.new("UICorner")
 				local Icon = Instance.new("ImageLabel")
-				
+
 				local ToggleFunc = {}
 
 				Toggle.Name = "Toggle"
@@ -2318,7 +2321,7 @@ function DiscordLib:Window(text)
 				Icon.Size = UDim2.new(0, 13, 0, 13)
 				Icon.Image = "http://www.roblox.com/asset/?id=6035047409"
 				Icon.ImageColor3 = Color3.fromRGB(114, 118, 125)
-				
+
 				local dlay = false
 				Toggle.MouseButton1Click:Connect(function()
 					if not dlay then dlay = true
@@ -2380,7 +2383,7 @@ function DiscordLib:Window(text)
 				end)
 
 				ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
-				
+
 				function ToggleFunc:SetToggle(bool)
 					if bool then
 						Icon.ImageColor3 = Color3.fromRGB(67,181,129)
@@ -2837,21 +2840,21 @@ function DiscordLib:Window(text)
 				end
 
 				ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
-				
+
 				function DropFunc:SetText(txt)
 					local txt = txt or "..."
 					txt = tostring(txt)
 					CurrentSelectedText.Text = txt
 					pcall(callback, txt)
 				end
-				
+
 				function DropFunc:Clear(a)
 					for i,v in next, DropItemHolder:GetChildren() do
 						if v.Name == "Item" then
 							Debris:AddItem(v,0)
 						end
 					end
-					
+
 					if not a then
 						CurrentSelectedText.Text = "..."
 					end
@@ -2866,7 +2869,7 @@ function DiscordLib:Window(text)
 					DropdownFrameMainOutline.Visible = false
 					ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 				end
-				
+
 				function DropFunc:Remove(txt)
 					for i,v in next, DropItemHolder:GetChildren() do
 						if v.Name == "Item" and v.ItemText.Text == tostring(txt) then
@@ -2892,7 +2895,7 @@ function DiscordLib:Window(text)
 					DropdownFrameMainOutline.Visible = false
 					ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 				end
-				
+
 				function DropFunc:Refresh(list)
 					DropFunc:Clear(true)
 					for i,v in next, list do
@@ -3045,7 +3048,7 @@ function DiscordLib:Window(text)
 				local ColorPickerInput = nil
 				local ColorInput = nil
 				local HueInput = nil
-				
+
 				local ColorpickerFunc = {}
 
 				local Colorpicker = Instance.new("Frame")
@@ -3253,7 +3256,7 @@ function DiscordLib:Window(text)
 				)
 
 				ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
-				
+
 				function ColorpickerFunc:SetColor(col)
 					local realcolor = Color3.toHSV(col)
 					ColorH = realcolor.ColorH
