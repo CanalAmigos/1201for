@@ -328,6 +328,9 @@ function DiscordLib:Window(text)
 					.3,
 					true
 				)
+				if MainFrame.Position.Y.Offset > 400 then
+					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,MainFrame.Position.Y.Scale,0)
+				end
 			else
 				MainFrame:TweenSize(
 					UDim2.new(0, 681, 0, 396),
@@ -337,7 +340,7 @@ function DiscordLib:Window(text)
 					true
 				)
 				if MainFrame.Position.Y.Offset < 0 then
-					MainFrame.Position = MainFrame.Position - UDim2.new(0,0,0.3,0)
+					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,MainFrame.Position.Y.Scale,0)
 				end
 			end
 			minimized = not minimized
