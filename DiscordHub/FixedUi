@@ -102,11 +102,11 @@ function DiscordLib:Window(text)
 	MainFrame.Size = UDim2.new(0, 681, 0, 396)
 
 	TopFrameHolder.Name = "TopFrameHolder"
-	TopFrameHolder.Parent = TopFrame
+	TopFrameHolder.Parent = MainFrame
 	TopFrameHolder.BackgroundColor3 = Color3.fromRGB(32, 34, 37)
 	TopFrameHolder.BackgroundTransparency = 1.000
 	TopFrameHolder.BorderSizePixel = 0
-	TopFrameHolder.Position = UDim2.new(-0.000658480625, 0, 0, 0)
+	TopFrameHolder.Position = UDim2.new(0, 0, 0, 0)
 	TopFrameHolder.Size = UDim2.new(0, 681, 0, 22)
 
 	Title.Name = "Title"
@@ -125,7 +125,7 @@ function DiscordLib:Window(text)
 	CloseBtn.Parent = TopFrame
 	CloseBtn.BackgroundColor3 = Color3.fromRGB(32, 34, 37)
 	CloseBtn.BackgroundTransparency = 0
-	CloseBtn.Position = UDim2.new(0.959063113, 0, -0.0169996787, 0)
+	CloseBtn.Position = UDim2.new(0.959063113, 0, 0, 0)
 	CloseBtn.Size = UDim2.new(0, 28, 0, 22)
 	CloseBtn.Font = Enum.Font.Gotham
 	CloseBtn.Text = ""
@@ -138,7 +138,7 @@ function DiscordLib:Window(text)
 	CloseIcon.Parent = CloseBtn
 	CloseIcon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	CloseIcon.BackgroundTransparency = 1.000
-	CloseIcon.Position = UDim2.new(0.189182192, 0, 0.128935531, 0)
+	CloseIcon.Position = UDim2.new(0.189182192, 0, 0, 0)
 	CloseIcon.Size = UDim2.new(0, 17, 0, 17)
 	CloseIcon.Image = "http://www.roblox.com/asset/?id=6035047409"
 	CloseIcon.ImageColor3 = Color3.fromRGB(220, 221, 222)
@@ -147,7 +147,7 @@ function DiscordLib:Window(text)
 	MinimizeBtn.Parent = TopFrame
 	MinimizeBtn.BackgroundColor3 = Color3.fromRGB(32, 34, 37)
 	MinimizeBtn.BackgroundTransparency = 0
-	MinimizeBtn.Position = UDim2.new(0.917947114, 0, -0.0169996787, 0)
+	MinimizeBtn.Position = UDim2.new(0.917947114, 0, 0, 0)
 	MinimizeBtn.Size = UDim2.new(0, 28, 0, 22)
 	MinimizeBtn.Font = Enum.Font.Gotham
 	MinimizeBtn.Text = ""
@@ -160,7 +160,7 @@ function DiscordLib:Window(text)
 	MinimizeIcon.Parent = MinimizeBtn
 	MinimizeIcon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	MinimizeIcon.BackgroundTransparency = 1.000
-	MinimizeIcon.Position = UDim2.new(0.189182192, 0, 0.128935531, 0)
+	MinimizeIcon.Position = UDim2.new(0.189182192, 0, 0, 0)
 	MinimizeIcon.Size = UDim2.new(0, 17, 0, 17)
 	MinimizeIcon.Image = "http://www.roblox.com/asset/?id=6035067836"
 	MinimizeIcon.ImageColor3 = Color3.fromRGB(220, 221, 222)
