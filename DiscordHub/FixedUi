@@ -328,7 +328,7 @@ function DiscordLib:Window(text)
 					.3,
 					true
 				)
-				if MainFrame.Position.Y.Offset > 400 then
+				if MainFrame.AbsolutePosition.Y >= 558 then
 					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0.741,0)
 				end
 			else
@@ -339,13 +339,15 @@ function DiscordLib:Window(text)
 					.3,
 					true
 				)
-				if MainFrame.Position.Y.Offset < 0 then
+				if MainFrame.AbsolutePosition.Y < 0 then
 					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0.257,0)
 				end
 			end
 			minimized = not minimized
 		end
 	)
+	
+	
 
 	local SettingsOpenBtn = Instance.new("TextButton")
 	local SettingsOpenBtnIco = Instance.new("ImageLabel")
