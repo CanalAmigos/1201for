@@ -331,6 +331,10 @@ function DiscordLib:Window(text)
 				if MainFrame.AbsolutePosition.Y >= 558 then
 					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0.741,0)
 				end
+				wait(.3)
+				if MainFrame.AbsolutePosition.Y >= 558 then
+					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0.741,0)
+				end
 			else
 				MainFrame:TweenSize(
 					UDim2.new(0, 681, 0, 396),
@@ -339,6 +343,10 @@ function DiscordLib:Window(text)
 					.3,
 					true
 				)
+				if MainFrame.AbsolutePosition.Y < 45 then
+					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0.257,0)
+				end
+				wait(.3)
 				if MainFrame.AbsolutePosition.Y < 45 then
 					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0.257,0)
 				end
