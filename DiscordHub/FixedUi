@@ -339,7 +339,7 @@ function DiscordLib:Window(text)
 					.3,
 					true
 				)
-				if MainFrame.AbsolutePosition.Y < 20 then
+				if MainFrame.AbsolutePosition.Y < 25 then
 					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0.257,0)
 				end
 			end
