@@ -344,11 +344,9 @@ function DiscordLib:Window(text)
 		while true do RunService.RenderStepped:Wait()
 			if Dragging ~= true then
 				if MainFrame.AbsolutePosition.Y >= 558 then
-					local r = MainFrame.Position.Y.Offset - 558
-					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0,r)
+					MainFrame.Position = UDim2.new(0,MainFrame.Position.X.Offset,0,MainFrame.Position.Y.Offset-3)
 				elseif MainFrame.AbsolutePosition.Y <= 25 then
-					local r = 25 - MainFrame.Position.Y.Offset
-					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0,r)
+					MainFrame.Position = UDim2.new(0,MainFrame.Position.X.Offset,0,MainFrame.Position.Y.Offset+3)
 				end
 			end
 		end
