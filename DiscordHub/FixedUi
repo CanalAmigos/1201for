@@ -32,7 +32,6 @@ local function ScaleToOffset(Scale)
 end
 
 local function MakeDraggable(topbarobject, object)
-	local Camera = workspace:WaitForChild("Camera")
 	local DragMousePosition
 	local FramePosition
 	local Draggable = false
@@ -53,7 +52,7 @@ local function MakeDraggable(topbarobject, object)
 
 	UserInputService.InputChanged:Connect(function(input)
 		if Draggable == true then
-			local NewPosition = FramePosition + ((Vector2.new(input.Position.X, input.Position.Y) - DragMousePosition) / Camera.ViewportSize)
+			local NewPosition = FramePosition + ((Vector2.new(input.Position.X, input.Position.Y) - DragMousePosition) / workspace.CurrentCamera.ViewportSize)
 			object.Position = UDim2.new(NewPosition.X, 0, NewPosition.Y, 0)
 		end
 	end)
@@ -1655,7 +1654,7 @@ function DiscordLib:Window(text)
 		return
 	end
 
-	MakeDraggable(TopFrame, MainFrame)
+	spawn(MakeDraggable(TopFrame, MainFrame))
 	ServersHoldPadding.PaddingLeft = UDim.new(0, 14)
 	local ServerHold = {}
 
