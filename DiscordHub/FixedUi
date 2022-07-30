@@ -26,6 +26,11 @@ local function SaveInfo()
 	writefile("discordlibinfo.txt", HttpService:JSONEncode(userinfo));
 end
 
+local function ScaleToOffset(Scale)
+	local ViewPortSize = workspace.Camera.ViewportSize
+	return ({ViewPortSize.X * Scale[1],ViewPortSize.Y * Scale[2]})
+end
+
 local function MakeDraggable(topbarobject, object)
 	local Dragging = nil
 	local DragInput = nil
@@ -41,7 +46,9 @@ local function MakeDraggable(topbarobject, object)
 				StartPosition.Y.Scale,
 				StartPosition.Y.Offset + Delta.Y
 			)
-		if object.AbsolutePosition.Y >= 558 or object.AbsolutePosition.Y <= 45 then return end
+		local Ba = ScaleToOffset({0,pos.X.Scale})[2] + pos.X.Offset
+		local Ab = ScaleToOffset({0,pos.Y.Scale})[2] + pos.Y.Offset
+		if (object.AbsolutePosition.Y >= 558 and not Ab < 558) or (object.AbsolutePosition.Y <= 45 and not Ab > 45) or Ba ~= object.AbsolutePosition.X then return end
 		object.Position = pos
 	end
 
