@@ -26,8 +26,8 @@ local function SaveInfo()
 	writefile("discordlibinfo.txt", HttpService:JSONEncode(userinfo));
 end
 
-local Dragging = nil
 local function MakeDraggable(topbarobject, object)
+	local Dragging = nil
 	local DragInput = nil
 	local DragStart = nil
 	local StartPosition = nil
@@ -328,6 +328,9 @@ function DiscordLib:Window(text)
 					.3,
 					true
 				)
+				if MainFrame.AbsolutePosition.Y >= 558 then
+					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0.741,0)
+				end
 			else
 				MainFrame:TweenSize(
 					UDim2.new(0, 681, 0, 396),
@@ -336,23 +339,13 @@ function DiscordLib:Window(text)
 					.3,
 					true
 				)
+				if MainFrame.AbsolutePosition.Y <= 45 then
+					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0.257,0)
+				end
 			end
 			minimized = not minimized
 		end
 	)
-	spawn(function()
-		while true do RunService.RenderStepped:Wait()
-			if Dragging ~= true then
-				if MainFrame.AbsolutePosition.Y >= 550 then
-					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0,MainFrame.Position.Y.Offset-5)
-				elseif MainFrame.AbsolutePosition.Y <= 5 then
-					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0,MainFrame.Position.Y.Offset+5)
-				end
-			end
-		end
-	end)
-	
-	
 
 	local SettingsOpenBtn = Instance.new("TextButton")
 	local SettingsOpenBtnIco = Instance.new("ImageLabel")
