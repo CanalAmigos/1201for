@@ -26,8 +26,8 @@ local function SaveInfo()
 	writefile("discordlibinfo.txt", HttpService:JSONEncode(userinfo));
 end
 
+local Dragging = nil
 local function MakeDraggable(topbarobject, object)
-	local Dragging = nil
 	local DragInput = nil
 	local DragStart = nil
 	local StartPosition = nil
@@ -342,10 +342,12 @@ function DiscordLib:Window(text)
 	)
 	spawn(function()
 		while true do RunService.RenderStepped:Wait()
-			if MainFrame.AbsolutePosition.Y >= 558 then
-				MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0,MainFrame.Position.Y.Offset-1)
-			elseif MainFrame.AbsolutePosition.Y <= 25 then
-				MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0,MainFrame.Position.Y.Offset+1)
+			if not Dragging then
+				if MainFrame.AbsolutePosition.Y >= 558 then
+					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0,MainFrame.Position.Y.Offset-1)
+				elseif MainFrame.AbsolutePosition.Y <= 25 then
+					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0,MainFrame.Position.Y.Offset+1)
+				end
 			end
 		end
 	end)
