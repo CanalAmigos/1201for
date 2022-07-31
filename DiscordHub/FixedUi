@@ -372,11 +372,11 @@ function DiscordLib:Window(text)
 
 	spawn(function()
 		while true do RunService.RenderStepped:Wait()
-			if minimized and not pos then
+			if minimized and pos then
 				if MainFrame.AbsolutePosition.Y >= 558 then
 					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0.741,0)
 				end
-			elseif not pos then
+			elseif pos then
 				if MainFrame.AbsolutePosition.Y <= 141 then
 					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0.257,0)
 				end
