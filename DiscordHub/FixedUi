@@ -15,6 +15,19 @@ pcall(function()
 	userinfo = HttpService:JSONDecode(readfile("discordlibinfo.txt"));
 end)
 
+if type(getconnections) == "function" then
+	for i,v in pairs(getconnections(LocalPlayer.Idled)) do
+		v:Disable()
+	end
+else
+	local vu = game:GetService("VirtualUser")
+	LocalPlayer.Idled:connect(function()
+		vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+		wait(1)
+		vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+	end)
+end 
+
 pfp = userinfo["pfp"] or "https://www.roblox.com/headshot-thumbnail/image?userId=".. game.Players.LocalPlayer.UserId .."&width=420&height=420&format=png"
 user =  userinfo["user"] or game.Players.LocalPlayer.Name
 tag = userinfo["tag"] or tostring(math.random(1000,9999))
@@ -317,35 +330,59 @@ function DiscordLib:Window(text)
 			MinimizeBtn.BackgroundColor3 = Color3.fromRGB(32, 34, 37)
 		end
 	)
-	local pos
+	local pos = false
 	MinimizeBtn.MouseButton1Click:Connect(
 		function()
 			if minimized == false then
-				MainFrame:TweenSize(
-					UDim2.new(0, 681, 0, 22),
-					Enum.EasingDirection.Out,
-					Enum.EasingStyle.Quart,
-					.3,
-					true
-				)
+				spawn(function()
+					pos = true
+					MainFrame:TweenSize(
+						UDim2.new(0, 681, 0, 22),
+						Enum.EasingDirection.Out,
+						Enum.EasingStyle.Quart,
+						.3,
+						true
+					)
+					wait(.3)
+					pos = false
+				end)
 				if MainFrame.AbsolutePosition.Y >= 558 then
 					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0.741,0)
 				end
 			else
-				MainFrame:TweenSize(
-					UDim2.new(0, 681, 0, 396),
-					Enum.EasingDirection.Out,
-					Enum.EasingStyle.Quart,
-					.3,
-					true
-				)
-				if MainFrame.AbsolutePosition.Y <= 45 then
+				spawn(function()
+					pos = true
+					MainFrame:TweenSize(
+						UDim2.new(0, 681, 0, 396),
+						Enum.EasingDirection.Out,
+						Enum.EasingStyle.Quart,
+						.3,
+						true
+					)
+					wait(.3)
+					pos = false
+				end)
+				if MainFrame.AbsolutePosition.Y <= 141 then
 					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0.257,0)
 				end
 			end
 			minimized = not minimized
 		end
 	)
+
+	spawn(function()
+		while true do RunService.RenderStepped:Wait()
+			if minimized and not pos then
+				if MainFrame.AbsolutePosition.Y >= 558 then
+					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0.741,0)
+				end
+			elseif not pos then
+				if MainFrame.AbsolutePosition.Y <= 141 then
+					MainFrame.Position = UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0.257,0)
+				end
+			end
+		end
+	end)
 
 	local SettingsOpenBtn = Instance.new("TextButton")
 	local SettingsOpenBtnIco = Instance.new("ImageLabel")
