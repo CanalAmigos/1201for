@@ -2590,8 +2590,9 @@ function DiscordLib:Window(text)
 					local SliderPrecise = ((pos.X.Scale * max) / max) * (max - min) + min
 					local SliderNonPrecise = math.floor(((pos.X.Scale * max) / max) * (max - min) + min)
 					local value = precise and SliderNonPrecise or SliderPrecise
-					ValueLabel.Text = string.format("%.2f",value)
-					pcall(callback, value)
+					local revalue = string.format("%.2f",value)
+					ValueLabel.Text = revalue
+					pcall(callback, revalue)
 				end
 				Zip.InputBegan:Connect(
 					function(input)
