@@ -1604,8 +1604,12 @@ function DiscordLib:Window(text)
 			Notification.Size = UDim2.new(0, 0, 0, 0)
 			Notification.BackgroundTransparency = 1
 
-			Notification:TweenSize(UDim2.new(0, 346, 0, 176), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .2, true)
-
+			TweenService:Create(
+				Notification,
+				TweenInfo.new(.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+				{Size = UDim2.new(0, 346, 0, 176)}
+			):Play()
+			
 			TweenService:Create(
 				Notification,
 				TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
@@ -1707,7 +1711,7 @@ function DiscordLib:Window(text)
 			TweenService:Create(Text1,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
 			TweenService:Create(Text2,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
 			TweenService:Create(AlrightBtn,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
-			Notification:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .2, true)
+			TweenService:Create(Notification,TweenInfo.new(.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),{Size = UDim2.new(0, 0, 0, 0)}):Play()
 			TweenService:Create(
 				Notification,
 				TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
@@ -2444,7 +2448,7 @@ function DiscordLib:Window(text)
 				return ToggleFunc
 			end
 
-			function ChannelContent:Slider(text, min, max, start, precise, callback)
+			function ChannelContent:Slider(text, min, max, start, callback)
 				local SliderFunc = {}
 				local dragging = false
 				local Slider = Instance.new("TextButton")
@@ -2587,12 +2591,9 @@ function DiscordLib:Window(text)
 						)
 					CurrentValueFrame.Size = pos1
 					Zip.Position = pos
-					local SliderPrecise = ((pos.X.Scale * max) / max) * (max - min) + min
-					local SliderNonPrecise = math.floor(((pos.X.Scale * max) / max) * (max - min) + min)
-					local value = precise and SliderNonPrecise or SliderPrecise
-					local revalue = string.format("%.2f",value)
-					ValueLabel.Text = revalue
-					pcall(callback, revalue)
+					local value = math.floor(((pos.X.Scale * max) / max) * (max - min) + min)
+					ValueLabel.Text = tostring(value)
+					pcall(callback, value)
 				end
 				Zip.InputBegan:Connect(
 					function(input)
