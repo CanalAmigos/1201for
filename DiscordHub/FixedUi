@@ -2444,7 +2444,7 @@ function DiscordLib:Window(text)
 				return ToggleFunc
 			end
 
-			function ChannelContent:Slider(text, min, max, start, callback)
+			function ChannelContent:Slider(text, min, max, start, precise, callback)
 				local SliderFunc = {}
 				local dragging = false
 				local Slider = Instance.new("TextButton")
@@ -2587,8 +2587,14 @@ function DiscordLib:Window(text)
 						)
 					CurrentValueFrame.Size = pos1
 					Zip.Position = pos
-					local value = math.floor(((pos.X.Scale * max) / max) * (max - min) + min)
-					ValueLabel.Text = tostring(value)
+					local SliderPrecise = ((pos.X.Scale * max) / max) * (max - min) + min
+					local SliderNonPrecise = math.floor(((pos.X.Scale * max) / max) * (max - min) + min)
+					local value = precise and SliderNonPrecise or SliderPrecise
+					if not precise then
+						ValueLabel.Text = string.format("%1f",value)
+					else
+						ValueLabel.Text = tostring(value)
+					end
 					pcall(callback, value)
 				end
 				Zip.InputBegan:Connect(
