@@ -2623,18 +2623,15 @@ function DiscordLib:Window(text)
 					end
 				end)
 				
-				if start == nil then
-					function SliderFunc:SetValue(Value)
-						GlobalSliderValue = Value
-						local def = math.clamp(GlobalSliderValue, min, max)
-						local Porcentage = (def - min) / (max - min)
-						CurrentValueFrame.Size = UDim2.new(Porcentage,0,0,8)
-						ValueLabel.Text = Value..Simbol
-						pcall(callback,Value)
-					end
-				else
-					SetValue(start)
+				function SliderFunc:Change(Value)
+					GlobalSliderValue = Value
+					local def = math.clamp(GlobalSliderValue, min, max)
+					local Porcentage = (def - min) / (max - min)
+					CurrentValueFrame.Size = UDim2.new(Porcentage,0,0,8)
+					ValueLabel.Text = Value..Simbol
+					pcall(callback,Value)
 				end
+				SetValue(start)
 
 				ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 				return SliderFunc
