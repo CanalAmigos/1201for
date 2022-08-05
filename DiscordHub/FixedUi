@@ -289,7 +289,8 @@ function DiscordLib:Window(text)
 	ServersHold.Size = UDim2.new(0, 71, 0, 373)
 	ServersHold.ScrollBarThickness = 1
 	ServersHold.ScrollBarImageTransparency = 1
-	ServersHold.CanvasSize = UDim2.new(0, 0, 0, 0)
+	ServersHold.CanvasSize = UDim2.new(0,0,0,0)
+	ServersHold.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
 	ServersHoldLayout.Name = "ServersHoldLayout"
 	ServersHoldLayout.Parent = ServersHold
@@ -1825,7 +1826,6 @@ function DiscordLib:Window(text)
 		ServerWhiteFrameCorner.CornerRadius = UDim.new(1, 0)
 		ServerWhiteFrameCorner.Name = "ServerWhiteFrameCorner"
 		ServerWhiteFrameCorner.Parent = ServerWhiteFrame
-		ServersHold.CanvasSize = UDim2.new(0, 0, 0, ServersHoldLayout.AbsoluteContentSize.Y)
 
 		local ServerFrame = Instance.new("Frame")
 		local ServerFrame1 = Instance.new("Frame")
@@ -1989,6 +1989,7 @@ function DiscordLib:Window(text)
 		ServerChannelHolder.ScrollBarThickness = 4
 		ServerChannelHolder.ScrollBarImageColor3 = Color3.fromRGB(18, 19, 21)
 		ServerChannelHolder.ScrollBarImageTransparency = 1
+		ServerChannelHolder.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
 		ServerChannelHolderLayout.Name = "ServerChannelHolderLayout"
 		ServerChannelHolderLayout.Parent = ServerChannelHolder
@@ -2181,7 +2182,6 @@ function DiscordLib:Window(text)
 			ChannelBtnTitle.TextColor3 = Color3.fromRGB(114, 118, 125)
 			ChannelBtnTitle.TextSize = 14.000
 			ChannelBtnTitle.TextXAlignment = Enum.TextXAlignment.Left
-			ServerChannelHolder.CanvasSize = UDim2.new(0, 0, 0, ServerChannelHolderLayout.AbsoluteContentSize.Y)
 
 			local ChannelHolder = Instance.new("ScrollingFrame")
 			local ChannelHolderLayout = Instance.new("UIListLayout")
@@ -2198,6 +2198,7 @@ function DiscordLib:Window(text)
 			ChannelHolder.CanvasSize = UDim2.new(0,0,0,0)
 			ChannelHolder.ScrollBarImageTransparency = 0
 			ChannelHolder.ScrollBarImageColor3 = Color3.fromRGB(18, 19, 21)
+			ChannelHolder.AutomaticCanvasSize = Enum.AutomaticSize.Y
 			ChannelHolder.Visible = false
 			ChannelHolder.ClipsDescendants = false
 
@@ -2292,7 +2293,6 @@ function DiscordLib:Window(text)
 						{BackgroundColor3 = Color3.fromRGB(114, 137, 228)}
 					):Play()
 				end)
-				ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 			end
 			function ChannelContent:Toggle(text,default,callback)
 				local toggled = false
@@ -2421,7 +2421,6 @@ function DiscordLib:Window(text)
 					end
 				end)
 
-				ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 
 				function ToggleFunc:SetToggle(bool)
 					if bool then
@@ -2591,8 +2590,9 @@ function DiscordLib:Window(text)
 					SliderValue = tonumber(string.format("%.2f", SliderValue))
 					GlobalSliderValue = SliderValue
 					ValueLabel.Text = tostring(SliderValue)..Simbol
-					pcall(callback,GlobalSliderValue)
+					callback(GlobalSliderValue)
 				end
+				
 				local function SetValue(Value)
 					GlobalSliderValue = Value
 					local def = math.clamp(Value, min, max)
@@ -2600,7 +2600,7 @@ function DiscordLib:Window(text)
 					Zip.Position = UDim2.new(Porcentage, -6,-0.644999981, 0)
 					CurrentValueFrame.Size = UDim2.new(Porcentage,0,0,8)
 					ValueLabel.Text = Value..Simbol
-					pcall(callback,GlobalSliderValue)
+					callback(GlobalSliderValue)
 				end
 				
 				Zip.InputBegan:Connect(function(Input)
@@ -2631,11 +2631,10 @@ function DiscordLib:Window(text)
 					Zip.Position = UDim2.new(Porcentage, -6,-0.644999981, 0)
 					CurrentValueFrame.Size = UDim2.new(Porcentage,0,0,8)
 					ValueLabel.Text = Value..Simbol
-					pcall(callback,Value)
+					callback(Value)
 				end
 				SetValue(start)
 
-				ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 				return SliderFunc
 			end
 			function ChannelContent:Seperator()
@@ -2655,7 +2654,6 @@ function DiscordLib:Window(text)
 				Seperator2.BorderSizePixel = 0
 				Seperator2.Position = UDim2.new(0, 0, 0, 4)
 				Seperator2.Size = UDim2.new(0, 401, 0, 1)
-				ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 			end
 			function ChannelContent:Dropdown(text, list, callback)
 				local DropFunc = {}
@@ -2797,6 +2795,7 @@ function DiscordLib:Window(text)
 				DropItemHolder.Position = UDim2.new(0, 0, 0.215384638, 0)
 				DropItemHolder.Size = UDim2.new(0, 385, 0, 0)
 				DropItemHolder.CanvasSize = UDim2.new(0, 0, 0, 0)
+				DropItemHolder.AutomaticCanvasSize = Enum.AutomaticSize.Y
 				DropItemHolder.ScrollBarThickness = 6
 				DropItemHolder.BorderSizePixel = 0
 				DropItemHolder.ScrollBarImageColor3 = Color3.fromRGB(28, 29, 32)
@@ -2811,13 +2810,11 @@ function DiscordLib:Window(text)
 						DropdownFrameMain.Visible = true
 						DropdownFrameMainOutline.Visible = true
 						Dropdown.Size = UDim2.new(0, 403, 0, 73 + DropdownFrameMainOutline.AbsoluteSize.Y)
-						ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 
 					else
 						Dropdown.Size = UDim2.new(0, 403, 0, 73)
 						DropdownFrameMain.Visible = false
 						DropdownFrameMainOutline.Visible = false
-						ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 					end
 					DropTog = not DropTog
 				end)
@@ -2881,18 +2878,15 @@ function DiscordLib:Window(text)
 						Dropdown.Size = UDim2.new(0, 403, 0, 73)
 						DropdownFrameMain.Visible = false
 						DropdownFrameMainOutline.Visible = false
-						ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 						DropTog = not DropTog
 					end)
 
-					DropItemHolder.CanvasSize = UDim2.new(0,0,0,DropItemHolderLayout.AbsoluteContentSize.Y)
 
 					DropItemHolder.Size = UDim2.new(0, 385, 0, framesize)
 					DropdownFrameMain.Size = UDim2.new(0, 392, 0, framesize + 6)
 					DropdownFrameMainOutline.Size = UDim2.new(0, 396, 0, framesize + 10)
 				end
 
-				ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 
 				function DropFunc:SetText(txt)
 					local txt = txt or "..."
@@ -2920,7 +2914,6 @@ function DiscordLib:Window(text)
 					Dropdown.Size = UDim2.new(0, 403, 0, 73)
 					DropdownFrameMain.Visible = false
 					DropdownFrameMainOutline.Visible = false
-					ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 				end
 
 				function DropFunc:Remove(txt)
@@ -2946,7 +2939,6 @@ function DiscordLib:Window(text)
 					Dropdown.Size = UDim2.new(0, 403, 0, 73)
 					DropdownFrameMain.Visible = false
 					DropdownFrameMainOutline.Visible = false
-					ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 				end
 
 				function DropFunc:Refresh(list)
@@ -3009,11 +3001,9 @@ function DiscordLib:Window(text)
 							Dropdown.Size = UDim2.new(0, 403, 0, 73)
 							DropdownFrameMain.Visible = false
 							DropdownFrameMainOutline.Visible = false
-							ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 							DropTog = not DropTog
 						end)
 
-						DropItemHolder.CanvasSize = UDim2.new(0,0,0,DropItemHolderLayout.AbsoluteContentSize.Y)
 
 						DropItemHolder.Size = UDim2.new(0, 385, 0, framesize)
 						DropdownFrameMain.Size = UDim2.new(0, 392, 0, framesize + 6)
@@ -3079,11 +3069,9 @@ function DiscordLib:Window(text)
 						Dropdown.Size = UDim2.new(0, 403, 0, 73)
 						DropdownFrameMain.Visible = false
 						DropdownFrameMainOutline.Visible = false
-						ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 						DropTog = not DropTog
 					end)
 
-					DropItemHolder.CanvasSize = UDim2.new(0,0,0,DropItemHolderLayout.AbsoluteContentSize.Y)
 
 					DropItemHolder.Size = UDim2.new(0, 385, 0, framesize)
 					DropdownFrameMain.Size = UDim2.new(0, 392, 0, framesize + 6)
@@ -3308,7 +3296,6 @@ function DiscordLib:Window(text)
 					end
 				)
 
-				ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 
 				function ColorpickerFunc:SetColor(col)
 					local realcolor = Color3.toHSV(col)
@@ -3408,7 +3395,6 @@ function DiscordLib:Window(text)
 					end
 				end)
 
-				ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 			end
 
 			function ChannelContent:Label(text)
@@ -3440,7 +3426,6 @@ function DiscordLib:Window(text)
 				LabelTitle.TextSize = 14.000
 				LabelTitle.TextXAlignment = Enum.TextXAlignment.Left
 
-				ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 			end
 
 			function ChannelContent:Bind(text, presetbind, callback)
@@ -3501,7 +3486,6 @@ function DiscordLib:Window(text)
 						end
 					end
 				end)
-				ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
 			end
 
 			return ChannelContent
