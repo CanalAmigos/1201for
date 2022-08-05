@@ -2597,6 +2597,7 @@ function DiscordLib:Window(text)
 					GlobalSliderValue = Value
 					local def = math.clamp(Value, min, max)
 					local Porcentage = (def - min) / (max - min)
+					Zip.Position = UDim2.new(Porcentage, -6,-0.644999981, 0)
 					CurrentValueFrame.Size = UDim2.new(Porcentage,0,0,8)
 					ValueLabel.Text = Value..Simbol
 					pcall(callback,GlobalSliderValue)
@@ -2627,6 +2628,7 @@ function DiscordLib:Window(text)
 					GlobalSliderValue = Value
 					local def = math.clamp(GlobalSliderValue, min, max)
 					local Porcentage = (def - min) / (max - min)
+					Zip.Position = UDim2.new(Porcentage, -6,-0.644999981, 0)
 					CurrentValueFrame.Size = UDim2.new(Porcentage,0,0,8)
 					ValueLabel.Text = Value..Simbol
 					pcall(callback,Value)
