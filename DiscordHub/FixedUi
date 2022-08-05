@@ -2567,7 +2567,11 @@ function DiscordLib:Window(text)
 				ValueLabel.BackgroundTransparency = 1.000
 				ValueLabel.Size = UDim2.new(0, 36, 0, 21)
 				ValueLabel.Font = Enum.Font.Gotham
-				ValueLabel.Text = tostring(start and math.floor((start / max) * (max - min) + min) or 0)
+				if not precise then
+					ValueLabel.Text = tostring(start and string.format("%.1f",((start * max) / max) * (max - min) + min) or 0)
+				else
+					ValueLabel.Text = tostring(start and math.floor((start / max) * (max - min) + min) or 0)
+				end
 				ValueLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 				ValueLabel.TextSize = 10.000
 				local function move(input)
@@ -2591,7 +2595,7 @@ function DiscordLib:Window(text)
 					local SliderNonPrecise = math.floor(((pos.X.Scale * max) / max) * (max - min) + min)
 					local value = precise and SliderNonPrecise or SliderPrecise
 					if not precise then
-						ValueLabel.Text = string.format("%1f",value)
+						ValueLabel.Text = string.format("%.1f",value)
 					else
 						ValueLabel.Text = tostring(value)
 					end
@@ -2623,7 +2627,11 @@ function DiscordLib:Window(text)
 				function SliderFunc:Change(tochange)
 					CurrentValueFrame.Size = UDim2.new((tochange or 0) / max, 0, 0, 8)
 					Zip.Position = UDim2.new((tochange or 0)/max, -6,-0.644999981, 0)
-					ValueLabel.Text = tostring(tochange and math.floor((tochange / max) * (max - min) + min) or 0)
+					if not precise then
+						ValueLabel.Text = tostring(tochange and string.format("%.1f",((tochange * max) / max) * (max - min) + min) or 0)
+					else
+						ValueLabel.Text = tostring(tochange and math.floor((tochange / max) * (max - min) + min) or 0)
+					end
 					pcall(callback, tochange)
 				end
 
