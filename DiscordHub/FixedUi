@@ -1605,7 +1605,7 @@ function DiscordLib:Window(text)
 			Notification.BackgroundTransparency = 1
 
 			Notification:TweenSize(UDim2.new(0, 346, 0, 176), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .2, true)
-			
+
 			TweenService:Create(
 				Notification,
 				TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
@@ -2444,9 +2444,17 @@ function DiscordLib:Window(text)
 				return ToggleFunc
 			end
 
-			function ChannelContent:Slider(text, min, max, start, precise, callback)
+			function ChannelContent:Slider(text, min, max, start, precise, callback, simbol)
+				local text = text or ""
+				local min = min or start or 0
+				local max = max or start or 0
+				local start = start or min or 0
+				local precise = precise or false
+				local callback = callback or function() end
+				local Simbol = simbol or ""
+				local GlobalSliderValue = 0
+				local Dragging = false
 				local SliderFunc = {}
-				local dragging = false
 				local Slider = Instance.new("TextButton")
 				local SliderTitle = Instance.new("TextLabel")
 				local SliderFrame = Instance.new("Frame")
@@ -2499,7 +2507,7 @@ function DiscordLib:Window(text)
 				CurrentValueFrame.Name = "CurrentValueFrame"
 				CurrentValueFrame.Parent = SliderFrame
 				CurrentValueFrame.BackgroundColor3 = Color3.fromRGB(114, 137, 218)
-				CurrentValueFrame.Size = UDim2.new((start or 0) / max, 0, 0, 8)
+				CurrentValueFrame.Size = UDim2.new(min / max,0,0,8)
 
 				CurrentValueFrameCorner.Name = "CurrentValueFrameCorner"
 				CurrentValueFrameCorner.Parent = CurrentValueFrame
@@ -2507,7 +2515,7 @@ function DiscordLib:Window(text)
 				Zip.Name = "Zip"
 				Zip.Parent = SliderFrame
 				Zip.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-				Zip.Position = UDim2.new((start or 0)/max, -6,-0.644999981, 0)
+				Zip.Position = UDim2.new(min / max, -6,-0.644999981, 0)
 				Zip.Size = UDim2.new(0, 10, 0, 18)
 				ZipCorner.CornerRadius = UDim.new(0, 3)
 				ZipCorner.Name = "ZipCorner"
@@ -2523,13 +2531,13 @@ function DiscordLib:Window(text)
 
 
 				Zip.MouseEnter:Connect(function()
-					if dragging == false then
+					if Dragging == false then
 						ValueBubble.Visible = true
 					end
 				end)
 
 				Zip.MouseLeave:Connect(function()
-					if dragging == false then
+					if Dragging == false then
 						ValueBubble.Visible = false
 					end
 				end)
@@ -2567,72 +2575,65 @@ function DiscordLib:Window(text)
 				ValueLabel.BackgroundTransparency = 1.000
 				ValueLabel.Size = UDim2.new(0, 36, 0, 21)
 				ValueLabel.Font = Enum.Font.Gotham
-				if not precise then
-					ValueLabel.Text = tostring(start and string.format("%.2f",((start * max) / max) * (max - min) + min) or 0)
-				else
-					ValueLabel.Text = tostring(start and math.floor((start / max) * (max - min) + min) or 0)
-				end
+				ValueLabel.Text = "0"
 				ValueLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 				ValueLabel.TextSize = 10.000
-				local function move(input)
-					local pos =
-						UDim2.new(
-							math.clamp((input.Position.X - SliderFrame.AbsolutePosition.X) / SliderFrame.AbsoluteSize.X, 0, 1),
-							-6,
-							-0.644999981,
-							0
-						)
-					local pos1 =
-						UDim2.new(
-							math.clamp((input.Position.X - SliderFrame.AbsolutePosition.X) / SliderFrame.AbsoluteSize.X, 0, 1),
-							0,
-							0,
-							8
-						)
-					CurrentValueFrame.Size = pos1
-					Zip.Position = pos
-					local SliderPrecise = ((pos.X.Scale * max) / max) * (max - min) + min
-					local SliderNonPrecise = math.floor(((pos.X.Scale * max) / max) * (max - min) + min)
-					local value = precise and SliderNonPrecise or SliderPrecise
-					if not precise then
-						ValueLabel.Text = string.format("%.2f",value)
-					else
-						ValueLabel.Text = tostring(value)
-					end
-					pcall(callback, value)
-				end
-				Zip.InputBegan:Connect(
-					function(input)
-						if input.UserInputType == Enum.UserInputType.MouseButton1 then
-							dragging = true
-							ValueBubble.Visible = true
-						end
-					end
-				)
-				Zip.InputEnded:Connect(
-					function(input)
-						if input.UserInputType == Enum.UserInputType.MouseButton1 then
-							dragging = false
-							ValueBubble.Visible = false
-						end
-					end
-				)
-				game:GetService("UserInputService").InputChanged:Connect(function(input)
-					if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-						move(input)
-					end
-				end
-				)
+				ValueLabel.Text = tostring(min / max)..Simbol
 
-				function SliderFunc:Change(tochange)
-					CurrentValueFrame.Size = UDim2.new((tochange or 0) / max, 0, 0, 8)
-					Zip.Position = UDim2.new((tochange or 0)/max, -6,-0.644999981, 0)
-					if not precise then
-						ValueLabel.Text = tostring(tochange and string.format("%.2f",((tochange * max) / max) * (max - min) + min) or 0)
-					else
-						ValueLabel.Text = tostring(tochange and math.floor((tochange / max) * (max - min) + min) or 0)
+				local function Sliding(Input)
+					local Position1 = UDim2.new(math.clamp((Input.Position.X - SliderFrame.AbsolutePosition.X) / SliderFrame.AbsoluteSize.X, 0, 1),-6,-0.644999981,0)
+					local Position = UDim2.new(math.clamp((Input.Position.X - SliderFrame.AbsolutePosition.X) / SliderFrame.AbsoluteSize.X,0,1),0,0,8)
+					Zip.Position = Position1
+					CurrentValueFrame.Size = Position
+					local SliderPrecise = ((Position.X.Scale * max) / max) * (max - min) + min
+					local SliderNonPrecise = math.floor(((Position.X.Scale * max) / max) * (max - min) + min)
+					local SliderValue = precise and SliderNonPrecise or SliderPrecise
+					SliderValue = tonumber(string.format("%.2f", SliderValue))
+					GlobalSliderValue = SliderValue
+					ValueLabel.Text = tostring(SliderValue)..Simbol
+					pcall(callback,GlobalSliderValue)
+				end
+				local function SetValue(Value)
+					GlobalSliderValue = Value
+					local def = math.clamp(Value, min, max)
+					local Porcentage = (def - min) / (max - min)
+					CurrentValueFrame.Size = UDim2.new(Porcentage,0,0,8)
+					ValueLabel.Text = Value..Simbol
+					pcall(callback,GlobalSliderValue)
+				end
+				
+				Zip.InputBegan:Connect(function(Input)
+					if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+						Sliding(Input)
+						Dragging = true
+						ValueBubble.Visible = true
 					end
-					pcall(callback, tochange)
+				end)
+				
+				Zip.InputEnded:Connect(function(input)
+					if input.UserInputType == Enum.UserInputType.MouseButton1 then
+						Dragging = false
+						ValueBubble.Visible = false
+					end
+				end)
+				
+				game:GetService("UserInputService").InputChanged:Connect(function(Input)
+					if Dragging and Input.UserInputType == Enum.UserInputType.MouseMovement then
+						Sliding(Input)
+					end
+				end)
+				
+				if start == nil then
+					function SliderFunc:SetValue(Value)
+						GlobalSliderValue = Value
+						local def = math.clamp(GlobalSliderValue, min, max)
+						local Porcentage = (def - min) / (max - min)
+						CurrentValueFrame.Size = UDim2.new(Porcentage,0,0,8)
+						ValueLabel.Text = Value..Simbol
+						pcall(callback,Value)
+					end
+				else
+					SetValue(start)
 				end
 
 				ChannelHolder.CanvasSize = UDim2.new(0,0,0,ChannelHolderLayout.AbsoluteContentSize.Y)
