@@ -125,44 +125,7 @@ function DiscordLib:Window(text)
 	local ServersHoldLayout = Instance.new("UIListLayout")
 	local ServersHoldPadding = Instance.new("UIPadding")
 	local TopFrameHolder = Instance.new("Frame")
-	---------------------------------------------------
-	local Tooltip = Instance.new("Frame")
-	local UICorner = Instance.new("UICorner")
-	local TextTool = Instance.new("TextLabel")
-	local UIText = Instance.new("UITextSizeConstraint")
-
-	Tooltip.Name = "Tooltip"
-	Tooltip.Parent = Discord
-	Tooltip.BackgroundColor3 = Color3.fromRGB(47, 47, 47)
-	Tooltip.BackgroundTransparency = 0.3
-	Tooltip.AutomaticSize = Enum.AutomaticSize.Y
-	Tooltip.Visible = false
-	Tooltip.Position = UDim2.new(0, 0, 0, 0)
-	Tooltip.Size = UDim2.new(0, 5, 0, 25)
-
-	UICorner.CornerRadius = UDim.new(0, 3)
-	UICorner.Parent = Tooltip
-
-	TextTool.Name = "Text"
-	TextTool.Parent = Tooltip
-	TextTool.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	TextTool.BackgroundTransparency = 1
-	TextTool.Size = UDim2.new(0, 0, 1, 0)
-	TextTool.Font = Enum.Font.SourceSans
-	TextTool.Text = ""
-	TextTool.AutomaticSize = Enum.AutomaticSize.Y
-	TextTool.TextColor3 = Color3.fromRGB(255, 255, 255)
-	TextTool.TextSize = 15
-
-	UIText.Name = "UIText"
-	UIText.Parent = TextTool
 	
-	RunService.RenderStepped:Connect(function()
-		if minimized == false then
-			Tooltip.Position = UDim2.new(0,UserInputService:GetMouseLocation().X + 10,0,UserInputService:GetMouseLocation().Y - 5)
-		end
-	end)
-	---------------------------------------------------
 	MainFrame.Name = "MainFrame"
 	MainFrame.Parent = Discord
 	MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -2331,19 +2294,7 @@ function DiscordLib:Window(text)
 						{BackgroundColor3 = Color3.fromRGB(114, 137, 228)}
 					):Play()
 				end)
-				
-				function ButtonFunc:ToolTip(txt)
-					if tostring(txt):gsub(" ","") ~= "" then
-						Button.MouseEnter:Connect(function()
-							TextTool.Text = txt
-							Tooltip.Visible = true
-						end)
-						Button.MouseLeave:Connect(function()
-							Tooltip.Visible = false
-						end)
-					end
-				end
-				
+
 				return ButtonFunc
 			end
 			function ChannelContent:Toggle(text,default,callback)
@@ -2492,19 +2443,7 @@ function DiscordLib:Window(text)
 					end
 					pcall(callback, toggled)
 				end
-				
-				function ToggleFunc:ToolTip(txt)
-					if tostring(txt):gsub(" ","") ~= "" then
-						Toggle.MouseEnter:Connect(function()
-							
-							TextTool.Text = txt
-							Tooltip.Visible = true
-						end)
-						Toggle.MouseLeave:Connect(function()
-							Tooltip.Visible = false
-						end)
-					end
-				end
+
 				return ToggleFunc
 			end
 
@@ -2657,7 +2596,7 @@ function DiscordLib:Window(text)
 					ValueLabel.Text = tostring(SliderValue)..Simbol
 					callback(GlobalSliderValue)
 				end
-				
+
 				local function SetValue(Value)
 					GlobalSliderValue = Value
 					local def = math.clamp(Value, min, max)
@@ -2667,7 +2606,7 @@ function DiscordLib:Window(text)
 					ValueLabel.Text = Value..Simbol
 					callback(GlobalSliderValue)
 				end
-				
+
 				Zip.InputBegan:Connect(function(Input)
 					if Input.UserInputType == Enum.UserInputType.MouseButton1 then
 						Sliding(Input)
@@ -2675,20 +2614,20 @@ function DiscordLib:Window(text)
 						ValueBubble.Visible = true
 					end
 				end)
-				
+
 				Zip.InputEnded:Connect(function(input)
 					if input.UserInputType == Enum.UserInputType.MouseButton1 then
 						Dragging = false
 						ValueBubble.Visible = false
 					end
 				end)
-				
+
 				game:GetService("UserInputService").InputChanged:Connect(function(Input)
 					if Dragging and Input.UserInputType == Enum.UserInputType.MouseMovement then
 						Sliding(Input)
 					end
 				end)
-				
+
 				function SliderFunc:Change(Value)
 					GlobalSliderValue = Value
 					local def = math.clamp(GlobalSliderValue, min, max)
@@ -2699,19 +2638,7 @@ function DiscordLib:Window(text)
 					callback(Value)
 				end
 				SetValue(start)
-				
-				function SliderFunc:ToolTip(txt)
-					if tostring(txt):gsub(" ","") ~= "" then
-						Slider.MouseEnter:Connect(function()
-							
-							TextTool.Text = txt
-							Tooltip.Visible = true
-						end)
-						Slider.MouseLeave:Connect(function()
-							Tooltip.Visible = false
-						end)
-					end
-				end
+
 				return SliderFunc
 			end
 			function ChannelContent:Seperator()
@@ -3154,19 +3081,7 @@ function DiscordLib:Window(text)
 					DropdownFrameMain.Size = UDim2.new(0, 392, 0, framesize + 6)
 					DropdownFrameMainOutline.Size = UDim2.new(0, 396, 0, framesize + 10)
 				end
-				
-				function DropFunc:ToolTip(txt)
-					if tostring(txt):gsub(" ","") ~= "" then
-						Dropdown.MouseEnter:Connect(function()
-							
-							TextTool.Text = txt
-							Tooltip.Visible = true
-						end)
-						Dropdown.MouseLeave:Connect(function()
-							Tooltip.Visible = false
-						end)
-					end
-				end
+
 				return DropFunc
 			end
 			function ChannelContent:Colorpicker(text, preset, callback)
@@ -3394,18 +3309,7 @@ function DiscordLib:Window(text)
 					ColorV = realcolor.ColorV
 					UpdateColorPicker(true)
 				end
-				
-				function ColorpickerFunc:ToolTip(txt)
-					if tostring(txt):gsub(" ","") ~= "" then
-						Colorpicker.MouseEnter:Connect(function()
-							TextTool.Text = txt
-							Tooltip.Visible = true
-						end)
-						Colorpicker.MouseLeave:Connect(function()
-							Tooltip.Visible = false
-						end)
-					end
-				end
+
 				return ColorpickerFunc
 			end
 
@@ -3417,7 +3321,7 @@ function DiscordLib:Window(text)
 				local TextboxFrame = Instance.new("Frame")
 				local TextboxFrameCorner = Instance.new("UICorner")
 				local TextBox = Instance.new("TextBox")
-				
+
 				local TextBoxFunc = {}
 
 				Textbox.Name = "Textbox"
@@ -3498,19 +3402,7 @@ function DiscordLib:Window(text)
 						end
 					end
 				end)
-				
-				function TextBoxFunc:ToolTip(txt)
-					if tostring(txt):gsub(" ","") ~= "" then
-						Textbox.MouseEnter:Connect(function()
-							
-							TextTool.Text = txt
-							Tooltip.Visible = true
-						end)
-						Textbox.MouseLeave:Connect(function()
-							Tooltip.Visible = false
-						end)
-					end
-				end
+
 				return TextBoxFunc
 			end
 
@@ -3551,7 +3443,7 @@ function DiscordLib:Window(text)
 				local Keybind = Instance.new("TextButton")
 				local KeybindTitle = Instance.new("TextLabel")
 				local KeybindText = Instance.new("TextLabel")
-				
+
 				local KeyBindFunc = {}
 
 				Keybind.Name = "Keybind"
@@ -3608,18 +3500,7 @@ function DiscordLib:Window(text)
 						end
 					end
 				end)
-				
-				function KeyBindFunc:ToolTip(txt)
-					if tostring(txt):gsub(" ","") ~= "" then
-						Keybind.MouseEnter:Connect(function()
-							TextTool.Text = txt
-							Tooltip.Visible = true
-						end)
-						Keybind.MouseLeave:Connect(function()
-							Tooltip.Visible = false
-						end)
-					end
-				end
+
 				return KeyBindFunc
 			end
 
