@@ -125,7 +125,7 @@ function DiscordLib:Window(text)
 	local ServersHoldLayout = Instance.new("UIListLayout")
 	local ServersHoldPadding = Instance.new("UIPadding")
 	local TopFrameHolder = Instance.new("Frame")
-
+	
 	MainFrame.Name = "MainFrame"
 	MainFrame.Parent = Discord
 	MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -2253,6 +2253,7 @@ function DiscordLib:Window(text)
 			function ChannelContent:Button(text,callback)
 				local Button = Instance.new("TextButton")
 				local ButtonCorner = Instance.new("UICorner")
+				local ButtonFunc = {}
 
 				Button.Name = "Button"
 				Button.Parent = ChannelHolder
@@ -2293,6 +2294,7 @@ function DiscordLib:Window(text)
 						{BackgroundColor3 = Color3.fromRGB(114, 137, 228)}
 					):Play()
 				end)
+				return ButtonFunc
 			end
 			function ChannelContent:Toggle(text,default,callback)
 				local toggled = false
@@ -2634,7 +2636,7 @@ function DiscordLib:Window(text)
 					callback(Value)
 				end
 				SetValue(start)
-
+				
 				return SliderFunc
 			end
 			function ChannelContent:Seperator()
@@ -3315,6 +3317,8 @@ function DiscordLib:Window(text)
 				local TextboxFrame = Instance.new("Frame")
 				local TextboxFrameCorner = Instance.new("UICorner")
 				local TextBox = Instance.new("TextBox")
+				
+				local TextBoxFunc = {}
 
 				Textbox.Name = "Textbox"
 				Textbox.Parent = ChannelHolder
@@ -3394,7 +3398,7 @@ function DiscordLib:Window(text)
 						end
 					end
 				end)
-
+				return TextBoxFunc
 			end
 
 			function ChannelContent:Label(text)
@@ -3428,11 +3432,14 @@ function DiscordLib:Window(text)
 
 			end
 
-			function ChannelContent:Bind(text, presetbind, callback)
+			function ChannelContent:Bind(text, presetbind, lock, callback)
 				local Key = presetbind.Name
+				local lock = lock or false
 				local Keybind = Instance.new("TextButton")
 				local KeybindTitle = Instance.new("TextLabel")
 				local KeybindText = Instance.new("TextLabel")
+				
+				local KeyBindFunc = {}
 
 				Keybind.Name = "Keybind"
 				Keybind.Parent = ChannelHolder
@@ -3471,11 +3478,13 @@ function DiscordLib:Window(text)
 				KeybindText.TextXAlignment = Enum.TextXAlignment.Right
 
 				Keybind.MouseButton1Click:Connect(function()
-					KeybindText.Text = "..."
-					local inputwait = game:GetService("UserInputService").InputBegan:wait()
-					if inputwait.KeyCode.Name ~= "Unknown" then
-						KeybindText.Text = inputwait.KeyCode.Name
-						Key = inputwait.KeyCode.Name
+					if not lock then
+						KeybindText.Text = "..."
+						local inputwait = game:GetService("UserInputService").InputBegan:wait()
+						if inputwait.KeyCode.Name ~= "Unknown" then
+							KeybindText.Text = inputwait.KeyCode.Name
+							Key = inputwait.KeyCode.Name
+						end
 					end
 				end)
 
@@ -3486,6 +3495,7 @@ function DiscordLib:Window(text)
 						end
 					end
 				end)
+				return KeyBindFunc
 			end
 
 			return ChannelContent
