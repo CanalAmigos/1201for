@@ -150,6 +150,7 @@ function DiscordLib:Window(text)
 	TextTool.Size = UDim2.new(0, 0, 1, 0)
 	TextTool.Font = Enum.Font.SourceSans
 	TextTool.Text = ""
+	TextTool.AutomaticSize = Enum.AutomaticSize.Y
 	TextTool.TextColor3 = Color3.fromRGB(255, 255, 255)
 	TextTool.TextSize = 15
 
@@ -2334,7 +2335,6 @@ function DiscordLib:Window(text)
 				function ButtonFunc:ToolTip(txt)
 					if tostring(txt):gsub(" ","") ~= "" then
 						Button.MouseEnter:Connect(function()
-							TextTool.Size = UDim2.new(0,txt.TextBounds.X + 5,0,txt.TextBounds.Y + 5)
 							TextTool.Text = txt
 							Tooltip.Visible = true
 						end)
@@ -2496,7 +2496,7 @@ function DiscordLib:Window(text)
 				function ToggleFunc:ToolTip(txt)
 					if tostring(txt):gsub(" ","") ~= "" then
 						Toggle.MouseEnter:Connect(function()
-							TextTool.Size = UDim2.new(0,txt.TextBounds.X + 5,0,txt.TextBounds.Y + 5)
+							
 							TextTool.Text = txt
 							Tooltip.Visible = true
 						end)
@@ -2703,7 +2703,7 @@ function DiscordLib:Window(text)
 				function SliderFunc:ToolTip(txt)
 					if tostring(txt):gsub(" ","") ~= "" then
 						Slider.MouseEnter:Connect(function()
-							TextTool.Size = UDim2.new(0,txt.TextBounds.X + 5,0,txt.TextBounds.Y + 5)
+							
 							TextTool.Text = txt
 							Tooltip.Visible = true
 						end)
@@ -3158,7 +3158,7 @@ function DiscordLib:Window(text)
 				function DropFunc:ToolTip(txt)
 					if tostring(txt):gsub(" ","") ~= "" then
 						Dropdown.MouseEnter:Connect(function()
-							TextTool.Size = UDim2.new(0,txt.TextBounds.X + 5,0,txt.TextBounds.Y + 5)
+							
 							TextTool.Text = txt
 							Tooltip.Visible = true
 						end)
@@ -3398,7 +3398,6 @@ function DiscordLib:Window(text)
 				function ColorpickerFunc:ToolTip(txt)
 					if tostring(txt):gsub(" ","") ~= "" then
 						Colorpicker.MouseEnter:Connect(function()
-							TextTool.Size = UDim2.new(0,txt.TextBounds.X + 5,0,txt.TextBounds.Y + 5)
 							TextTool.Text = txt
 							Tooltip.Visible = true
 						end)
@@ -3503,7 +3502,7 @@ function DiscordLib:Window(text)
 				function TextBoxFunc:ToolTip(txt)
 					if tostring(txt):gsub(" ","") ~= "" then
 						Textbox.MouseEnter:Connect(function()
-							TextTool.Size = UDim2.new(0,txt.TextBounds.X + 5,0,txt.TextBounds.Y + 5)
+							
 							TextTool.Text = txt
 							Tooltip.Visible = true
 						end)
@@ -3613,7 +3612,6 @@ function DiscordLib:Window(text)
 				function KeyBindFunc:ToolTip(txt)
 					if tostring(txt):gsub(" ","") ~= "" then
 						Keybind.MouseEnter:Connect(function()
-							TextTool.Size = UDim2.new(0,txt.TextBounds.X + 5,0,txt.TextBounds.Y + 5)
 							TextTool.Text = txt
 							Tooltip.Visible = true
 						end)
