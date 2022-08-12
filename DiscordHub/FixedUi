@@ -3437,9 +3437,10 @@ function DiscordLib:Window(text)
 
 			end
 
-			function ChannelContent:Bind(text, presetbind, lock, callback)
+			function ChannelContent:Bind(text, toggled, presetbind, lock, callback)
 				local Key = presetbind.Name
 				local lock = lock or false
+				local Toggled = toggled or false
 				local Keybind = Instance.new("TextButton")
 				local KeybindTitle = Instance.new("TextLabel")
 				local KeybindText = Instance.new("TextLabel")
@@ -3496,7 +3497,8 @@ function DiscordLib:Window(text)
 				game:GetService("UserInputService").InputBegan:connect(function(current, pressed)
 					if not pressed then
 						if current.KeyCode.Name == Key then
-							pcall(callback)
+							Toggled = not Toggled
+							pcall(callback,Toggled)
 						end
 					end
 				end)
