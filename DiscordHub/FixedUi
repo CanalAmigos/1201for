@@ -3493,8 +3493,8 @@ function DiscordLib:Window(text)
 						end
 					end
 				end)
-
-				game:GetService("UserInputService").InputBegan:connect(function(current, pressed)
+				
+				game:GetService("UserInputService").InputEnded:connect(function(current, pressed)
 					if not pressed then
 						if current.KeyCode.Name == Key then
 							Toggled = not Toggled
