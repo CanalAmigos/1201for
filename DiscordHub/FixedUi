@@ -3502,15 +3502,19 @@ function DiscordLib:Window(text)
 				end)
 				
 				function KeyBindFunc:SetBind(bind)
-					bind = bind or "..."
+					bind = bind.Name
 					if bind.Name ~= "Unknown" then
-						KeybindText.Text = bind.Name
-						Key = bind.Name
+						KeybindText.Text = bind
+						Key = bind
 					end
 				end
 				
 				function KeyBindFunc:Lock(bool)
 					lock = bool or false
+				end
+				
+				function KeyBindFunc:GetBind()
+					return Enum.KeyCode[Key]
 				end
 				return KeyBindFunc
 			end
