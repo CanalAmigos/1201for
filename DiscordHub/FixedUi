@@ -3503,7 +3503,7 @@ function DiscordLib:Window(text)
 				
 				function KeyBindFunc:SetBind(bind)
 					bind = bind.Name
-					if bind.Name ~= "Unknown" then
+					if bind ~= "Unknown" then
 						KeybindText.Text = bind
 						Key = bind
 					end
