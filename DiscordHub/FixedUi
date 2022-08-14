@@ -3500,7 +3500,18 @@ function DiscordLib:Window(text)
 						end
 					end
 				end)
-
+				
+				function KeyBindFunc:SetBind(bind)
+					bind = bind or "..."
+					if bind.Name ~= "Unknown" then
+						KeybindText.Text = bind.Name
+						Key = bind.Name
+					end
+				end
+				
+				function KeyBindFunc:Lock(bool)
+					lock = bool or false
+				end
 				return KeyBindFunc
 			end
 
