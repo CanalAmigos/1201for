@@ -3404,10 +3404,10 @@ function DiscordLib:Window(text)
 				end)
 				
 				function TextBoxFunc:SetTextBox(txt)
-					txt = txt or ''
+					local txt = txt or ''
 					if txt:gsub(' ','') ~= '' then
 						TextBox.Text = txt
-						pcall(callback, TextBox.Text)
+						pcall(callback, txt)
 					end
 				end
 
