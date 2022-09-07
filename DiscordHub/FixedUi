@@ -2825,6 +2825,7 @@ function DiscordLib:Window(text)
 
 
 				for i,v in next, list do
+					if #list == 0 then break end
 					itemcount = itemcount + 1
 
 					if itemcount == 1 then
@@ -3303,11 +3304,14 @@ function DiscordLib:Window(text)
 
 
 				function ColorpickerFunc:SetColor(col)
-					local realcolor = Color3.toHSV(col)
-					ColorH = realcolor.ColorH
-					ColorS = realcolor.ColorS
-					ColorV = realcolor.ColorV
-					UpdateColorPicker(true)
+					ColorSelection.Position = UDim2.new(col and select(3, Color3.toHSV(col)))
+					HueSelection.Position = UDim2.new(0.48, 0, 1 - select(1, Color3.toHSV(col)))
+					ColorH = 1 - (math.clamp(HueSelection.AbsolutePosition.Y - Hue.AbsolutePosition.Y, 0, Hue.AbsoluteSize.Y) / Hue.AbsoluteSize.Y)
+					ColorS = (math.clamp(ColorSelection.AbsolutePosition.X - Color.AbsolutePosition.X, 0, Color.AbsoluteSize.X) / Color.AbsoluteSize.X)
+					ColorV = 1 - (math.clamp(ColorSelection.AbsolutePosition.Y - Color.AbsolutePosition.Y, 0, Color.AbsoluteSize.Y) / Color.AbsoluteSize.Y)
+					PresetClr.BackgroundColor3 = col
+					Color.BackgroundColor3 = col
+					pcall(callback, col)
 				end
 
 				return ColorpickerFunc
