@@ -125,7 +125,7 @@ function DiscordLib:Window(text)
 	local ServersHoldLayout = Instance.new("UIListLayout")
 	local ServersHoldPadding = Instance.new("UIPadding")
 	local TopFrameHolder = Instance.new("Frame")
-	
+
 	MainFrame.Name = "MainFrame"
 	MainFrame.Parent = Discord
 	MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -1724,13 +1724,40 @@ function DiscordLib:Window(text)
 	ServersHoldPadding.PaddingLeft = UDim.new(0, 14)
 	local ServerHold = {}
 
-	function ServerHold:Save(table_,name,path)
+	local function TableIgnore(v,ignore)
+		local Table = v or {}
+		for i,v in pairs(Table) do
+			local a = table.find(ignore,i)
+			if typeof(v) == 'table' and not a then
+				for i_,v in pairs(v) do
+					local a = table.find(ignore,i_)
+					if typeof(v) == 'table' and not a then
+						for _i,v in pairs(v) do
+							local a = table.find(ignore,_i)
+							if a then
+								Table[i][i_][_i] = nil
+							end
+						end
+					elseif a then
+						Table[i][i_] = nil
+					end
+				end
+			elseif a then
+				Table[i] = nil
+			end
+		end
+		return Table
+	end
+
+	function ServerHold:Save(table_,name,path,ignore)
 		if type(writefile) == "function" then
 			local table_ = table_ or {}
 			local name = name or text
 			local path = path or ""
+			local ignore = ignore or {}
 			if table_ and typeof(table_) == "table" then
-				local Save = {version = 1.82,objects={}}
+				local Save = {version = 1.83,objects={}}
+				TableIgnore(table_,ignore)
 				for i,v in pairs(table_) do
 					Save.objects[i] = v
 				end
@@ -1766,11 +1793,13 @@ function DiscordLib:Window(text)
 			if table_ and typeof(table_) == "table" then
 				local decode = game:GetService("HttpService"):JSONDecode(readfile(path.."/"..name..".json"))
 				local s,e = pcall(function()
-					if tonumber(decode.version) == 1.82 then
+					if tonumber(decode.version) == 1.83 then
 						for i,v in pairs(decode.objects) do
 							if not v or not i then continue end
 							table_[i] = v
 						end
+					else
+						warn("[LoadSaveError]: Current file ["..name.."] is in an old version")
 					end
 				end)
 				if not s then
@@ -2805,6 +2834,7 @@ function DiscordLib:Window(text)
 				DropItemHolder.CanvasSize = UDim2.new(0, 0, 0, 0)
 				DropItemHolder.AutomaticCanvasSize = Enum.AutomaticSize.Y
 				DropItemHolder.ScrollBarThickness = 6
+				DropItemHolder.
 				DropItemHolder.BorderSizePixel = 0
 				DropItemHolder.ScrollBarImageColor3 = Color3.fromRGB(28, 29, 32)
 
@@ -3410,7 +3440,7 @@ function DiscordLib:Window(text)
 						end
 					end
 				end)
-				
+
 				function TextBoxFunc:SetTextBox(txt)
 					local txt = txt or ''
 					if txt:gsub(' ','') ~= '' then
@@ -3508,7 +3538,7 @@ function DiscordLib:Window(text)
 						end
 					end
 				end)
-				
+
 				game:GetService("UserInputService").InputBegan:connect(function(current, pressed)
 					if not pressed then
 						if current.KeyCode.Name == Key then
@@ -3516,7 +3546,7 @@ function DiscordLib:Window(text)
 						end
 					end
 				end)
-				
+
 				function KeyBindFunc:SetBind(bind)
 					bind = bind.Name
 					if bind ~= "Unknown" then
@@ -3524,11 +3554,11 @@ function DiscordLib:Window(text)
 						Key = bind
 					end
 				end
-				
+
 				function KeyBindFunc:Lock(bool)
 					lock = bool or false
 				end
-				
+
 				function KeyBindFunc:GetBind()
 					return Enum.KeyCode[Key]
 				end
