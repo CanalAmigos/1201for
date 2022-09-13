@@ -1724,31 +1724,6 @@ function DiscordLib:Window(text)
 	ServersHoldPadding.PaddingLeft = UDim.new(0, 14)
 	local ServerHold = {}
 
-	local function TableIgnore(v,ignore)
-		local Table = v or {}
-		for i,v in pairs(Table) do
-			local a = table.find(ignore,i)
-			if typeof(v) == 'table' and not a then
-				for i_,v in pairs(v) do
-					local a = table.find(ignore,i_)
-					if typeof(v) == 'table' and not a then
-						for _i,v in pairs(v) do
-							local a = table.find(ignore,_i)
-							if a then
-								Table[i][i_][_i] = nil
-							end
-						end
-					elseif a then
-						Table[i][i_] = nil
-					end
-				end
-			elseif a then
-				Table[i] = nil
-			end
-		end
-		return Table
-	end
-
 	function ServerHold:Save(table_,name,path,ignore)
 		if type(writefile) == "function" then
 			local table_ = table_ or {}
@@ -1757,7 +1732,6 @@ function DiscordLib:Window(text)
 			local ignore = ignore or {}
 			if table_ and typeof(table_) == "table" then
 				local Save = {version = 1.83,objects={}}
-				TableIgnore(table_,ignore)
 				for i,v in pairs(table_) do
 					Save.objects[i] = v
 				end
