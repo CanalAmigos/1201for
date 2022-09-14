@@ -2447,6 +2447,9 @@ function DiscordLib:Window(text)
 					end
 					pcall(callback, toggled)
 				end
+				function ToggleFunc:Type()
+					return "Toggle"
+				end
 				function ToggleFunc:Lock(bool)
 					local bool = bool or false
 					Locked = bool
@@ -2644,6 +2647,9 @@ function DiscordLib:Window(text)
 					ValueLabel.Text = Value..Simbol
 					callback(Value)
 				end
+				function SliderFunc:Type()
+					return "Slider"
+				end
 				SetValue(start)
 
 				return SliderFunc
@@ -2680,6 +2686,7 @@ function DiscordLib:Window(text)
 				local CurrentSelectedText = Instance.new("TextLabel")
 				local ArrowImg = Instance.new("ImageLabel")
 				local DropdownFrameBtn = Instance.new("TextButton")
+				local Type = "Text"
 
 				Dropdown.Name = "Dropdown"
 				Dropdown.Parent = ChannelHolder
@@ -2839,8 +2846,10 @@ function DiscordLib:Window(text)
 						framesize = 29
 					elseif itemcount == 2 then
 						framesize = 58
-					elseif itemcount >= 3 then
+					elseif itemcount == 3 then
 						framesize = 87
+					elseif itemcount >= 4 then
+						framesize = 116
 					end
 
 					local Item = Instance.new("TextButton")
@@ -2962,8 +2971,10 @@ function DiscordLib:Window(text)
 							framesize = 29
 						elseif itemcount == 2 then
 							framesize = 58
-						elseif itemcount >= 3 then
+						elseif itemcount == 3 then
 							framesize = 87
+						elseif itemcount >= 4 then
+							framesize = 116
 						end
 
 						local Item = Instance.new("TextButton")
@@ -3088,6 +3099,16 @@ function DiscordLib:Window(text)
 					DropItemHolder.Size = UDim2.new(0, 385, 0, framesize)
 					DropdownFrameMain.Size = UDim2.new(0, 392, 0, framesize + 6)
 					DropdownFrameMainOutline.Size = UDim2.new(0, 396, 0, framesize + 10)
+				end
+				function DropFunc:ChangeType(t)
+					if t == 1 then
+						Type = 'Text'
+					elseif t == 2 then
+						Type = 'Refresh'
+					end
+				end
+				function DropFunc:Type()
+					return Type
 				end
 
 				return DropFunc
@@ -3320,6 +3341,10 @@ function DiscordLib:Window(text)
 					Color.BackgroundColor3 = col
 					pcall(callback, col)
 				end
+				
+				function ColorpickerFunc:Type()
+					return "Color"
+				end
 
 				return ColorpickerFunc
 			end
@@ -3420,6 +3445,10 @@ function DiscordLib:Window(text)
 						TextBox.Text = txt
 						pcall(callback, txt)
 					end
+				end
+				
+				function TextBoxFunc:Type()
+					return "TextBox"
 				end
 
 				return TextBoxFunc
@@ -3534,6 +3563,10 @@ function DiscordLib:Window(text)
 
 				function KeyBindFunc:GetBind()
 					return Enum.KeyCode[Key]
+				end
+				
+				function KeyBindFunc:Type()
+					return "Bind"
 				end
 				return KeyBindFunc
 			end
