@@ -100,6 +100,10 @@ Discord.Name = "Discord"
 Discord.Parent = game.CoreGui
 Discord.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
+function DiscordLib:GetGui()
+	return Discord
+end
+
 function DiscordLib:Window(text)
 	local currentservertoggled = ""
 	local minimized = false
