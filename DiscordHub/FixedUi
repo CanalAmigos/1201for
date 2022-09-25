@@ -2451,6 +2451,77 @@ function DiscordLib:Window(text)
 					end
 					pcall(callback, toggled)
 				end
+				
+				function ToggleFunc:AddKeyBind(keycode,lock)
+					local Key = keycode.Name
+					local lock = lock or false
+					local KeybindText = Instance.new("TextLabel")
+					
+					local KeyBindFunc = {}
+
+					KeybindText.Name = "KeybindText"
+					KeybindText.Parent = Toggle
+					KeybindText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+					KeybindText.BackgroundTransparency = 1.000
+					KeybindText.Position = UDim2.new(0, 316, 0, 0)
+					KeybindText.Size = UDim2.new(0, 85, 0, 30)
+					KeybindText.Font = Enum.Font.Gotham
+					KeybindText.Text = keycode.Name
+					KeybindText.TextColor3 = Color3.fromRGB(127, 131, 137)
+					KeybindText.TextSize = 14.000
+					KeybindText.TextXAlignment = Enum.TextXAlignment.Right
+
+					Toggle.MouseButton1Click:Connect(function()
+						if not lock then
+							KeybindText.Text = "..."
+							local inputwait = game:GetService("UserInputService").InputBegan:wait()
+							if inputwait.KeyCode.Name ~= "Unknown" then
+								KeybindText.Text = inputwait.KeyCode.Name
+								Key = inputwait.KeyCode.Name
+							end
+						end
+					end)
+
+					game:GetService("UserInputService").InputBegan:connect(function(current, pressed)
+						if not pressed then
+							if current.KeyCode.Name == Key then
+								if not toggled then
+									Icon.ImageColor3 = Color3.fromRGB(67,181,129)
+									ToggleFrame.BackgroundColor3 = Color3.fromRGB(67,181,129)
+									ToggleFrameCircle.Position = UDim2.new(0.655, -5, 0.133000001, 0)
+									Icon.ImageTransparency = 0
+									Icon.Image = "http://www.roblox.com/asset/?id=6023426926"
+									toggled = true
+								else
+									Icon.ImageColor3 = Color3.fromRGB(114, 118, 125)
+									ToggleFrame.BackgroundColor3 = Color3.fromRGB(114, 118, 125)
+									ToggleFrameCircle.Position = UDim2.new(0.234999999, -5, 0.133000001, 0)
+									Icon.ImageTransparency = 0
+									Icon.Image = "http://www.roblox.com/asset/?id=6035047409"
+									toggled = false
+								end
+								pcall(callback, toggled)
+							end
+						end
+					end)
+
+					function KeyBindFunc:SetBind(bind)
+						bind = bind.Name
+						if bind ~= "Unknown" then
+							KeybindText.Text = bind
+							Key = bind
+						end
+					end
+
+					function KeyBindFunc:Lock(bool)
+						lock = bool or false
+					end
+
+					function KeyBindFunc:GetBind()
+						return Enum.KeyCode[Key]
+					end
+					return KeyBindFunc
+				end
 				function ToggleFunc:Type()
 					return "Toggle"
 				end
