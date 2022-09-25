@@ -2464,7 +2464,7 @@ function DiscordLib:Window(text)
 					Keybind.Parent = Toggle
 					Keybind.BackgroundColor3 = Color3.fromRGB(54, 57, 63)
 					Keybind.BorderSizePixel = 0
-					Keybind.Position = UDim2.new(0, 267, 0, 0)
+					Keybind.Position = UDim2.new(0, 235, 0, 0)
 					Keybind.Size = UDim2.new(0, 85, 0, 30)
 					Keybind.AutoButtonColor = false
 					Keybind.Font = Enum.Font.Gotham
@@ -2476,7 +2476,7 @@ function DiscordLib:Window(text)
 					KeybindText.Parent = Toggle
 					KeybindText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 					KeybindText.BackgroundTransparency = 1.000
-					KeybindText.Position = UDim2.new(0, 267, 0, 0)
+					KeybindText.Position = UDim2.new(0, 235, 0, 0)
 					KeybindText.Size = UDim2.new(0, 85, 0, 30)
 					KeybindText.Font = Enum.Font.Gotham
 					KeybindText.Text = keycode.Name
