@@ -2455,10 +2455,19 @@ function DiscordLib:Window(text)
 				function ToggleFunc:AddKeyBind(keycode,lock)
 					local Key = keycode.Name
 					local lock = lock or false
+					local Keybind = Instance.new('TextButton')
 					local KeybindText = Instance.new("TextLabel")
 					
 					local KeyBindFunc = {}
-
+					
+					Keybind.Name = "KeybindButton"
+					Keybind.Parent = Toggle
+					Keybind.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+					Keybind.BackgroundTransparency = 1.000
+					Keybind.Position = UDim2.new(0, 316, 0, 0)
+					Keybind.Size = UDim2.new(0, 85, 0, 30)
+					Keybind.Text = ''
+					
 					KeybindText.Name = "KeybindText"
 					KeybindText.Parent = Toggle
 					KeybindText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -2471,7 +2480,7 @@ function DiscordLib:Window(text)
 					KeybindText.TextSize = 14.000
 					KeybindText.TextXAlignment = Enum.TextXAlignment.Right
 
-					Toggle.MouseButton1Click:Connect(function()
+					Keybind.MouseButton1Click:Connect(function()
 						if not lock then
 							KeybindText.Text = "..."
 							local inputwait = game:GetService("UserInputService").InputBegan:wait()
