@@ -14,20 +14,22 @@ function library:CreateGui(title)
 	local Main = Instance.new("Frame")
 	local UICorner = Instance.new("UICorner")
 	local Main_2 = Instance.new("Frame")
+	local UICorner_2 = Instance.new("UICorner")
+	local Holder = Instance.new("ScrollingFrame")
+	local UIListLayout = Instance.new("UIListLayout")
+	local Title = Instance.new("Frame")
+	local UICorner_3 = Instance.new("UICorner")
+	local UIText = Instance.new("UITextSizeConstraint")
+	local Title_2 = Instance.new("TextLabel")
+	local UIText_2 = Instance.new("UITextSizeConstraint")
 	local ColorPicker = Instance.new("Frame")
 	local RGB = Instance.new("ImageLabel")
 	local Marker = Instance.new("Frame")
 	local Value = Instance.new("ImageLabel")
 	local Marker_2 = Instance.new("Frame")
-	local UICorner_2 = Instance.new("UICorner")
-	local Preview = Instance.new("ImageLabel")
-	local UICorner_3 = Instance.new("UICorner")
-	local UICorner_3_ = Instance.new("UICorner")
-	local Holder = Instance.new("ScrollingFrame")
-	local UIListLayout = Instance.new("UIListLayout")
-	local Title = Instance.new("TextLabel")
 	local UICorner_4 = Instance.new("UICorner")
-	local UIText = Instance.new("UITextSizeConstraint")
+	local Preview = Instance.new("ImageLabel")
+	local UICorner_5 = Instance.new("UICorner")
 	local Togglekey = "RightControl"
 	
 	local selectedColor = Color3.fromHSV(0, 0, 1)
@@ -35,6 +37,34 @@ function library:CreateGui(title)
 	local mouse1down = false
 	
 	local Gui = {}
+	
+	local function MakeDraggable(ClickObject, Object)
+		local Dragging,DragInput,DragStart,StartPosition = nil,nil,nil,nil
+		ClickObject.InputBegan:Connect(function(Input)
+			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+				Dragging = true
+				DragStart = Input.Position
+				StartPosition = Object.Position
+
+				Input.Changed:Connect(function()
+					if Input.UserInputState == Enum.UserInputState.End then
+						Dragging = false
+					end
+				end)
+			end
+		end)
+		ClickObject.InputChanged:Connect(function(Input)
+			if Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch then
+				DragInput = Input
+			end
+		end)
+		userIn.InputChanged:Connect(function(Input)
+			if Input == DragInput and Dragging then
+				local Delta = Input.Position - DragStart
+				Object.Position = UDim2.new(StartPosition.X.Scale, StartPosition.X.Offset + Delta.X, StartPosition.Y.Scale, StartPosition.Y.Offset + Delta.Y)
+			end
+		end)
+	end
 
 	Ui.Name = "[[{Ui}]]"
 	Ui.Parent = game:GetService("CoreGui")
@@ -48,8 +78,6 @@ function library:CreateGui(title)
 	Main.BorderSizePixel = 0
 	Main.Position = UDim2.new(0.371, 0,0.406, 0)
 	Main.Size = UDim2.new(0, 280, 0, 345)
-	Title.Selectable = true
-	Title.Draggable = true
 
 	UICorner.Parent = Main
 	
@@ -162,7 +190,7 @@ function library:CreateGui(title)
 	Main_2.Position = UDim2.new(0.0160714388, 0, 0.11486537, 0)
 	Main_2.Size = UDim2.new(0.964285731, 0, 0.869565189, 0)
 
-	UICorner_3_.Parent = Main_2
+	UICorner_4.Parent = Main_2
 
 	Holder.Name = "Holder"
 	Holder.Parent = Main_2
@@ -179,18 +207,29 @@ function library:CreateGui(title)
 	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	UIListLayout.Padding = UDim.new(0, 6)
 
-	Title.Name = "Title"
+	Title.Name = "TitleHolder"
 	Title.Parent = Main_2
 	Title.BackgroundColor3 = Color3.fromRGB(57, 57, 57)
 	Title.Position = UDim2.new(-0.0170000009, 0, -0.170000002, 0)
 	Title.Size = UDim2.new(1.03703701, 0, 0.166666672, 0)
-	Title.Font = Enum.Font.SourceSansSemibold
-	Title.Text = title
-	Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Title.TextSize = 35
-	Title.TextWrapped = true
+	MakeDraggable(Title,Main)
 
-	UICorner_4.Parent = Title
+	UICorner_5.Parent = Title
+	
+	Title_2.Name = "Title"
+	Title_2.Parent = Title
+	Title_2.Active = true
+	Title_2.BackgroundTransparency = 1
+	Title_2.Position = UDim2.new(0.0265714284, 0, 0.0199999996, 0)
+	Title_2.Size = UDim2.new(0.946446538, 0, 1.00000072, 0)
+	Title_2.Font = Enum.Font.SourceSansSemibold
+	Title_2.Text = title
+	Title_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Title_2.TextSize = 35.000
+	Title_2.TextWrapped = true
+
+	UIText_2.Name = "UIText"
+	UIText_2.Parent = Title_2
 
 	UIText.Name = "UIText"
 	UIText.Parent = Title
@@ -541,7 +580,7 @@ function library:CreateGui(title)
 
 		Open.Name = "Open"
 		Open.Parent = DropDown
-		Open.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
+		Open.BackgroundColor3 = Color3.fromRGB(62, 62, 62)
 		Open.Position = UDim2.new(0, 11, 0, 32)
 		Open.Size = UDim2.new(0, 238, 0, 32)
 		Open.Font = Enum.Font.SciFi
@@ -568,8 +607,9 @@ function library:CreateGui(title)
 
 		UICorner_2.Parent = Open
 		
-		local function AddItem(text)
+		local function AddItem(text,call)
 			local text = text or "..."
+			local call = call or callback
 			
 			local ItemL = {}
 			
@@ -593,7 +633,7 @@ function library:CreateGui(title)
 			TextButton.MouseButton1Click:Connect(function()
 				Open.Text = text
 				Toggle(false)
-				callback(text)
+				call(text)
 			end)
 			TextButton.MouseEnter:Connect(function()
 				TextButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
@@ -622,9 +662,11 @@ function library:CreateGui(title)
 			return ItemL
 		end
 		
-		for i,v in pairs(items) do
-			if v:gsub(" ","") ~= "" then
-				AddItem(v)
+		if type(items) == "table" then
+			for i,v in pairs(items) do
+				if v:gsub(" ","") ~= "" then
+					AddItem(v,callback)
+				end
 			end
 		end
 		
@@ -632,7 +674,7 @@ function library:CreateGui(title)
 			local text = text or "..."
 			local callback_ = callback_ or callback
 			if text:gsub(" ","") ~= "" then
-				return AddItem(text)
+				return AddItem(text,callback_)
 			end
 		end
 		
@@ -643,7 +685,7 @@ function library:CreateGui(title)
 			if type(table_) == "table" then
 				for i,v in pairs(table_) do
 					if v:gsub(" ","") ~= "" then
-						Return[i] = AddItem(v)
+						Return[i] = AddItem(v,callback_)
 					end
 				end
 			end
@@ -702,6 +744,7 @@ function library:CreateGui(title)
 			Value.Text = tostring(SliderValue)..simbol
 			callback(GlobalSliderValue)
 		end
+		
 		local function SetValue(Value)
 			GlobalSliderValue = Value
 			local def = math.clamp(Value, Min, Max)
