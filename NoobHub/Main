@@ -225,6 +225,7 @@ function library:CreateGui(title)
 	Title_2.Size = UDim2.new(0.946446538, 0, 1.00000072, 0)
 	Title_2.Font = Enum.Font.SourceSansSemibold
 	Title_2.Text = title
+	Title_2.TextScaled = (string.len(title) >= 13 and true) or false
 	Title_2.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Title_2.TextSize = 35.000
 	Title_2.TextWrapped = true
