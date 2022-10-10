@@ -1727,6 +1727,34 @@ function DiscordLib:Window(text)
 	MakeDraggable(TopFrame, MainFrame)
 	ServersHoldPadding.PaddingLeft = UDim.new(0, 14)
 	local ServerHold = {}
+	
+	local function toInteger(color)
+		return math.floor(color.r*255)*256^2+math.floor(color.g*255)*256+math.floor(color.b*255)
+	end
+
+	local function toHex(color)
+		local int = toInteger(color)
+		local current = int
+		local final = ''
+		local hexChar = {'A','B','C','D','E','F'}
+		repeat local remainder = current % 16
+			local char = tostring(remainder)
+			if remainder >= 10 then
+				char = hexChar[1 + remainder - 10]
+			end
+			current = math.floor(current/16)
+			final = final..char
+		until current <= 0
+		return '#'..string.reverse(final)
+	end
+	
+	local function fromHex(hex)
+		hex = hex:gsub('#','')
+		local r = tonumber('0x'..hex:sub(1,2))
+		local g = tonumber('0x'..hex:sub(3,4))
+		local b = tonumber('0x'..hex:sub(5,6))
+		return Color3.fromRGB(r, g, b)
+	end
 
 	function ServerHold:Save(table_,name,path,ignore)
 		if type(writefile) == "function" then
@@ -1735,16 +1763,18 @@ function DiscordLib:Window(text)
 			local path = path or ""
 			local ignore = ignore or {}
 			if table_ and typeof(table_) == "table" then
-				local Save = {version = 1.83,objects={}}
+				local Save = {version = 1.84,objects={}}
 				for i,v in pairs(table_) do
 					Save.objects[i] = v
 				end
 				local _i = 0
 				for i,v in pairs(Save.objects) do _i+=1
-					if v and i then
+					if (v and i) and typeof(v) ~= 'Color3' then
 						continue
-					else
+					elseif not (v or i) then
 						table.remove(Save.objects,_i)
+					else
+						Save.objects[i] = toHex(v)
 					end
 				end
 				table.sort(Save.objects, function(a, b) return a:lower() < b:lower() end)
@@ -1771,10 +1801,14 @@ function DiscordLib:Window(text)
 			if table_ and typeof(table_) == "table" then
 				local decode = game:GetService("HttpService"):JSONDecode(readfile(path.."/"..name..".json"))
 				local s,e = pcall(function()
-					if tonumber(decode.version) == 1.83 then
+					if tonumber(decode.version) == 1.84 then
 						for i,v in pairs(decode.objects) do
-							if not v or not i then continue end
-							table_[i] = v
+							if (v and i) and typeof(v) ~= 'Color3' then
+								table_[i] = v
+							elseif not (v or i) then continue
+							else
+								table_[i] = fromHex(v)
+							end
 						end
 					else
 						warn("[LoadSaveError]: Current file ["..name.."] is in an old version")
