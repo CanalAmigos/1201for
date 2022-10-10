@@ -1751,7 +1751,7 @@ function DiscordLib:Window(text)
 	local function fromHex(color)
 		local color = string.split(color,',')
 		if typeof(color) == 'table' then
-			return Color3.new(color[1],color[2],color[3])
+			return Color3.new(tonumber(color[1]),tonumber(color[2]),tonumber(color[3]))
 		end
 		return Color3.new(1, 1, 1)
 	end
