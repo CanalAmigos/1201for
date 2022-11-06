@@ -303,6 +303,37 @@ function DiscordLib:Window(text)
 
 	ServersHoldPadding.Name = "ServersHoldPadding"
 	ServersHoldPadding.Parent = ServersHold
+	
+	local ToolTip = Instance.new("TextLabel")
+	local UICorner = Instance.new("UICorner")
+
+	ToolTip.Name = "ToolTip"
+	ToolTip.Parent = Discord
+	ToolTip.AnchorPoint = Vector2.new(0, 1)
+	ToolTip.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	ToolTip.BackgroundTransparency = 0.5
+	ToolTip.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ToolTip.BorderSizePixel = 0
+	ToolTip.Size = UDim2.new(0, 45, 0, 20)
+	ToolTip.Visible = false
+	ToolTip.ZIndex = 5
+	ToolTip.Font = Enum.Font.SourceSans
+	ToolTip.Text = "ToolTip"
+	ToolTip.TextColor3 = Color3.fromRGB(200, 200, 200)
+	ToolTip.TextSize = 15
+	ToolTip.TextStrokeTransparency = 0.750
+
+	UICorner.CornerRadius = UDim.new(0, 4)
+	UICorner.Parent = ToolTip
+	
+	local TTP
+	TTP = RunService.RenderStepped:Connect(function()
+		if ToolTip == nil then TTP:Disconnect() end
+		if not minimized then
+			ToolTip.Position = UDim2.new(0,UserInputService:GetMouseLocation().X + 10,0,UserInputService:GetMouseLocation().Y - 5)
+			ToolTip.Size = UDim2.new(0,ToolTip.TextBounds.X + 5,0,ToolTip.TextBounds.Y + 5)
+		end
+	end)
 
 	CloseBtn.MouseButton1Click:Connect(
 		function()
@@ -1568,158 +1599,160 @@ function DiscordLib:Window(text)
 
 	function DiscordLib:Notification(titletext, desctext, btntext, duration)
 		spawn(function()
-			local skip = false
+			if not minimized then
+				local skip = false
 
-			local NotificationHolderMain = Instance.new("TextButton")
-			local Notification = Instance.new("Frame")
-			local NotificationCorner = Instance.new("UICorner")
-			local UnderBar = Instance.new("Frame")
-			local UnderBarCorner = Instance.new("UICorner")
-			local UnderBarFrame = Instance.new("Frame")
-			local Text1 = Instance.new("TextLabel")
-			local Text2 = Instance.new("TextLabel")
-			local AlrightBtn = Instance.new("TextButton")
-			local AlrightCorner = Instance.new("UICorner")
+				local NotificationHolderMain = Instance.new("TextButton")
+				local Notification = Instance.new("Frame")
+				local NotificationCorner = Instance.new("UICorner")
+				local UnderBar = Instance.new("Frame")
+				local UnderBarCorner = Instance.new("UICorner")
+				local UnderBarFrame = Instance.new("Frame")
+				local Text1 = Instance.new("TextLabel")
+				local Text2 = Instance.new("TextLabel")
+				local AlrightBtn = Instance.new("TextButton")
+				local AlrightCorner = Instance.new("UICorner")
 
-			NotificationHolderMain.Name = "NotificationHolderMain"
-			NotificationHolderMain.Parent = MainFrame
-			NotificationHolderMain.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
-			NotificationHolderMain.BackgroundTransparency = 1
-			NotificationHolderMain.BorderSizePixel = 0
-			NotificationHolderMain.Position = UDim2.new(0, 0, 0.0560000017, 0)
-			NotificationHolderMain.Size = UDim2.new(0, 681, 0, 374)
-			NotificationHolderMain.AutoButtonColor = false
-			NotificationHolderMain.Font = Enum.Font.SourceSans
-			NotificationHolderMain.Text = ""
-			NotificationHolderMain.TextColor3 = Color3.fromRGB(0, 0, 0)
-			NotificationHolderMain.TextSize = 14.000
-			TweenService:Create(
-				NotificationHolderMain,
-				TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-				{BackgroundTransparency = 0.2}
-			):Play()
+				NotificationHolderMain.Name = "NotificationHolderMain"
+				NotificationHolderMain.Parent = MainFrame
+				NotificationHolderMain.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
+				NotificationHolderMain.BackgroundTransparency = 1
+				NotificationHolderMain.BorderSizePixel = 0
+				NotificationHolderMain.Position = UDim2.new(0, 0, 0.0560000017, 0)
+				NotificationHolderMain.Size = UDim2.new(0, 681, 0, 374)
+				NotificationHolderMain.AutoButtonColor = false
+				NotificationHolderMain.Font = Enum.Font.SourceSans
+				NotificationHolderMain.Text = ""
+				NotificationHolderMain.TextColor3 = Color3.fromRGB(0, 0, 0)
+				NotificationHolderMain.TextSize = 14.000
+				TweenService:Create(
+					NotificationHolderMain,
+					TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+					{BackgroundTransparency = 0.2}
+				):Play()
 
 
-			Notification.Name = "Notification"
-			Notification.Parent = NotificationHolderMain
-			Notification.AnchorPoint = Vector2.new(0.5, 0.5)
-			Notification.BackgroundColor3 = Color3.fromRGB(54, 57, 63)
-			Notification.ClipsDescendants = true
-			Notification.Position = UDim2.new(0.524819076, 0, 0.469270051, 0)
-			Notification.Size = UDim2.new(0, 0, 0, 0)
-			Notification.BackgroundTransparency = 1
+				Notification.Name = "Notification"
+				Notification.Parent = NotificationHolderMain
+				Notification.AnchorPoint = Vector2.new(0.5, 0.5)
+				Notification.BackgroundColor3 = Color3.fromRGB(54, 57, 63)
+				Notification.ClipsDescendants = true
+				Notification.Position = UDim2.new(0.524819076, 0, 0.469270051, 0)
+				Notification.Size = UDim2.new(0, 0, 0, 0)
+				Notification.BackgroundTransparency = 1
 
-			Notification:TweenSize(UDim2.new(0, 346, 0, 176), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .2, true)
+				Notification:TweenSize(UDim2.new(0, 346, 0, 176), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .2, true)
 
-			TweenService:Create(
-				Notification,
-				TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-				{BackgroundTransparency = 0}
-			):Play()
+				TweenService:Create(
+					Notification,
+					TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+					{BackgroundTransparency = 0}
+				):Play()
 
-			NotificationCorner.CornerRadius = UDim.new(0, 5)
-			NotificationCorner.Name = "NotificationCorner"
-			NotificationCorner.Parent = Notification
+				NotificationCorner.CornerRadius = UDim.new(0, 5)
+				NotificationCorner.Name = "NotificationCorner"
+				NotificationCorner.Parent = Notification
 
-			UnderBar.Name = "UnderBar"
-			UnderBar.Parent = Notification
-			UnderBar.BackgroundColor3 = Color3.fromRGB(47, 49, 54)
-			UnderBar.Position = UDim2.new(-0.000297061284, 0, 0.945048928, 0)
-			UnderBar.Size = UDim2.new(0, 346, 0, 10)
+				UnderBar.Name = "UnderBar"
+				UnderBar.Parent = Notification
+				UnderBar.BackgroundColor3 = Color3.fromRGB(47, 49, 54)
+				UnderBar.Position = UDim2.new(-0.000297061284, 0, 0.945048928, 0)
+				UnderBar.Size = UDim2.new(0, 346, 0, 10)
 
-			UnderBarCorner.CornerRadius = UDim.new(0, 5)
-			UnderBarCorner.Name = "UnderBarCorner"
-			UnderBarCorner.Parent = UnderBar
+				UnderBarCorner.CornerRadius = UDim.new(0, 5)
+				UnderBarCorner.Name = "UnderBarCorner"
+				UnderBarCorner.Parent = UnderBar
 
-			UnderBarFrame.Name = "UnderBarFrame"
-			UnderBarFrame.Parent = UnderBar
-			UnderBarFrame.BackgroundColor3 = Color3.fromRGB(47, 49, 54)
-			UnderBarFrame.BorderSizePixel = 0
-			UnderBarFrame.Position = UDim2.new(-0.000297061284, 0, -3.76068449, 0)
-			UnderBarFrame.Size = UDim2.new(0, 346, 0, 40)
+				UnderBarFrame.Name = "UnderBarFrame"
+				UnderBarFrame.Parent = UnderBar
+				UnderBarFrame.BackgroundColor3 = Color3.fromRGB(47, 49, 54)
+				UnderBarFrame.BorderSizePixel = 0
+				UnderBarFrame.Position = UDim2.new(-0.000297061284, 0, -3.76068449, 0)
+				UnderBarFrame.Size = UDim2.new(0, 346, 0, 40)
 
-			Text1.Name = "Text1"
-			Text1.Parent = Notification
-			Text1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-			Text1.BackgroundTransparency = 1.000
-			Text1.Position = UDim2.new(-0.000594122568, 0, 0.0202020202, 0)
-			Text1.Size = UDim2.new(0, 346, 0, 68)
-			Text1.Font = Enum.Font.GothamSemibold
-			Text1.Text = titletext
-			Text1.TextColor3 = Color3.fromRGB(255, 255, 255)
-			Text1.TextSize = 20.000
+				Text1.Name = "Text1"
+				Text1.Parent = Notification
+				Text1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				Text1.BackgroundTransparency = 1.000
+				Text1.Position = UDim2.new(-0.000594122568, 0, 0.0202020202, 0)
+				Text1.Size = UDim2.new(0, 346, 0, 68)
+				Text1.Font = Enum.Font.GothamSemibold
+				Text1.Text = titletext
+				Text1.TextColor3 = Color3.fromRGB(255, 255, 255)
+				Text1.TextSize = 20.000
 
-			Text2.Name = "Text2"
-			Text2.Parent = Notification
-			Text2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-			Text2.BackgroundTransparency = 1.000
-			Text2.Position = UDim2.new(0.106342293, 0, 0.317724228, 0)
-			Text2.Size = UDim2.new(0, 272, 0, 63)
-			Text2.Font = Enum.Font.Gotham
-			Text2.Text = desctext
-			Text2.TextColor3 = Color3.fromRGB(171, 172, 176)
-			Text2.TextSize = 14.000
-			Text2.TextWrapped = true
+				Text2.Name = "Text2"
+				Text2.Parent = Notification
+				Text2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				Text2.BackgroundTransparency = 1.000
+				Text2.Position = UDim2.new(0.106342293, 0, 0.317724228, 0)
+				Text2.Size = UDim2.new(0, 272, 0, 63)
+				Text2.Font = Enum.Font.Gotham
+				Text2.Text = desctext
+				Text2.TextColor3 = Color3.fromRGB(171, 172, 176)
+				Text2.TextSize = 14.000
+				Text2.TextWrapped = true
 
-			if string.gsub(btntext," ","") ~= "" then
-				AlrightBtn.Name = "AlrightBtn"
-				AlrightBtn.Parent = Notification
-				AlrightBtn.BackgroundColor3 = Color3.fromRGB(114, 137, 228)
-				AlrightBtn.Position = UDim2.new(0.0332369953, 0, 0.789141417, 0)
-				AlrightBtn.Size = UDim2.new(0, 322, 0, 27)
-				AlrightBtn.Font = Enum.Font.Gotham
-				AlrightBtn.Text = btntext
-				AlrightBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-				AlrightBtn.TextSize = 13.000
-				AlrightBtn.AutoButtonColor = false
+				if string.gsub(btntext," ","") ~= "" then
+					AlrightBtn.Name = "AlrightBtn"
+					AlrightBtn.Parent = Notification
+					AlrightBtn.BackgroundColor3 = Color3.fromRGB(114, 137, 228)
+					AlrightBtn.Position = UDim2.new(0.0332369953, 0, 0.789141417, 0)
+					AlrightBtn.Size = UDim2.new(0, 322, 0, 27)
+					AlrightBtn.Font = Enum.Font.Gotham
+					AlrightBtn.Text = btntext
+					AlrightBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+					AlrightBtn.TextSize = 13.000
+					AlrightBtn.AutoButtonColor = false
 
-				AlrightCorner.CornerRadius = UDim.new(0, 4)
-				AlrightCorner.Name = "AlrightCorner"
-				AlrightCorner.Parent = AlrightBtn
+					AlrightCorner.CornerRadius = UDim.new(0, 4)
+					AlrightCorner.Name = "AlrightCorner"
+					AlrightCorner.Parent = AlrightBtn
 
-				AlrightBtn.MouseButton1Click:Connect(function()
+					AlrightBtn.MouseButton1Click:Connect(function()
+						skip = true
+					end)
+
+					AlrightBtn.MouseEnter:Connect(function()
+						TweenService:Create(
+							AlrightBtn,
+							TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+							{BackgroundColor3 = Color3.fromRGB(103,123,196)}
+						):Play()
+					end)
+
+					AlrightBtn.MouseLeave:Connect(function()
+						TweenService:Create(
+							AlrightBtn,
+							TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+							{BackgroundColor3 = Color3.fromRGB(114, 137, 228)}
+						):Play()
+					end)
+				end
+
+				spawn(function()
+					wait(duration or 5)
 					skip = true
 				end)
 
-				AlrightBtn.MouseEnter:Connect(function()
-					TweenService:Create(
-						AlrightBtn,
-						TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-						{BackgroundColor3 = Color3.fromRGB(103,123,196)}
-					):Play()
-				end)
-
-				AlrightBtn.MouseLeave:Connect(function()
-					TweenService:Create(
-						AlrightBtn,
-						TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-						{BackgroundColor3 = Color3.fromRGB(114, 137, 228)}
-					):Play()
-				end)
+				repeat RunService.RenderStepped:Wait() until skip
+				TweenService:Create(
+					NotificationHolderMain,
+					TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+					{BackgroundTransparency = 1}
+				):Play()
+				TweenService:Create(Text1,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
+				TweenService:Create(Text2,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
+				TweenService:Create(AlrightBtn,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
+				Notification:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .2, true)
+				TweenService:Create(
+					Notification,
+					TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+					{BackgroundTransparency = 1}
+				):Play()
+				wait(.2)
+				Debris:AddItem(NotificationHolderMain,0)
 			end
-
-			spawn(function()
-				wait(duration or 5)
-				skip = true
-			end)
-
-			repeat RunService.RenderStepped:Wait() until skip
-			TweenService:Create(
-				NotificationHolderMain,
-				TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-				{BackgroundTransparency = 1}
-			):Play()
-			TweenService:Create(Text1,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
-			TweenService:Create(Text2,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
-			TweenService:Create(AlrightBtn,TweenInfo.new(.1,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{TextTransparency = 1}):Play()
-			Notification:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .2, true)
-			TweenService:Create(
-				Notification,
-				TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-				{BackgroundTransparency = 1}
-			):Play()
-			wait(.2)
-			Debris:AddItem(NotificationHolderMain,0)
 		end)
 		return
 	end
@@ -2335,7 +2368,20 @@ function DiscordLib:Window(text)
 						{BackgroundColor3 = Color3.fromRGB(114, 137, 228)}
 					):Play()
 				end)
-
+				
+				function ButtonFunc:AddToolTip(Text)
+					if tostring(Text):gsub(" ","") ~= "" then
+						Button.MouseEnter:Connect(function()
+							ToolTip.Text = Text
+							ToolTip.Visible = true
+						end)
+						
+						Button.MouseLeave:Connect(function()
+							ToolTip.Visible = false
+						end)
+					end
+				end
+				
 				return ButtonFunc
 			end
 			function ChannelContent:Toggle(text,default,callback)
@@ -2491,6 +2537,18 @@ function DiscordLib:Window(text)
 				function ToggleFunc:Lock(bool)
 					local bool = bool or false
 					Locked = bool
+				end
+				function ToggleFunc:AddToolTip(Text)
+					if tostring(Text):gsub(" ","") ~= "" then
+						Toggle.MouseEnter:Connect(function()
+							ToolTip.Text = Text
+							ToolTip.Visible = true
+						end)
+
+						Toggle.MouseLeave:Connect(function()
+							ToolTip.Visible = false
+						end)
+					end
 				end
 				return ToggleFunc
 			end
@@ -2689,7 +2747,19 @@ function DiscordLib:Window(text)
 					return "Slider"
 				end
 				SetValue(start)
+				
+				function SliderFunc:AddToolTip(Text)
+					if tostring(Text):gsub(" ","") ~= "" then
+						Slider.MouseEnter:Connect(function()
+							ToolTip.Text = Text
+							ToolTip.Visible = true
+						end)
 
+						Slider.MouseLeave:Connect(function()
+							ToolTip.Visible = false
+						end)
+					end
+				end
 				return SliderFunc
 			end
 			function ChannelContent:Seperator()
@@ -2878,19 +2948,8 @@ function DiscordLib:Window(text)
 
 				for i,v in next, list do
 					if #list == 0 then break end
-					itemcount = itemcount + 1
-
-					if itemcount == 1 then
-						framesize = 29
-					elseif itemcount == 2 then
-						framesize = 58
-					elseif itemcount == 3 then
-						framesize = 87
-					elseif itemcount == 4 then
-						framesize = 116
-					elseif itemcount >= 5 then
-						framesize = 145
-					end
+					itemcount = itemcount + 1	
+					framesize = 29*itemcount
 
 					local Item = Instance.new("TextButton")
 					local ItemCorner = Instance.new("UICorner")
@@ -3156,7 +3215,18 @@ function DiscordLib:Window(text)
 				function DropFunc:Type()
 					return Type
 				end
+				function DropFunc:AddToolTip(Text)
+					if tostring(Text):gsub(" ","") ~= "" then
+						DropdownFrameMain.MouseEnter:Connect(function()
+							ToolTip.Text = Text
+							ToolTip.Visible = true
+						end)
 
+						DropdownFrameMain.MouseLeave:Connect(function()
+							ToolTip.Visible = false
+						end)
+					end
+				end
 				return DropFunc
 			end
 			function ChannelContent:Colorpicker(text, preset, callback)
@@ -3391,6 +3461,19 @@ function DiscordLib:Window(text)
 				function ColorpickerFunc:Type()
 					return "Color"
 				end
+				
+				function ColorpickerFunc:AddToolTip(Text)
+					if tostring(Text):gsub(" ","") ~= "" then
+						Colorpicker.MouseEnter:Connect(function()
+							ToolTip.Text = Text
+							ToolTip.Visible = true
+						end)
+
+						Colorpicker.MouseLeave:Connect(function()
+							ToolTip.Visible = false
+						end)
+					end
+				end
 
 				return ColorpickerFunc
 			end
@@ -3496,6 +3579,19 @@ function DiscordLib:Window(text)
 				function TextBoxFunc:Type()
 					return "TextBox"
 				end
+				
+				function TextBoxFunc:AddToolTip(Text)
+					if tostring(Text):gsub(" ","") ~= "" then
+						Textbox.MouseEnter:Connect(function()
+							ToolTip.Text = Text
+							ToolTip.Visible = true
+						end)
+
+						Textbox.MouseLeave:Connect(function()
+							ToolTip.Visible = false
+						end)
+					end
+				end
 
 				return TextBoxFunc
 			end
@@ -3503,6 +3599,7 @@ function DiscordLib:Window(text)
 			function ChannelContent:Label(text)
 				local Label = Instance.new("TextButton")
 				local LabelTitle = Instance.new("TextLabel")
+				local LabelFunc = {}
 
 				Label.Name = "Label"
 				Label.Parent = ChannelHolder
@@ -3528,7 +3625,19 @@ function DiscordLib:Window(text)
 				LabelTitle.TextColor3 = Color3.fromRGB(127, 131, 137)
 				LabelTitle.TextSize = 14.000
 				LabelTitle.TextXAlignment = Enum.TextXAlignment.Left
+				
+				function LabelFunc:AddToolTip(Text)
+					if tostring(Text):gsub(" ","") ~= "" then
+						Label.MouseEnter:Connect(function()
+							ToolTip.Text = Text
+							ToolTip.Visible = true
+						end)
 
+						Label.MouseLeave:Connect(function()
+							ToolTip.Visible = false
+						end)
+					end
+				end
 			end
 
 			function ChannelContent:Bind(text, presetbind, lock, callback)
@@ -3537,6 +3646,7 @@ function DiscordLib:Window(text)
 				local Keybind = Instance.new("TextButton")
 				local KeybindTitle = Instance.new("TextLabel")
 				local KeybindText = Instance.new("TextLabel")
+				local KeybindChanging = false
 
 				local KeyBindFunc = {}
 
@@ -3578,17 +3688,19 @@ function DiscordLib:Window(text)
 
 				Keybind.MouseButton1Click:Connect(function()
 					if not lock then
+						KeybindChanging = true
 						KeybindText.Text = "..."
 						local inputwait = game:GetService("UserInputService").InputBegan:wait()
 						if inputwait.KeyCode.Name ~= "Unknown" then
 							KeybindText.Text = inputwait.KeyCode.Name
 							Key = inputwait.KeyCode.Name
 						end
+						KeybindChanging = false
 					end
 				end)
 
 				game:GetService("UserInputService").InputBegan:connect(function(current, pressed)
-					if not pressed then
+					if not pressed and not KeybindChanging then
 						if current.KeyCode.Name == Key then
 							pcall(callback)
 						end
@@ -3613,6 +3725,19 @@ function DiscordLib:Window(text)
 				
 				function KeyBindFunc:Type()
 					return "Bind"
+				end
+				
+				function KeyBindFunc:AddToolTip(Text)
+					if tostring(Text):gsub(" ","") ~= "" then
+						Keybind.MouseEnter:Connect(function()
+							ToolTip.Text = Text
+							ToolTip.Visible = true
+						end)
+
+						Keybind.MouseLeave:Connect(function()
+							ToolTip.Visible = false
+						end)
+					end
 				end
 				return KeyBindFunc
 			end
