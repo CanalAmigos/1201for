@@ -2531,6 +2531,9 @@ function DiscordLib:Window(text)
 					end
 					pcall(callback, toggled)
 				end
+				function ToggleFunc:GetValue()
+					return toggled
+				end
 				function ToggleFunc:Type()
 					return "Toggle"
 				end
