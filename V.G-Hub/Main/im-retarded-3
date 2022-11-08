@@ -433,10 +433,11 @@ function Library:CreateWindow(Config, Parent)
 					return ToggleState
 				end
 
-				function ToggleInit:CreateKeybind(Bind,Lock,Callback)
+				function ToggleInit:CreateKeybind(Bind,Lock,Used,Callback)
 					local KeybindInit = {}
 					Bind = Bind or "NONE"
 					Lock = Lock or false
+					Used = Used or false
 
 					local WaitingForBind = false
 					local Selected = Bind
@@ -457,7 +458,7 @@ function Library:CreateWindow(Config, Parent)
 						Toggle.Title.Size = UDim2.new(1,-Toggle.Keybind.Size.X.Offset - 15,1,0)
 					end)
 
-					UserInputService.InputBegan:Connect(function(Input)
+					UserInputService.InputBegan:Connect(function(Input,Using)
 						if WaitingForBind and Input.UserInputType == Enum.UserInputType.Keyboard then
 							local Key = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
 							if not table.find(Blacklist, Key) then
@@ -468,7 +469,7 @@ function Library:CreateWindow(Config, Parent)
 								Selected = "NONE"
 							end
 							WaitingForBind = false
-						elseif Input.UserInputType == Enum.UserInputType.Keyboard then
+						elseif Input.UserInputType == Enum.UserInputType.Keyboard and (Used and not Using) or not Used then
 							local Key = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
 							if Key == Selected then
 								ToggleState = not ToggleState
