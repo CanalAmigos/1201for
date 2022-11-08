@@ -2925,7 +2925,7 @@ function DiscordLib:Window(text)
 				DropItemHolder.Size = UDim2.new(0, 385, 0, 0)
 				DropItemHolder.CanvasSize = UDim2.new(0, 0, 0, 0)
 				DropItemHolder.AutomaticCanvasSize = Enum.AutomaticSize.Y
-				DropItemHolder.ScrollBarThickness = 6
+				DropItemHolder.ScrollBarThickness = 0
 				DropItemHolder.BorderSizePixel = 0
 				DropItemHolder.ScrollBarImageColor3 = Color3.fromRGB(28, 29, 32)
 
@@ -3049,13 +3049,7 @@ function DiscordLib:Window(text)
 					if CurrentSelectedText.Text == tostring(txt) then
 						CurrentSelectedText.Text = "..."
 					end
-					if itemcount == 1 then
-						framesize = 29
-					elseif itemcount == 2 then
-						framesize = 58
-					elseif itemcount >= 3 then
-						framesize = 87
-					end
+					framesize = 29*itemcount
 					DropItemHolder.Size = UDim2.new(0, 385, 0, framesize)
 					DropdownFrameMain.Size = UDim2.new(0, 392, 0, framesize + 6)
 					DropdownFrameMainOutline.Size = UDim2.new(0, 396, 0, framesize + 10)
@@ -3069,17 +3063,7 @@ function DiscordLib:Window(text)
 					for i,v in next, list do
 						itemcount = itemcount + 1
 
-						if itemcount == 1 then
-							framesize = 29
-						elseif itemcount == 2 then
-							framesize = 58
-						elseif itemcount == 3 then
-							framesize = 87
-						elseif itemcount == 4 then
-							framesize = 116
-						elseif itemcount >= 5 then
-							framesize = 145
-						end
+						framesize = 29*itemcount
 
 						local Item = Instance.new("TextButton")
 						local ItemCorner = Instance.new("UICorner")
@@ -3140,18 +3124,7 @@ function DiscordLib:Window(text)
 
 				function DropFunc:Add(textadd)
 					itemcount = itemcount + 1
-
-					if itemcount == 1 then
-						framesize = 29
-					elseif itemcount == 2 then
-						framesize = 58
-					elseif itemcount == 3 then
-						framesize = 87
-					elseif itemcount == 4 then
-						framesize = 116
-					elseif itemcount >= 5 then
-						framesize = 145
-					end
+					framesize = 29*itemcount
 
 					local Item = Instance.new("TextButton")
 					local ItemCorner = Instance.new("UICorner")
