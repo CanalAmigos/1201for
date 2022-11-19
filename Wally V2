@@ -796,6 +796,7 @@ local defaults; do
 			local flag = options.flag or "";
 			local callback = callback or function() end;
 			local list = options.list or {};
+			local default = options.default or list[1];
 
 			location[flag] = list[1]
 			local check = library:Create('Frame', {
@@ -814,7 +815,7 @@ local defaults; do
 					library:Create('TextLabel', {
 						Name = 'Selection';
 						Size = UDim2.new(1, 0, 1, 0);
-						Text = list[1];
+						Text = default;
 						TextColor3 = library.options.textcolor;
 						BackgroundTransparency = 1;
 						Font = library.options.font;
