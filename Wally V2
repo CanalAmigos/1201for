@@ -507,7 +507,7 @@ local defaults; do
 		function types:DeleteButton(callback)
 			local callback = callback or function() end
 			self:Button('Destroy Gui',function()
-				game:GetService('Debris'):AddItem(self.container)
+				game:GetService('Debris'):AddItem(library.container,0)
 				callback()
 			end)
 		end
