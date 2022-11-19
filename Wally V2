@@ -605,9 +605,11 @@ local defaults; do
 						percent = tonumber(string.format("%.2f", percent))
 
 						overlay.Container.Button.Position = UDim2.new(math.clamp(percent, 0, 0.99), 0, 0, 1)
-
-						local num = min + (max - min) * percent
-						local value = (precise and num or math.floor(num))
+						
+						local SliderPrecise = ((percent * max) / max) * (max - min) + min
+						local SliderNonPrecise = math.floor(((percent * max) / max) * (max - min) + min)
+						local SliderValue = precise and SliderNonPrecise or SliderPrecise
+						local value = SliderValue
 
 						overlay.Container.ValueLabel.Text = value;
 						callback(tonumber(value))
@@ -659,7 +661,8 @@ local defaults; do
 			self:Resize();
 			return {
 				Set = function(self, value)
-					local percent = 1 - ((max - value) / (max - min))
+					local def = math.clamp(value, min, max)
+					local Porcentage = (def - min) / (max - min)
 					local number  = value 
 
 					number = tonumber(string.format("%.2f", number))
@@ -667,7 +670,7 @@ local defaults; do
 						number = math.floor(number)
 					end
 
-					overlay.Container.Button.Position  = UDim2.new(math.clamp(percent, 0, 0.99), 0,  0, 1) 
+					overlay.Container.Button.Position  = UDim2.new(math.clamp(Porcentage, 0, 0.99), 0,  0, 1) 
 					overlay.Container.ValueLabel.Text  = number
 					location[flag] = number
 					callback(number)
