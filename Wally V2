@@ -607,7 +607,7 @@ local defaults; do
 						overlay.Container.Button.Position = UDim2.new(math.clamp(percent, 0, 0.99), 0, 0, 1)
 						
 						local SliderPrecise = ((percent * max) / max) * (max - min) + min
-						local SliderNonPrecise = math.floor(((percent * max) / max) * (max - min) + min)
+						local SliderNonPrecise = math.floor(SliderPrecise)
 						local SliderValue = precise and SliderNonPrecise or SliderPrecise
 						local value = SliderValue
 
