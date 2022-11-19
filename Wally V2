@@ -826,9 +826,9 @@ local defaults; do
 			local flag = options.flag or "";
 			local callback = callback or function() end;
 			local list = options.list or {};
-			local default = options.default or list[1];
+			local default = options.default or "";
 
-			location[flag] = list[1]
+			location[flag] = default
 			local check = library:Create('Frame', {
 				BackgroundTransparency = 1;
 				Size = UDim2.new(1, 0, 0, 25);
@@ -956,7 +956,7 @@ local defaults; do
 				input = game:GetService('UserInputService').InputBegan:connect(function(a)
 					if a.UserInputType == Enum.UserInputType.MouseButton1 and (not isInGui(container)) then
 						check:FindFirstChild('dropdown_lbl'):WaitForChild('Selection').TextColor3 = library.options.textcolor
-						check:FindFirstChild('dropdown_lbl'):WaitForChild('Selection').Text       = location[flag];
+						check:FindFirstChild('dropdown_lbl'):WaitForChild('Selection').Text = location[flag];
 
 						container:TweenSize(UDim2.new(1, 0, 0, 0), 'In', 'Quint', .3, true)
 						wait(0.15)
