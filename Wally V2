@@ -206,7 +206,7 @@ local defaults; do
 		function types:Toggle(name, options, callback)
 			local default  = options.default or false;
 			local location = options.location or self.flags;
-			local flag = options.flag or tostring(#location+1);
+			local flag = options.flag or tonumber(#location+1);
 			local callback = callback or function() end;
 
 			location[flag] = default;
@@ -305,7 +305,7 @@ local defaults; do
 			local default = options.default or "";
 			local data = options.data
 			local location = options.location or self.flags;
-			local flag = options.flag or tostring(#location+1);
+			local flag = options.flag or tonumber(#location+1);
 			local callback = callback or function() end;
 			local min = options.min or 0;
 			local max = options.max or 9e9;
@@ -382,7 +382,7 @@ local defaults; do
 		function types:Bind(name, options, callback)
 			local location = options.location or self.flags;
 			local keyboardOnly = options.kbonly or false
-			local flag = options.flag or tostring(#location+1);
+			local flag = options.flag or tonumber(#location+1);
 			local callback = callback or function() end;
 			local default = options.default;
 
@@ -545,7 +545,7 @@ local defaults; do
 			local max = options.max or 1;
 			local location = options.location or self.flags;
 			local precise = options.precise  or false -- e.g 0, 1 vs 0, 0.1, 0.2, ...
-			local flag = options.flag or tostring(#location+1);
+			local flag = options.flag or tonumber(#location+1);
 			local callback = callback or function() end
 
 			location[flag] = default;
@@ -708,7 +708,7 @@ local defaults; do
 		function types:SearchBox(text, options, callback)
 			local list = options.list or {};
 			local location = options.location or self.flags;
-			local flag = options.flag or tostring(#location+1);
+			local flag = options.flag or tonumber(#location+1);
 			local callback = callback or function() end;
 
 			local busy = false;
@@ -823,7 +823,7 @@ local defaults; do
 
 		function types:Dropdown(name, options, callback)
 			local location = options.location or self.flags;
-			local flag = options.flag or tostring(#location+1);
+			local flag = options.flag or tonumber(#location+1);
 			local callback = callback or function() end;
 			local list = options.list or {};
 			local default = options.default or "";
