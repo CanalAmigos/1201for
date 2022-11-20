@@ -634,7 +634,7 @@ local defaults; do
 						local SliderPrecise = ((percent * max) / max) * (max - min) + min
 						local SliderNonPrecise = math.floor(SliderPrecise)
 						local SliderValue = precise and SliderNonPrecise or SliderPrecise
-						local value = tonumber(string.format("%.2f", tostring(SliderValue)))
+						local value = tonumber(string.format("%.1f", tostring(SliderValue)))
 
 						overlay.Container.ValueLabel.Text = value;
 						callback(tonumber(value))
@@ -674,11 +674,11 @@ local defaults; do
 				local percent = 1 - ((max - default) / (max - min))
 				local number  = default 
 
-				number = tonumber(string.format("%.2f", number))
+				number = tonumber(string.format("%.1f", number))
 				if (not precise) then
 					number = math.floor(number)
 				end
-				number = tonumber(string.format("%.2f", tostring(number)))
+				number = tonumber(string.format("%.1f", tostring(number)))
 
 				overlay.Container.Button.Position  = UDim2.new(math.clamp(percent, 0, 0.99), 0,  0, 1) 
 				overlay.Container.ValueLabel.Text  = number
@@ -691,11 +691,11 @@ local defaults; do
 					local Porcentage = (def - min) / (max - min)
 					local number  = value
 
-					number = tonumber(string.format("%.2f", number))
+					number = tonumber(string.format("%.1f", number))
 					if (not precise) then
 						number = math.floor(number)
 					end
-					number = tonumber(string.format("%.2f", tostring(number)))
+					number = tonumber(string.format("%.1f", tostring(number)))
 
 					overlay.Container.Button.Position  = UDim2.new(math.clamp(Porcentage, 0, 0.99), 0,  0, 1) 
 					overlay.Container.ValueLabel.Text  = number
