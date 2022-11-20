@@ -163,13 +163,7 @@ local defaults; do
 					window.container.ClipsDescendants = true;
 				end
 				wait();
-				local y = 0;
-				for i, v in next, window.container:GetChildren() do
-					if (not v:IsA('UIListLayout')) then
-						y = y + v.AbsoluteSize.Y;
-					end
-				end 
-
+				local y = window.container.List.AbsoluteContentSize.Y
 				local targetSize = window.toggled and UDim2.new(1, 0, 0, y+5) or UDim2.new(1, 0, 0, 0);
 				local targetDirection = window.toggled and "In" or "Out"
 
@@ -184,22 +178,12 @@ local defaults; do
 		end
 
 		function types:Resize()
-			local y = 0;
-			for i, v in next, self.container:GetChildren() do
-				if (not v:IsA('UIListLayout')) then
-					y = y + v.AbsoluteSize.Y;
-				end
-			end 
+			local y = self.container.List.AbsoluteContentSize.Y
 			self.container.Size = UDim2.new(1, 0, 0, y+5)
 		end
 
 		function types:GetOrder() 
-			local c = 0;
-			for i, v in next, self.container:GetChildren() do
-				if (not v:IsA('UIListLayout')) then
-					c = c + 1
-				end
-			end
+			local c = #self.container:GetChildren() - 1 -- more simple
 			return c
 		end
 
@@ -989,7 +973,6 @@ local defaults; do
 		local obj = Instance.new(class);
 		for i, v in next, data do
 			if i ~= 'Parent' then
-
 				if typeof(v) == "Instance" then
 					v.Parent = obj;
 				else
