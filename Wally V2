@@ -69,9 +69,7 @@ local defaults; do
 				if key.KeyCode == Enum.KeyCode.RightControl then
 					library.toggled = not library.toggled;
 					for i, data in next, library.queue do
-						local pos = (library.toggled and data.p or UDim2.new(-1, 0, -0.5,0))
-						data.w:TweenPosition(pos, (library.toggled and 'Out' or 'In'), 'Quad', 0.15, true)
-						wait();
+						data.w.Visible = library.toggled
 					end
 				end
 			end
@@ -193,7 +191,7 @@ local defaults; do
 			local flag = options.flag or tonumber(#location+1);
 			local callback = callback or function() end;
 
-			location[flag] = default;
+			location[flag] = {default,callback};
 
 			local check = library:Create('Frame', {
 				BackgroundTransparency = 1;
@@ -212,7 +210,7 @@ local defaults; do
 					TextStrokeTransparency = library.options.textstroke;
 					TextStrokeColor3 = library.options.strokecolor;
 					library:Create('TextButton', {
-						Text = (location[flag] and utf8.char(10003) or "");
+						Text = (location[flag][1] and utf8.char(10003) or "");
 						Font = library.options.font;
 						TextSize = library.options.fontsize;
 						Name = 'Checkmark';
@@ -229,24 +227,24 @@ local defaults; do
 			});
 
 			local function click(t)
-				location[flag] = not location[flag];
-				callback(location[flag])
-				check:FindFirstChild(name).Checkmark.Text = location[flag] and utf8.char(10003) or "";
+				location[flag][1] = not location[flag][1];
+				callback(location[flag][1])
+				check:FindFirstChild(name).Checkmark.Text = location[flag][1] and utf8.char(10003) or "";
 			end
 
 			check:FindFirstChild(name).Checkmark.MouseButton1Click:connect(click)
 			library.callbacks[flag] = click;
 
-			if location[flag] == true then
-				callback(location[flag])
+			if location[flag][1] == true then
+				callback(location[flag][1])
 			end
 
 			self:Resize();
 			return {
 				Set = function(self, b)
-					location[flag] = b;
-					callback(location[flag])
-					check:FindFirstChild(name).Checkmark.Text = location[flag] and utf8.char(10003) or "";
+					location[flag][1] = b;
+					callback(location[flag][1])
+					check:FindFirstChild(name).Checkmark.Text = location[flag][1] and utf8.char(10003) or "";
 				end
 			}
 		end
@@ -474,6 +472,18 @@ local defaults; do
 			};
 
 			self:Resize();
+			return {
+				Connect = function(...) -- only works on toggle
+					local args = {...}
+					local location = args[2] or location
+					if args[1] ~= nil and location[args[1]] ~= nil then
+						if type(location[args[1]]) == 'table' then
+							location[args[1]][1] = not location[args[1]][1]
+							location[args[1]][2](location[args[1]][1])
+						end
+					end
+				end
+			}
 		end
 
 		function types:Section(name)
@@ -877,7 +887,7 @@ local defaults; do
 					scrollSize = 5;
 				end
 
-				local goSize = (clampedSize ~= nil and clampedSize) or size;    
+				local goSize = (clampedSize ~= nil and clampedSize) or size;
 				local container = library:Create('ScrollingFrame', {
 					TopImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png';
 					BottomImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png';
