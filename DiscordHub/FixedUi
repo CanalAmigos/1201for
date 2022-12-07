@@ -104,6 +104,12 @@ function DiscordLib:GetGui()
 	return Discord
 end
 
+function Pcall(func)
+	spawn(function()
+		pcall(func)
+	end)
+end
+
 function DiscordLib:Window(text)
 	local currentservertoggled = ""
 	local minimized = false
@@ -379,13 +385,6 @@ function DiscordLib:Window(text)
 						.3,
 						true
 					)
-					MainFrame:TweenPosition(
-						UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0,TopFrame.AbsolutePosition.Y),
-						Enum.EasingDirection.Out,
-						Enum.EasingStyle.Quart,
-						.3,
-						true
-					)
 					wait(.3)
 					pos = false
 				end)
@@ -397,13 +396,6 @@ function DiscordLib:Window(text)
 					pos = true
 					MainFrame:TweenSize(
 						UDim2.new(0, 681, 0, 396),
-						Enum.EasingDirection.Out,
-						Enum.EasingStyle.Quart,
-						.3,
-						true
-					)
-					MainFrame:TweenPosition(
-						UDim2.new(MainFrame.Position.X.Scale,MainFrame.Position.X.Offset,0,TopFrame.AbsolutePosition.Y),
 						Enum.EasingDirection.Out,
 						Enum.EasingStyle.Quart,
 						.3,
@@ -2366,7 +2358,7 @@ function DiscordLib:Window(text)
 				end)
 
 				Button.MouseButton1Click:Connect(function()
-					pcall(callback)
+					Pcall(callback)
 					Button.TextSize = 0
 					TweenService:Create(
 						Button,
@@ -2520,7 +2512,7 @@ function DiscordLib:Window(text)
 							):Play()
 							toggled = false
 						end
-						pcall(callback, toggled)
+						Pcall(callback, toggled)
 						wait(0.1)
 						dlay = false
 					end
@@ -2543,7 +2535,7 @@ function DiscordLib:Window(text)
 						Icon.Image = "http://www.roblox.com/asset/?id=6035047409"
 						toggled = false
 					end
-					pcall(callback, toggled)
+					Pcall(callback, toggled)
 				end
 				function ToggleFunc:GetValue()
 					return toggled
@@ -3011,7 +3003,7 @@ function DiscordLib:Window(text)
 
 					Item.MouseButton1Click:Connect(function()
 						CurrentSelectedText.Text = v
-						pcall(callback, v)
+						Pcall(callback, v)
 						Dropdown.Size = UDim2.new(0, 403, 0, 73)
 						DropdownFrameMain.Visible = false
 						DropdownFrameMainOutline.Visible = false
@@ -3029,7 +3021,7 @@ function DiscordLib:Window(text)
 					local txt = txt or "..."
 					txt = tostring(txt)
 					CurrentSelectedText.Text = txt
-					pcall(callback, txt)
+					Pcall(callback, txt)
 				end
 
 				function DropFunc:Clear(a)
@@ -3122,7 +3114,7 @@ function DiscordLib:Window(text)
 
 						Item.MouseButton1Click:Connect(function()
 							CurrentSelectedText.Text = v
-							pcall(callback, v)
+							Pcall(callback, v)
 							Dropdown.Size = UDim2.new(0, 403, 0, 73)
 							DropdownFrameMain.Visible = false
 							DropdownFrameMainOutline.Visible = false
@@ -3183,7 +3175,7 @@ function DiscordLib:Window(text)
 
 					Item.MouseButton1Click:Connect(function()
 						CurrentSelectedText.Text = textadd
-						pcall(callback, textadd)
+						Pcall(callback, textadd)
 						Dropdown.Size = UDim2.new(0, 403, 0, 73)
 						DropdownFrameMain.Visible = false
 						DropdownFrameMainOutline.Visible = false
@@ -3357,7 +3349,7 @@ function DiscordLib:Window(text)
 					PresetClr.BackgroundColor3 = Color3.fromHSV(ColorH, ColorS, ColorV)
 					Color.BackgroundColor3 = Color3.fromHSV(ColorH, 1, 1)
 
-					pcall(callback, PresetClr.BackgroundColor3)
+					Pcall(callback, PresetClr.BackgroundColor3)
 				end
 
 				ColorH = 1 - (math.clamp(HueSelection.AbsolutePosition.Y - Hue.AbsolutePosition.Y, 0, Hue.AbsoluteSize.Y) / Hue.AbsoluteSize.Y)
@@ -3366,7 +3358,7 @@ function DiscordLib:Window(text)
 
 				PresetClr.BackgroundColor3 = preset
 				Color.BackgroundColor3 = preset
-				pcall(callback, preset)
+				Pcall(callback, preset)
 
 				Color.InputBegan:Connect(
 					function(input)
@@ -3445,7 +3437,7 @@ function DiscordLib:Window(text)
 					ColorV = 1 - (math.clamp(ColorSelection.AbsolutePosition.Y - Color.AbsolutePosition.Y, 0, Color.AbsoluteSize.Y) / Color.AbsoluteSize.Y)
 					PresetClr.BackgroundColor3 = col
 					Color.BackgroundColor3 = col
-					pcall(callback, col)
+					Pcall(callback, col)
 				end
 
 				function ColorpickerFunc:Type()
@@ -3550,7 +3542,7 @@ function DiscordLib:Window(text)
 					):Play()
 					if ep then
 						if #TextBox.Text > 0 then
-							pcall(callback, TextBox.Text)
+							Pcall(callback, TextBox.Text)
 							if disapper then
 								TextBox.Text = ""
 							end
@@ -3562,7 +3554,7 @@ function DiscordLib:Window(text)
 					local txt = txt or ''
 					if txt:gsub(' ','') ~= '' then
 						TextBox.Text = txt
-						pcall(callback, txt)
+						Pcall(callback, txt)
 					end
 				end
 
@@ -3671,7 +3663,7 @@ function DiscordLib:Window(text)
 				KeybindText.Position = UDim2.new(0, 316, 0, 0)
 				KeybindText.Size = UDim2.new(0, 85, 0, 30)
 				KeybindText.Font = Enum.Font.Gotham
-				KeybindText.Text = presetbind.Name
+				KeybindText.Text = '['..presetbind.Name..']'
 				KeybindText.TextColor3 = Color3.fromRGB(127, 131, 137)
 				KeybindText.TextSize = 14.000
 				KeybindText.TextXAlignment = Enum.TextXAlignment.Right
@@ -3679,11 +3671,11 @@ function DiscordLib:Window(text)
 				Keybind.MouseButton1Click:Connect(function()
 					if not lock then
 						KeybindChanging = true
-						KeybindText.Text = "..."
+						KeybindText.Text = "[...]"
 						local inputwait = game:GetService("UserInputService").InputBegan:wait()
 						if Discord == nil then return end
 						if inputwait.KeyCode.Name ~= "Unknown" then
-							KeybindText.Text = inputwait.KeyCode.Name
+							KeybindText.Text = '['..inputwait.KeyCode.Name..']'
 							Key = inputwait.KeyCode.Name
 						end
 						KeybindChanging = false
@@ -3695,7 +3687,7 @@ function DiscordLib:Window(text)
 					if Discord == nil then KeyDown:Disconnect(); return end
 					if not pressed and not KeybindChanging then
 						if current.KeyCode.Name == Key then
-							pcall(callback)
+							Pcall(callback)
 						end
 					end
 				end)
@@ -3703,7 +3695,7 @@ function DiscordLib:Window(text)
 				function KeyBindFunc:SetBind(bind)
 					bind = bind.Name
 					if bind ~= "Unknown" then
-						KeybindText.Text = bind
+						KeybindText.Text = '['..bind..']'
 						Key = bind
 					end
 				end
