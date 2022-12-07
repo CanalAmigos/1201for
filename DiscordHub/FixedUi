@@ -379,13 +379,6 @@ function DiscordLib:Window(text)
 						.3,
 						true
 					)
-					MainFrame:TweenPosition(
-						TopFrameHolder.Position,
-						Enum.EasingDirection.InOut,
-						Enum.EasingStyle.Quart,
-						.3,
-						true
-					)
 					wait(.3)
 					pos = false
 				end)
@@ -398,13 +391,6 @@ function DiscordLib:Window(text)
 					MainFrame:TweenSize(
 						UDim2.new(0, 681, 0, 396),
 						Enum.EasingDirection.Out,
-						Enum.EasingStyle.Quart,
-						.3,
-						true
-					)
-					MainFrame:TweenPosition(
-						TopFrameHolder.Position,
-						Enum.EasingDirection.InOut,
 						Enum.EasingStyle.Quart,
 						.3,
 						true
