@@ -303,7 +303,7 @@ function DiscordLib:Window(text)
 
 	ServersHoldPadding.Name = "ServersHoldPadding"
 	ServersHoldPadding.Parent = ServersHold
-	
+
 	local ToolTip = Instance.new("TextLabel")
 	local UICorner = Instance.new("UICorner")
 
@@ -325,7 +325,7 @@ function DiscordLib:Window(text)
 
 	UICorner.CornerRadius = UDim.new(0, 4)
 	UICorner.Parent = ToolTip
-	
+
 	local TTP
 	TTP = RunService.RenderStepped:Connect(function()
 		if ToolTip == nil then TTP:Disconnect() end
@@ -379,6 +379,13 @@ function DiscordLib:Window(text)
 						.3,
 						true
 					)
+					MainFrame:TweenPosition(
+						TopFrameHolder.Position,
+						Enum.EasingDirection.InOut,
+						Enum.EasingStyle.Quart,
+						.3,
+						true
+					)
 					wait(.3)
 					pos = false
 				end)
@@ -391,6 +398,13 @@ function DiscordLib:Window(text)
 					MainFrame:TweenSize(
 						UDim2.new(0, 681, 0, 396),
 						Enum.EasingDirection.Out,
+						Enum.EasingStyle.Quart,
+						.3,
+						true
+					)
+					MainFrame:TweenPosition(
+						TopFrameHolder.Position,
+						Enum.EasingDirection.InOut,
 						Enum.EasingStyle.Quart,
 						.3,
 						true
@@ -569,33 +583,33 @@ function DiscordLib:Window(text)
 	CloseSettingsBtn.MouseLeave:Connect(function()
 		CloseSettingsBtnCircle.BackgroundColor3 = Color3.fromRGB(54, 57, 63)
 	end)
-
-	UserInputService.InputBegan:Connect(
-		function(io, p)
-			if io.KeyCode == Enum.KeyCode.RightControl then
-				if settingsopened == true then
-					settingsopened = false
-					TopFrameHolder.Visible = true
-					ServersHoldFrame.Visible = true
-					SettingsHolder:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .3, true)
+	
+	local Open_Close
+	Open_Close = UserInputService.InputBegan:Connect(function(io, p)
+		if Discord == nil then Open_Close:Disconnect(); return end
+		if io.KeyCode == Enum.KeyCode.RightControl then
+			if settingsopened == true then
+				settingsopened = false
+				TopFrameHolder.Visible = true
+				ServersHoldFrame.Visible = true
+				SettingsHolder:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .3, true)
+				TweenService:Create(
+					Settings,
+					TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+					{BackgroundTransparency = 1}
+				):Play()
+				for i,v in next, SettingsHolder:GetChildren() do
 					TweenService:Create(
-						Settings,
+						v,
 						TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 						{BackgroundTransparency = 1}
 					):Play()
-					for i,v in next, SettingsHolder:GetChildren() do
-						TweenService:Create(
-							v,
-							TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-							{BackgroundTransparency = 1}
-						):Play()
-					end
-					wait(.3)
-					SettingsFrame.Visible = false
 				end
+				wait(.3)
+				SettingsFrame.Visible = false
 			end
 		end
-	)
+	end)
 
 	TextLabel.Parent = CloseSettingsBtn
 	TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1760,7 +1774,7 @@ function DiscordLib:Window(text)
 	MakeDraggable(TopFrame, MainFrame)
 	ServersHoldPadding.PaddingLeft = UDim.new(0, 14)
 	local ServerHold = {}
-	
+
 	local function toInteger(color)
 		return math.floor(color.r*255)*256^2+math.floor(color.g*255)*256+math.floor(color.b*255)
 	end
@@ -1780,7 +1794,7 @@ function DiscordLib:Window(text)
 		until current <= 0
 		return '#'..string.reverse(final)
 	end
-	
+
 	local function fromHex(color)
 		local color = string.split(color,',')
 		if typeof(color) == 'table' then
@@ -2368,20 +2382,20 @@ function DiscordLib:Window(text)
 						{BackgroundColor3 = Color3.fromRGB(114, 137, 228)}
 					):Play()
 				end)
-				
+
 				function ButtonFunc:AddToolTip(Text)
 					if tostring(Text):gsub(" ","") ~= "" then
 						Button.MouseEnter:Connect(function()
 							ToolTip.Text = Text
 							ToolTip.Visible = true
 						end)
-						
+
 						Button.MouseLeave:Connect(function()
 							ToolTip.Visible = false
 						end)
 					end
 				end
-				
+
 				return ButtonFunc
 			end
 			function ChannelContent:Toggle(text,default,callback)
@@ -2750,7 +2764,7 @@ function DiscordLib:Window(text)
 					return "Slider"
 				end
 				SetValue(start)
-				
+
 				function SliderFunc:AddToolTip(Text)
 					if tostring(Text):gsub(" ","") ~= "" then
 						Slider.MouseEnter:Connect(function()
@@ -3433,11 +3447,11 @@ function DiscordLib:Window(text)
 					Color.BackgroundColor3 = col
 					pcall(callback, col)
 				end
-				
+
 				function ColorpickerFunc:Type()
 					return "Color"
 				end
-				
+
 				function ColorpickerFunc:AddToolTip(Text)
 					if tostring(Text):gsub(" ","") ~= "" then
 						Colorpicker.MouseEnter:Connect(function()
@@ -3551,11 +3565,11 @@ function DiscordLib:Window(text)
 						pcall(callback, txt)
 					end
 				end
-				
+
 				function TextBoxFunc:Type()
 					return "TextBox"
 				end
-				
+
 				function TextBoxFunc:AddToolTip(Text)
 					if tostring(Text):gsub(" ","") ~= "" then
 						Textbox.MouseEnter:Connect(function()
@@ -3601,7 +3615,7 @@ function DiscordLib:Window(text)
 				LabelTitle.TextColor3 = Color3.fromRGB(127, 131, 137)
 				LabelTitle.TextSize = 14.000
 				LabelTitle.TextXAlignment = Enum.TextXAlignment.Left
-				
+
 				function LabelFunc:AddToolTip(Text)
 					if tostring(Text):gsub(" ","") ~= "" then
 						Label.MouseEnter:Connect(function()
@@ -3667,6 +3681,7 @@ function DiscordLib:Window(text)
 						KeybindChanging = true
 						KeybindText.Text = "..."
 						local inputwait = game:GetService("UserInputService").InputBegan:wait()
+						if Discord == nil then return end
 						if inputwait.KeyCode.Name ~= "Unknown" then
 							KeybindText.Text = inputwait.KeyCode.Name
 							Key = inputwait.KeyCode.Name
@@ -3675,7 +3690,9 @@ function DiscordLib:Window(text)
 					end
 				end)
 
-				game:GetService("UserInputService").InputBegan:connect(function(current, pressed)
+				local KeyDown
+				KeyDown = game:GetService("UserInputService").InputBegan:connect(function(current, pressed)
+					if Discord == nil then KeyDown:Disconnect(); return end
 					if not pressed and not KeybindChanging then
 						if current.KeyCode.Name == Key then
 							pcall(callback)
@@ -3698,11 +3715,11 @@ function DiscordLib:Window(text)
 				function KeyBindFunc:GetBind()
 					return Enum.KeyCode[Key]
 				end
-				
+
 				function KeyBindFunc:Type()
 					return "Bind"
 				end
-				
+
 				function KeyBindFunc:AddToolTip(Text)
 					if tostring(Text):gsub(" ","") ~= "" then
 						Keybind.MouseEnter:Connect(function()
