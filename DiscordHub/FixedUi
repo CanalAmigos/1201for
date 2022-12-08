@@ -104,9 +104,10 @@ function DiscordLib:GetGui()
 	return Discord
 end
 
-function Pcall(func)
+function Pcall(func,...)
+	local args = {...}
 	spawn(function()
-		pcall(func)
+		pcall(func,unpack(args))
 	end)
 end
 
