@@ -6,7 +6,7 @@ local defaults = nil; do
 		local mouse = game:GetService("Players").LocalPlayer:GetMouse();
 		local inputService = game:GetService('UserInputService');
 		local heartbeat = game:GetService("RunService").Heartbeat;
-		-- // credits to Ririchi / Inori for this cute drag function :)
+		
 		function dragger.new(frame)
 			local Dragging = nil
 			local DragInput = nil
@@ -183,6 +183,16 @@ local defaults = nil; do
 			local c = #self.container:GetChildren() - 1 -- more simple
 			return c
 		end
+		
+		function types:GetVisible()
+			local old = #self.container:GetChildren() - 1
+			if old.Name == 'Section' and old.section_toggle.Text == '+' then
+				return false
+			elseif not old.Visible then
+				return false
+			end
+			return true
+		end
 
 		function types:Toggle(name, options, callback)
 			local default= options.default or false;
@@ -195,6 +205,7 @@ local defaults = nil; do
 			local check = library:Create('Frame', {
 				BackgroundTransparency = 1;
 				Size = UDim2.new(1, 0, 0, 25);
+				Visible = self:GetVisible();
 				LayoutOrder = self:GetOrder();
 				library:Create('TextLabel', {
 					Name = name;
@@ -254,6 +265,7 @@ local defaults = nil; do
 			local check = library:Create('Frame', {
 				BackgroundTransparency = 1;
 				Size = UDim2.new(1, 0, 0, 25);
+				Visible = self:GetVisible();
 				LayoutOrder = self:GetOrder();
 				library:Create('TextButton', {
 					Name = name;
@@ -302,6 +314,7 @@ local defaults = nil; do
 				BackgroundTransparency = 1;
 				Size = UDim2.new(1, 0, 0, 30);
 				LayoutOrder = self:GetOrder();
+				Visible = self:GetVisible();
 				library:Create('TextLabel', {
 					Name = name;
 					Text = "\r" .. name;
@@ -396,6 +409,7 @@ local defaults = nil; do
 			local check = library:Create('Frame', {
 				BackgroundTransparency = 1;
 				Size = UDim2.new(1, 0, 0, 30);
+				Visible = self:GetVisible();
 				LayoutOrder = self:GetOrder();
 				library:Create('TextLabel', {
 					Name = name;
@@ -485,11 +499,12 @@ local defaults = nil; do
 			}
 		end
 
-		function types:Section(name)
+		function types:Section(name,toggle)
 			local order = self:GetOrder();
 			local determinedSize = UDim2.new(1, 0, 0, 25)
 			local determinedPos = UDim2.new(0, 0, 0, 4);
 			local secondarySize = UDim2.new(1, 0, 0, 20);
+			local sectiontoggled = toggle or true
 
 			if order == 0 then
 				determinedSize = UDim2.new(1, 0, 0, 21)
@@ -518,8 +533,34 @@ local defaults = nil; do
 					TextStrokeTransparency = library.options.textstroke;
 					TextStrokeColor3 = library.options.strokecolor;
 				});
+				library:Create('TextButton',{
+					Name = "section_toggle",
+					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+					BackgroundTransparency = 1,
+					Position = UDim2.new(1, -35, 0, 0),
+					Size = UDim2.new(0.158, 0, 1, 0),
+					ZIndex = 3,
+					Font = Enum.Font.Code,
+					Text = (sectiontoggled and "-") or "+",
+					TextColor3 = Color3.fromRGB(255, 255, 255),
+					TextSize = 18
+				}),
+				
 				Parent = self.container;
 			});
+			check.section_toggle.MouseButton1Click:connect(function()
+				sectiontoggled = not sectiontoggled
+				check.section_toggle.Text = (sectiontoggled and "-") or "+"
+				for _,v in pairs(self.container:GetChildren()) do
+					if v.LayoutOrder > order then
+						if v.Name ~= 'Section' then
+							v.Visible = sectiontoggled
+						else
+							break
+						end
+					end
+				end
+			end)
 
 			self:Resize();
 		end
@@ -527,7 +568,9 @@ local defaults = nil; do
 		function types:DeleteButton(callback)
 			local callback = callback or function() end
 			self:Button('Destroy Gui',function()
-				game:GetService('Debris'):AddItem(library.container.Parent,0)
+				local Parent = library.container.Parent
+				pcall(function() Parent:ClearAllChildren() end)
+				game:GetService('Debris'):AddItem(Parent,0)
 				callback()
 			end)
 		end
@@ -546,6 +589,7 @@ local defaults = nil; do
 			local check = library:Create('Frame', {
 				BackgroundTransparency = 1;
 				Size = UDim2.new(1, 0, 0, 25);
+				Visible = self:GetVisible();
 				LayoutOrder = self:GetOrder();
 				library:Create('TextLabel', {
 					Name = name;
@@ -706,6 +750,7 @@ local defaults = nil; do
 			local box = library:Create('Frame', {
 				BackgroundTransparency = 1;
 				Size = UDim2.new(1, 0, 0, 25);
+				Visible = self:GetVisible();
 				LayoutOrder = self:GetOrder();
 				library:Create('TextBox', {
 					Text = "";
@@ -827,6 +872,7 @@ local defaults = nil; do
 				Size = UDim2.new(1, 0, 0, 25);
 				BackgroundColor3 = Color3.fromRGB(25, 25, 25);
 				BorderSizePixel = 0;
+				Visible = self:GetVisible();
 				LayoutOrder = self:GetOrder();
 				library:Create('Frame', {
 					Name = 'dropdown_lbl';
