@@ -101,7 +101,7 @@ local defaults = nil; do
 					ZIndex = 3;
 				});
 				library:Create("TextButton", {
-					Size = UDim2.new(0, 30, 0, 30);
+					Size = UDim2.new(0.158, 0,0.933, 0);
 					Position = UDim2.new(1, -35, 0, 0);
 					BackgroundTransparency = 1;
 					Text = "-";
