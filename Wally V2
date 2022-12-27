@@ -175,13 +175,8 @@ local defaults = nil; do
 		end
 
 		function types:Resize()
-			local Childs = self.container:GetChildren()
 			local y = self.container.List.AbsoluteContentSize.Y
-			if Childs[#Childs].Name == 'Section' then
-				self.container.Size = UDim2.new(1, 0, 0, y)
-			else
-				self.container.Size = UDim2.new(1, 0, 0, y+5)
-			end
+			self.container.Size = UDim2.new(1, 0, 0, y+5)
 		end
 
 		function types:GetOrder() 
