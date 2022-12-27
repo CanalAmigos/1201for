@@ -502,12 +502,12 @@ local defaults = nil; do
 			}
 		end
 
-		function types:Section(name,toggle)
+		function types:Section(name, toggle)
 			local order = self:GetOrder();
 			local determinedSize = UDim2.new(1, 0, 0, 25)
 			local determinedPos = UDim2.new(0, 0, 0, 4);
 			local secondarySize = UDim2.new(1, 0, 0, 20);
-			local sectiontoggled = toggle or true
+			local toggle = (toggle == nil and true) or toggle
 
 			if order == 0 then
 				determinedSize = UDim2.new(1, 0, 0, 21)
@@ -551,14 +551,14 @@ local defaults = nil; do
 				
 				Parent = self.container;
 			});
-			check.section_toggle.Text = (sectiontoggled and "-") or "+"
+			check.section_toggle.Text = (toggle and "-") or "+"
 			check.section_toggle.MouseButton1Click:connect(function()
-				sectiontoggled = not sectiontoggled
-				check.section_toggle.Text = (sectiontoggled and "-") or "+"
+				toggle = not toggle
+				check.section_toggle.Text = (toggle and "-") or "+"
 				for _,v in pairs(self.container:GetChildren()) do
 					if v.Name ~= 'List' and v.LayoutOrder > order then
 						if v.Name ~= 'Section' then
-							v.Visible = sectiontoggled
+							v.Visible = toggle
 						else
 							break
 						end
