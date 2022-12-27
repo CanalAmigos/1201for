@@ -188,7 +188,7 @@ local defaults = nil; do
 			local Childs = self.container:GetChildren()
 			if (#Childs-1) > 1 then
 				local old = Childs[#Childs - 1]
-				if old and old.Name == 'Section' and old.section_toggle.Text == '+' then
+				if old and old.Name == 'Section' and old.section_toggle.Text == '-' then
 					return false
 				elseif old and not old.Visible then
 					return false
@@ -544,7 +544,7 @@ local defaults = nil; do
 					Size = UDim2.new(0.158, 0, 1, 0),
 					ZIndex = 3,
 					Font = Enum.Font.Code,
-					Text = (sectiontoggled and "-") or "+",
+					Text = (sectiontoggled and "+") or "-",
 					TextColor3 = Color3.fromRGB(255, 255, 255),
 					TextSize = 18
 				}),
@@ -553,7 +553,7 @@ local defaults = nil; do
 			});
 			check.section_toggle.MouseButton1Click:connect(function()
 				sectiontoggled = not sectiontoggled
-				check.section_toggle.Text = (sectiontoggled and "-") or "+"
+				check.section_toggle.Text = (sectiontoggled and "+") or "-"
 				for _,v in pairs(self.container:GetChildren()) do
 					if v.Name ~= 'List' and v.LayoutOrder > order then
 						if v.Name ~= 'Section' then
