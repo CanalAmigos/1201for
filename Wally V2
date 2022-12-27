@@ -186,8 +186,8 @@ local defaults = nil; do
 		
 		function types:GetVisible()
 			local Childs = self.container:GetChildren()
-			if (#Childs-1) > 1 then
-				local old = Childs[#Childs-1]
+			if #Childs > 1 then
+				local old = Childs[#Childs]
 				if old and old.Name == 'Section' and old.section_toggle.Text == '+' then
 					return false
 				elseif old and not old.Visible then
