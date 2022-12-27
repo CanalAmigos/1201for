@@ -544,13 +544,14 @@ local defaults = nil; do
 					Size = UDim2.new(0.158, 0, 1, 0),
 					ZIndex = 3,
 					Font = Enum.Font.Code,
-					Text = (sectiontoggled and "-") or "+",
+					Text = "-",
 					TextColor3 = Color3.fromRGB(255, 255, 255),
 					TextSize = 18
 				}),
 				
 				Parent = self.container;
 			});
+			check.section_toggle.Text = (sectiontoggled and "-") or "+"
 			check.section_toggle.MouseButton1Click:connect(function()
 				sectiontoggled = not sectiontoggled
 				check.section_toggle.Text = (sectiontoggled and "-") or "+"
