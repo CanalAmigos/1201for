@@ -563,6 +563,7 @@ local defaults = nil; do
 						end
 					end
 				end
+				self:Resize()
 			end)
 
 			self:Resize();
