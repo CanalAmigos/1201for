@@ -175,8 +175,13 @@ local defaults = nil; do
 		end
 
 		function types:Resize()
+			local Childs = self.container:GetChildren()
 			local y = self.container.List.AbsoluteContentSize.Y
-			self.container.Size = UDim2.new(1, 0, 0, y+5)
+			if Childs[#Childs].Name == 'Section' then
+				self.container.Size = UDim2.new(1, 0, 0, y)
+			else
+				self.container.Size = UDim2.new(1, 0, 0, y+5)
+			end
 		end
 
 		function types:GetOrder() 
@@ -187,7 +192,7 @@ local defaults = nil; do
 		function types:GetVisible()
 			local Childs = self.container:GetChildren()
 			if (#Childs-1) > 1 then
-				local old = Childs[#Childs - 1]
+				local old = Childs[#Childs-1]
 				if old and old.Name == 'Section' and old.section_toggle.Text == '+' then
 					return false
 				elseif old and not old.Visible then
