@@ -555,7 +555,7 @@ local defaults = nil; do
 				sectiontoggled = not sectiontoggled
 				check.section_toggle.Text = (sectiontoggled and "-") or "+"
 				for _,v in pairs(self.container:GetChildren()) do
-					if v.LayoutOrder > order then
+					if v.Name ~= 'List' and v.LayoutOrder > order then
 						if v.Name ~= 'Section' then
 							v.Visible = sectiontoggled
 						else
