@@ -253,13 +253,11 @@ local defaults = nil; do
 			end
 
 			self:Resize();
-			return {
-				Set = function(b)
-					location[flag][1] = b;
-					callback(location[flag][1])
-					check:FindFirstChild(name).Checkmark.Text = location[flag][1] and utf8.char(10003) or "";
-				end
-			}
+			return function(b)
+				location[flag][1] = b;
+				callback(location[flag][1])
+				check:FindFirstChild(name).Checkmark.Text = location[flag][1] and utf8.char(10003) or "";
+			end
 		end
 
 		function types:Button(name, callback)
@@ -725,24 +723,22 @@ local defaults = nil; do
 			end
 
 			self:Resize();
-			return {
-				Set = function(value)
-					local def = math.clamp(value, min, max)
-					local Porcentage = (def - min) / (max - min)
-					local number = value
+			return function(value)
+				local def = math.clamp(value, min, max)
+				local Porcentage = (def - min) / (max - min)
+				local number = value
 
-					number = tonumber(string.format("%.1f", number))
-					if (not precise) then
-						number = math.floor(number)
-					end
-					number = tonumber(string.format("%.1f", tostring(number)))
-
-					overlay.Container.Button.Position = UDim2.new(math.clamp(Porcentage, 0, 0.99), 0, 0, 1) 
-					overlay.Container.ValueLabel.Text = number
-					location[flag] = number
-					callback(number)
+				number = tonumber(string.format("%.1f", number))
+				if (not precise) then
+					number = math.floor(number)
 				end
-			}
+				number = tonumber(string.format("%.1f", tostring(number)))
+
+				overlay.Container.Button.Position = UDim2.new(math.clamp(Porcentage, 0, 0.99), 0, 0, 1) 
+				overlay.Container.ValueLabel.Text = number
+				location[flag] = number
+				callback(number)
+			end
 		end 
 
 		function types:SearchBox(text, options, callback)
