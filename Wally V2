@@ -254,7 +254,7 @@ local defaults = nil; do
 
 			self:Resize();
 			return {
-				Set = function(self, b)
+				Set = function(b)
 					location[flag][1] = b;
 					callback(location[flag][1])
 					check:FindFirstChild(name).Checkmark.Text = location[flag][1] and utf8.char(10003) or "";
@@ -726,7 +726,7 @@ local defaults = nil; do
 
 			self:Resize();
 			return {
-				Set = function(self, value)
+				Set = function(value)
 					local def = math.clamp(value, min, max)
 					local Porcentage = (def - min) / (max - min)
 					local number = value
