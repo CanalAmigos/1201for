@@ -184,6 +184,13 @@ local defaults = nil; do
 			return c
 		end
 		
+		function types:FireCallBack(call,...)
+			local Args = {...}
+			spawn(function()
+				pcall(call,unpack(Args))
+			end)
+		end
+		
 		function types:GetVisible()
 			local Childs = self.container:GetChildren()
 			if #Childs > 1 then
@@ -241,7 +248,7 @@ local defaults = nil; do
 
 			local function click(t)
 				location[flag][1] = not location[flag][1];
-				callback(location[flag][1])
+				self:FireCallBack(callback,location[flag][1])
 				check:FindFirstChild(name).Checkmark.Text = location[flag][1] and utf8.char(10003) or "";
 			end
 
@@ -249,13 +256,13 @@ local defaults = nil; do
 			library.callbacks[flag] = click;
 
 			if location[flag][1] == true then
-				callback(location[flag][1])
+				self:FireCallBack(callback,location[flag][1])
 			end
 
 			self:Resize();
 			return function(b)
 				location[flag][1] = b;
-				callback(location[flag][1])
+				self:FireCallBack(callback,location[flag][1])
 				check:FindFirstChild(name).Checkmark.Text = location[flag][1] and utf8.char(10003) or "";
 			end
 		end
@@ -284,12 +291,14 @@ local defaults = nil; do
 				Parent = self.container;
 			});
 
-			check:FindFirstChild(name).MouseButton1Click:connect(callback)
+			check:FindFirstChild(name).MouseButton1Click:connect(function()
+				self:FireCallBack(callback)
+			end)
 			self:Resize();
 
 			return {
 				Fire = function()
-					callback();
+					self:FireCallBack(callback);
 				end
 			}
 		end
@@ -361,7 +370,7 @@ local defaults = nil; do
 					location[flag] = tostring(box.Text)
 				end
 
-				callback(location[flag], old, e)
+				self:FireCallBack(callback,location[flag], old, e)
 			end)
 
 			if type == 'number' then
@@ -574,7 +583,7 @@ local defaults = nil; do
 				local Parent = library.container.Parent
 				pcall(function() Parent:ClearAllChildren() end)
 				game:GetService('Debris'):AddItem(Parent,0)
-				callback()
+				self:FireCallBack(callback)
 			end)
 		end
 
@@ -676,7 +685,7 @@ local defaults = nil; do
 						local value = tonumber(string.format("%.1f", tostring(SliderValue)))
 
 						overlay.Container.ValueLabel.Text = value;
-						callback(tonumber(value))
+						self:FireCallBack(callback,tonumber(value))
 						location[flag] = tonumber(value)
 					end)
 				end
@@ -737,7 +746,7 @@ local defaults = nil; do
 				overlay.Container.Button.Position = UDim2.new(math.clamp(Porcentage, 0, 0.99), 0, 0, 1) 
 				overlay.Container.ValueLabel.Text = number
 				location[flag] = number
-				callback(number)
+				self:FireCallBack(callback,number)
 			end
 		end 
 
@@ -818,7 +827,7 @@ local defaults = nil; do
 								busy = false;
 
 								location[flag] = button.Text;
-								callback(location[flag])
+								self:FireCallBack(callback,location[flag])
 
 								box:FindFirstChild('Box').Container.ScrollBarThickness = 0
 								for i, child in next, box:FindFirstChild('Box').Container:GetChildren() do
@@ -974,7 +983,7 @@ local defaults = nil; do
 						check:FindFirstChild('dropdown_lbl'):WaitForChild('Selection').Text = btn.Text;
 
 						location[flag] = tostring(btn.Text);
-						callback(location[flag])
+						self:FireCallBack(callback,location[flag])
 
 						game:GetService('Debris'):AddItem(container, 0)
 						input:disconnect();
@@ -1076,7 +1085,7 @@ local defaults = nil; do
 							check:FindFirstChild('dropdown_lbl'):WaitForChild('Selection').Text = btn.Text;
 
 							location[flag] = tostring(btn.Text);
-							callback(location[flag])
+							self:FireCallBack(callback,location[flag])
 
 							game:GetService('Debris'):AddItem(container, 0)
 							input:disconnect();
@@ -1224,7 +1233,7 @@ local defaults = nil; do
 			for idx, binds in next, library.binds do
 				local real_binding = binds.location[idx];
 				if real_binding and isreallypressed(real_binding, input) then
-					binds.callback()
+					types:FireCallBack(binds.callback)
 				end
 			end
 		end
