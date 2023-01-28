@@ -909,7 +909,6 @@ local defaults = nil; do
 					Font = library.options.font;
 					TextColor3 = library.options.textcolor;
 					TextSize = library.options.fontsize;
-					TextXAlignment = Enum.TextXAlignment.Left
 				});
 				Parent = self.container;
 			})
