@@ -877,33 +877,38 @@ local defaults = nil; do
 				LayoutOrder = self:GetOrder();
 				library:Create('TextButton', {
 					Name = "B1";
-					BackgroundColor3 = Color3.fromRGB(25, 25, 25);
-					BorderColor3 = Color3.fromRGB(60, 60, 60);
+					BackgroundColor3 = library.options.btncolor;
+					BorderColor3 = library.options.bordercolor;
 					Position = UDim2.new(0, 5, 0, 30);
 					Size = UDim2.new(0, 87, 0, 20);
 					Text = b1;
-					TextColor3 = Color3.fromRGB(255, 255, 255);
-					TextSize = 17
+					Font = library.options.font;
+					TextStrokeTransparency = library.options.textstroke;
+					TextColor3 = library.options.textcolor;
+					TextSize = library.options.fontsize
 				});
 				library:Create('TextButton', {
 					Name = "B2";
-					BackgroundColor3 = Color3.fromRGB(25, 25, 25);
-					BorderColor3 = Color3.fromRGB(60, 60, 60);
+					BackgroundColor3 = library.options.btncolor;
+					BorderColor3 = library.options.bordercolor;
 					Position = UDim2.new(0, 98, 0, 30);
 					Size = UDim2.new(0, 87, 0, 20);
 					Text = b2;
-					TextColor3 = Color3.fromRGB(255, 255, 255);
-					TextSize = 17
+					Font = library.options.font;
+					TextStrokeTransparency = library.options.textstroke;
+					TextColor3 = library.options.textcolor;
+					TextSize = library.options.fontsize
 				});
 				library:Create('TextLabel', {
 					Name = name;
-					BackgroundColor3 = Color3.fromRGB(25, 25, 25);
-					BorderColor3 = Color3.fromRGB(60, 60, 60);
+					BackgroundColor3 = library.options.btncolor;
+					BorderColor3 = library.options.bordercolor;
 					Position = UDim2.new(0, 5, 0, 4);
 					Size = UDim2.new(0, 180, 0, 20);
 					Text = name;
-					TextColor3 = Color3.fromRGB(255, 255, 255);
-					TextSize = 17;
+					Font = library.options.font;
+					TextColor3 = library.options.textcolor;
+					TextSize = library.options.fontsize;
 					TextXAlignment = Enum.TextXAlignment.Left
 				});
 				Parent = self.container;
