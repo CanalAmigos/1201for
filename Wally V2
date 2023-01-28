@@ -866,6 +866,67 @@ local defaults = nil; do
 			self:Resize();
 			return reload, box:FindFirstChild('Box');
 		end
+		
+		function types:DoubleButton(name, b1, b2, callback)
+			local callback = callback or function() end;
+			
+			local Double = library:Create('Frame', {
+				BackgroundTransparency = 1;
+				Size = UDim2.new(0, 190, 0, 50);
+				Visible = self:GetVisible();
+				LayoutOrder = self:GetOrder();
+				library:Create('TextButton', {
+					Name = "B1";
+					BackgroundColor3 = Color3.fromRGB(25, 25, 25);
+					BorderColor3 = Color3.fromRGB(60, 60, 60);
+					Position = UDim2.new(0, 5, 0, 30);
+					Size = UDim2.new(0, 87, 0, 20);
+					Text = b1;
+					TextColor3 = Color3.fromRGB(255, 255, 255);
+					TextSize = 17
+				});
+				library:Create('TextButton', {
+					Name = "B2";
+					BackgroundColor3 = Color3.fromRGB(25, 25, 25);
+					BorderColor3 = Color3.fromRGB(60, 60, 60);
+					Position = UDim2.new(0, 98, 0, 30);
+					Size = UDim2.new(0, 87, 0, 20);
+					Text = b2;
+					TextColor3 = Color3.fromRGB(255, 255, 255);
+					TextSize = 17
+				});
+				library:Create('TextLabel', {
+					Name = name;
+					BackgroundColor3 = Color3.fromRGB(25, 25, 25);
+					BorderColor3 = Color3.fromRGB(60, 60, 60);
+					Position = UDim2.new(0, 5, 0, 4);
+					Size = UDim2.new(0, 180, 0, 20);
+					Text = name;
+					TextColor3 = Color3.fromRGB(255, 255, 255);
+					TextSize = 17;
+					TextXAlignment = Enum.TextXAlignment.Left
+				});
+				Parent = self.container;
+			})
+			
+			Double:FindFirstChild('B1').MouseButton1Click:connect(function()
+				self:FireCallBack(callback,'1')
+			end)
+			
+			Double:FindFirstChild('B2').MouseButton1Click:connect(function()
+				self:FireCallBack(callback,'2')
+			end)
+			self:Resize()
+			
+			return {
+				['Fire1'] = function()
+					self:FireCallBack(callback,'1')
+				end;
+				['Fire2'] = function()
+					self:FireCallBack(callback,'2')
+				end
+			}
+		end
 
 		function types:Dropdown(name, options, callback)
 			local location = options.location or self.flags;
@@ -1119,7 +1180,7 @@ local defaults = nil; do
 				end
 				
 			end
-
+			
 			self:Resize();
 			return {
 				Refresh = reload;
