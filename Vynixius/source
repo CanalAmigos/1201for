@@ -3114,8 +3114,8 @@ function Library:AddWindow(options)
 						end
 					end)
 
-					UIS.InputBegan:Connect(function(input)
-						if input.KeyCode == Bind.Bind then
+					UIS.InputBegan:Connect(function(input, gameprocess)
+						if not gameprocess and input.KeyCode == Bind.Bind then
 							if options.toggleable == true and Tab.Flags[Bind.Flag] == false then
 								return
 							end
