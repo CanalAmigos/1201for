@@ -4081,7 +4081,7 @@ function Library:AddWindow(options)
 
 		-- Configs
 
-		function Tab:AddConfigs()
+		function Tab:AddConfigs(path)
 			-- Save
 
 			local Section = self:AddSection("Configs")
@@ -4093,7 +4093,7 @@ function Library:AddWindow(options)
 			SaveSection:AddButton("Save Config", function()
 				if SaveName.Box.Text ~= "" then
 					local fileName = SaveName.Box.Text.. (string.sub(SaveName.Box.Text, #SaveName.Box.Text - 4, #SaveName.Box.Text) ~= ".json" and ".json" or "")
-					local filePath = Library.Settings.ConfigPath.. "/".. fileName
+					local filePath = (path or Library.Settings.ConfigPath).. "/".. fileName
 
 					if isfile(filePath) then
 						Library:Notify({ text = "You already have a config named '".. fileName.. "', do you wish to overwrite it?" }, function(bool)
