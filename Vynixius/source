@@ -494,7 +494,6 @@ function Library:AddWindow(options)
 				end
 			end
 			
-			if not isfolder(filePath) then makefolder(filePath) end
 			writefile(filePath, HS:JSONEncode(config))
 		end)
 	end
@@ -4105,7 +4104,8 @@ function Library:AddWindow(options)
 
 						return
 					end
-
+					
+					makefolder(path or Library.Settings.ConfigPath)
 					saveConfig(filePath)
 				end
 			end)
