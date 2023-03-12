@@ -4120,7 +4120,7 @@ function Library:AddWindow(options)
 
 				local configs = {}
 
-				for _, v in next, listfiles(Library.Settings.ConfigPath) do
+				for _, v in next, listfiles(path or Library.Settings.ConfigPath) do
 					if string.find(v, ".json") then
 						local fileName = SelfModules.Directory.GetNameFromDirectory(v)
 
@@ -4137,7 +4137,7 @@ function Library:AddWindow(options)
 				local fileName = LoadName.Selected
 
 				if fileName ~= "" then
-					local filePath = Library.Settings.ConfigPath.. "/".. fileName
+					local filePath = (path or Library.Settings.ConfigPath).. "/".. fileName
 
 					Library:Notify({ text = "Are you sure you wish to delete '".. fileName.. "'?" }, function(bool)
 						if bool then
@@ -4148,7 +4148,7 @@ function Library:AddWindow(options)
 			end)
 
 			LoadSection:AddButton("Load Config", function()
-				loadConfig(Library.Settings.ConfigPath.. "/".. LoadName.Selected)
+				loadConfig((path or Library.Settings.ConfigPath).. "/".. LoadName.Selected)
 			end)
 
 			task.spawn(function()
