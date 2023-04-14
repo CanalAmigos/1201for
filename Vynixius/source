@@ -453,9 +453,9 @@ function Library:AddWindow(options)
 
 	-- Functions
 
-	local function saveConfig(filePath)
+	local function saveConfig(filePath,others)
 		pcall(function()
-			local config = { Flags = {}, Binds = {}, Sliders = {}, Pickers = {} }
+			local config = { Flags = {}, Binds = {}, Sliders = {}, Pickers = {}, Others = others }
 
 			for _, tab in next, Window.Tabs do
 				for flag, value in next, tab.Flags do
@@ -498,7 +498,7 @@ function Library:AddWindow(options)
 		end)
 	end
 
-	local function loadConfig(filePath)
+	local function loadConfig(filePath,callback)
 		pcall(function()
 			local config = HS:JSONDecode(readfile(filePath))
 
@@ -549,6 +549,7 @@ function Library:AddWindow(options)
 						end
 					end
 				end
+				callback('Load',config.Others)
 			end
 		end)
 	end
@@ -4081,8 +4082,10 @@ function Library:AddWindow(options)
 
 		-- Configs
 
-		function Tab:AddConfigs(path)
+		function Tab:AddConfigs(path,toreturn)
 			-- Save
+			
+			local toreturn = toreturn or function() return {} end
 
 			local Section = self:AddSection("Configs")
 
@@ -4098,7 +4101,7 @@ function Library:AddWindow(options)
 					if isfile(filePath) then
 						Library:Notify({ text = "You already have a config named '".. fileName.. "', do you wish to overwrite it?" }, function(bool)
 							if bool then
-								saveConfig(filePath)
+								saveConfig(filePath,toreturn('Save'))
 							end
 						end)
 
@@ -4106,7 +4109,7 @@ function Library:AddWindow(options)
 					end
 					
 					makefolder(path or Library.Settings.ConfigPath)
-					saveConfig(filePath)
+					saveConfig(filePath,toreturn('Save'))
 				end
 			end)
 
@@ -4149,7 +4152,7 @@ function Library:AddWindow(options)
 			end)
 
 			LoadSection:AddButton("Load Config", function()
-				loadConfig((path or Library.Settings.ConfigPath).. "/".. LoadName.Selected)
+				loadConfig((path or Library.Settings.ConfigPath).. "/".. LoadName.Selected,toreturn)
 			end)
 
 			task.spawn(function()
@@ -4159,6 +4162,8 @@ function Library:AddWindow(options)
 					task.wait(0.25)
 				end
 			end)
+			
+			
 		end
 
 		return Tab
