@@ -455,7 +455,7 @@ function Library:AddWindow(options)
 
 	local function saveConfig(filePath,others)
 		pcall(function()
-			local config = { Flags = {}, Binds = {}, Sliders = {}, Pickers = {}, Others = others }
+			local config = { Flags = {}, Binds = {}, Sliders = {}, Pickers = {}, Others = (typeof(others) == 'table' and others) or {} }
 
 			for _, tab in next, Window.Tabs do
 				for flag, value in next, tab.Flags do
