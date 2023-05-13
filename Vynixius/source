@@ -4123,7 +4123,8 @@ function Library:AddWindow(options)
 				LoadName:ClearList()
 
 				local configs = {}
-
+				
+				makefolder(path or Library.Settings.ConfigPath)
 				for _, v in next, listfiles(path or Library.Settings.ConfigPath) do
 					if string.find(v, ".json") then
 						local fileName = SelfModules.Directory.GetNameFromDirectory(v)
@@ -4142,12 +4143,16 @@ function Library:AddWindow(options)
 
 				if fileName ~= "" then
 					local filePath = (path or Library.Settings.ConfigPath).. "/".. fileName
-
-					Library:Notify({ text = "Are you sure you wish to delete '".. fileName.. "'?" }, function(bool)
-						if bool then
-							delfile(filePath)
-						end
-					end)
+					
+					if isfile(filePath) then
+						Library:Notify({ text = "Are you sure you wish to delete '".. fileName.. "'?" }, function(bool)
+							if bool then
+								delfile(filePath)
+							end
+						end)
+					else
+						Library:Notify({ text = fileName..' don\'t exist!'})
+					end
 				end
 			end)
 
