@@ -1798,13 +1798,11 @@ function DiscordLib:Window(text)
 	function ServerHold:LoadSave(path)
 		if type(isfile) == "function" and type(readfile) == "function" then
 			if isfile(path) then
-				print('Loading',path,'!')
 				local decode = HttpService:JSONDecode(readfile(path))
 				for i,v in pairs(decode) do
 					for o,v in pairs(v) do
 						local f = DiscordLib.Items[o]
 						if f then
-							print('['..o..']','=',tostring(v))
 							Pcall(f.call,v)
 						end
 					end
@@ -2475,7 +2473,7 @@ function DiscordLib:Window(text)
 
 
 				function ToggleFunc:SetToggle(bool)
-					if bool then
+					if bool == true then
 						Icon.ImageColor3 = Color3.fromRGB(67,181,129)
 						ToggleFrame.BackgroundColor3 = Color3.fromRGB(67,181,129)
 						ToggleFrameCircle.Position = UDim2.new(0.655, -5, 0.133000001, 0)
