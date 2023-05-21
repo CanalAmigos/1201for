@@ -1803,7 +1803,7 @@ function DiscordLib:Window(text)
 					for o,v in pairs(v) do
 						local f = DiscordLib.Items[o]
 						if f then
-							f.call(v)
+							pcall(f.call,v)
 						end
 					end
 				end
@@ -3423,7 +3423,7 @@ function DiscordLib:Window(text)
 			function ChannelContent:Textbox(text, options, callback)
 				local options = (type(options) ~= 'table' and {}) or options
 				local placetext = options.Text or ''
-				local vanishtext = options.Vanish == true
+				local vanishtext = (options.Vanish == true)
 				local flag = SaveItem(options.Flag or text,'Box')
 				local Textbox = Instance.new("Frame")
 				local TextboxTitle = Instance.new("TextLabel")
