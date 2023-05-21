@@ -2748,7 +2748,7 @@ function DiscordLib:Window(text)
 				local DropFunc = {}
 				local options = (type(options) ~= 'table' and {}) or options
 				local list = options.List or {}
-				local flag = SaveItem(options.Flag,'List')
+				local flag = SaveItem(options.Flag or text,'List')
 				local itemcount = 0
 				local framesize = 0
 				local DropTog = false
@@ -3424,7 +3424,7 @@ function DiscordLib:Window(text)
 				local options = (type(options) ~= 'table' and {}) or options
 				local placetext = options.Text or ''
 				local vanishtext = options.Vanish == true
-				local flag = SaveItem(Settings.Flag or text,'Box')
+				local flag = SaveItem(options.Flag or text,'Box')
 				local Textbox = Instance.new("Frame")
 				local TextboxTitle = Instance.new("TextLabel")
 				local TextboxFrameOutline = Instance.new("Frame")
