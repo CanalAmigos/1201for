@@ -2492,10 +2492,11 @@ function DiscordLib:Window(text)
 					Pcall(callback, toggled)
 				end
 				flag.Call(ToggleFunc.SetToggle)
+				pcall(ToggleFunc.SetToggle,toggled)
+				
 				function ToggleFunc:GetValue()
 					return toggled
 				end
-				ToggleFunc:SetToggle(toggled)
 				function ToggleFunc:Lock(bool)
 					local bool = bool or false
 					Locked = bool
@@ -2518,7 +2519,7 @@ function DiscordLib:Window(text)
 			function ChannelContent:Slider(text, options, callback)
 				local text = text or ""
 				local options = (type(options) ~= 'table' and {}) or options
-				local flag = SaveItem(options.Flag or text,'Sliders')
+				local flag = SaveItem(options.Flag or text,'Slider')
 				local min = options.min or options.Start or 0
 				local max = options.max or options.Start or 0
 				local start = options.Start or min or 0
