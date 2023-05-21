@@ -1803,7 +1803,7 @@ function DiscordLib:Window(text)
 					for o,v in pairs(v) do
 						local f = DiscordLib.Items[o]
 						if f then
-							pcall(f.call,v)
+							Pcall(f.call,v)
 						end
 					end
 				end
@@ -2492,7 +2492,8 @@ function DiscordLib:Window(text)
 					Pcall(callback, toggled)
 				end
 				flag.Call(ToggleFunc.SetToggle)
-				pcall(ToggleFunc.SetToggle,toggled)
+				flag.Value(toggled)
+				Pcall(ToggleFunc.SetToggle,toggled)
 				
 				function ToggleFunc:GetValue()
 					return toggled
