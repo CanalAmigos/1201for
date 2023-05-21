@@ -1,4 +1,4 @@
-local DiscordLib = {}
+local DiscordLib = {Items={}}
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local Debris = game:GetService("Debris")
@@ -37,6 +37,16 @@ local function SaveInfo()
 	userinfo["user"] = user
 	userinfo["tag"] = tag
 	writefile("discordlibinfo.txt", HttpService:JSONEncode(userinfo));
+end
+
+local function SaveItem(flag,type)
+	DiscordLib.Items[flag] = {type=type,value=nil,call=nil}
+	return {['Value'] = function(value)
+		DiscordLib.Items[flag].value = value
+	end,
+	['Call']=function(func)
+		DiscordLib.Items[flag].call = func
+	end,}
 end
 
 local function MakeDraggable(topbarobject, object)
@@ -1767,99 +1777,37 @@ function DiscordLib:Window(text)
 	MakeDraggable(TopFrame, MainFrame)
 	ServersHoldPadding.PaddingLeft = UDim.new(0, 14)
 	local ServerHold = {}
+	writefile = (writefile)
+	isfile = (isfile)
+	readfile = (readfile)
 
-	local function toInteger(color)
-		return math.floor(color.r*255)*256^2+math.floor(color.g*255)*256+math.floor(color.b*255)
-	end
-
-	local function toHex(color)
-		local int = toInteger(color)
-		local current = int
-		local final = ''
-		local hexChar = {'A','B','C','D','E','F'}
-		repeat local remainder = current % 16
-			local char = tostring(remainder)
-			if remainder >= 10 then
-				char = hexChar[1 + remainder - 10]
-			end
-			current = math.floor(current/16)
-			final = final..char
-		until current <= 0
-		return '#'..string.reverse(final)
-	end
-
-	local function fromHex(color)
-		local color = string.split(color,',')
-		if typeof(color) == 'table' then
-			return Color3.new(tonumber(color[1]),tonumber(color[2]),tonumber(color[3]))
-		end
-		return Color3.new(1, 1, 1)
-	end
-
-	function ServerHold:Save(table_,name,path,ignore)
+	function ServerHold:Save(path)
 		if type(writefile) == "function" then
-			local table_ = table_ or {}
-			local name = name or text
-			local path = path or ""
-			local ignore = ignore or {}
-			if table_ and typeof(table_) == "table" then
-				local Save = {version = 1.84,objects={}}
-				for i,v in pairs(table_) do
-					Save.objects[i] = v
-				end
-				local _i = 0
-				for i,v in pairs(Save.objects) do _i+=1
-					if (v and i) and typeof(v) ~= 'Color3' then
-						continue
-					elseif not (v or i) then
-						table.remove(Save.objects,_i)
-					else
-						Save.objects[i] = toHex(v)
-					end
-				end
-				table.sort(Save.objects, function(a, b) return a:lower() < b:lower() end)
-				local encode = game:GetService("HttpService"):JSONEncode(Save)
-				local s,e = pcall(function()
-					writefile(path.."/"..name..".json",encode)
-				end)
-				if not s then
-					warn("[WritefileError]: "..e)
-					return false
-				end
+			local Configs = {}
+			for i,v in pairs(DiscordLib.Items) do
+				Configs[v.type] = (type(Configs[v.type]) ~= 'table' and {}) or Configs[v.type]
+				Configs[v.type][i] = v.value
 			end
+			writefile(path,HttpService:JSONEncode(Configs))
 			return true
 		end
 		return false
 	end
 
-	function ServerHold:LoadSave(table_,name,path)
+	function ServerHold:LoadSave(path)
 		if type(isfile) == "function" and type(readfile) == "function" then
-			local table_ = table_ or {}
-			local name = name or text
-			local path = path or ""
-			if not isfile(path.."/"..name..".json") then return end
-			if table_ and typeof(table_) == "table" then
-				local decode = game:GetService("HttpService"):JSONDecode(readfile(path.."/"..name..".json"))
-				local s,e = pcall(function()
-					if tonumber(decode.version) == 1.84 then
-						for i,v in pairs(decode.objects) do
-							if (v and i) and typeof(v) ~= 'Color3' then
-								table_[i] = v
-							elseif not (v or i) then continue
-							else
-								table_[i] = fromHex(v)
-							end
+			if isfile(path) then
+				local decode = HttpService:JSONDecode(readfile(path))
+				for i,v in pairs(decode) do
+					for o,v in pairs(v) do
+						local f = DiscordLib.Items[o]
+						if f then
+							f.call(v)
 						end
-					else
-						warn("[LoadSaveError]: Current file ["..name.."] is in an old version")
 					end
-				end)
-				if not s then
-					warn("[LoadSaveError]: "..e)
-					return false
 				end
+				return true
 			end
-			return true
 		end
 		return false
 	end
@@ -2391,8 +2339,10 @@ function DiscordLib:Window(text)
 
 				return ButtonFunc
 			end
-			function ChannelContent:Toggle(text,default,callback)
-				local toggled = false
+			function ChannelContent:Toggle(text,options,callback)
+				local options = (type(options) ~= 'table' and {}) or options
+				local toggled = options.Default == true
+				local flag = SaveItem(options.Flag or text,'Toggle')
 				local Toggle = Instance.new("TextButton")
 				local ToggleTitle = Instance.new("TextLabel")
 				local ToggleFrame = Instance.new("Frame")
@@ -2513,6 +2463,7 @@ function DiscordLib:Window(text)
 							):Play()
 							toggled = false
 						end
+						flag.Value(toggled)
 						Pcall(callback, toggled)
 						wait(0.1)
 						dlay = false
@@ -2536,14 +2487,14 @@ function DiscordLib:Window(text)
 						Icon.Image = "http://www.roblox.com/asset/?id=6035047409"
 						toggled = false
 					end
+					flag.Value(toggled)
 					Pcall(callback, toggled)
 				end
+				flag.Call(ToggleFunc.SetToggle)
 				function ToggleFunc:GetValue()
 					return toggled
 				end
-				function ToggleFunc:Type()
-					return "Toggle"
-				end
+				ToggleFunc:SetToggle(toggled)
 				function ToggleFunc:Lock(bool)
 					local bool = bool or false
 					Locked = bool
@@ -2563,14 +2514,16 @@ function DiscordLib:Window(text)
 				return ToggleFunc
 			end
 
-			function ChannelContent:Slider(text, min, max, start, precise, callback, simbol)
+			function ChannelContent:Slider(text, options, callback)
 				local text = text or ""
-				local min = min or start or 0
-				local max = max or start or 0
-				local start = start or min or 0
-				local precise = precise or false
+				local options = (type(options) ~= 'table' and {}) or options
+				local flag = SaveItem(options.Flag or text,'Sliders')
+				local min = options.min or options.Start or 0
+				local max = options.max or options.Start or 0
+				local start = options.Start or min or 0
+				local precise = options.Precise or false
 				local callback = callback or function() end
-				local Simbol = simbol or ""
+				local Simbol = options.Simbol or ""
 				local GlobalSliderValue = 0
 				local Dragging = false
 				local SliderFunc = {}
@@ -2661,7 +2614,6 @@ function DiscordLib:Window(text)
 					end
 				end)
 
-
 				ValueBubbleCorner.CornerRadius = UDim.new(0, 3)
 				ValueBubbleCorner.Name = "ValueBubbleCorner"
 				ValueBubbleCorner.Parent = ValueBubble
@@ -2710,7 +2662,8 @@ function DiscordLib:Window(text)
 					SliderValue = tonumber(string.format("%.2f", SliderValue))
 					GlobalSliderValue = SliderValue
 					ValueLabel.Text = tostring(SliderValue)..Simbol
-					callback(GlobalSliderValue)
+					flag.Value(GlobalSliderValue)
+					Pcall(callback,GlobalSliderValue)
 				end
 
 				local function SetValue(Value)
@@ -2720,8 +2673,10 @@ function DiscordLib:Window(text)
 					Zip.Position = UDim2.new(Porcentage, -6,-0.644999981, 0)
 					CurrentValueFrame.Size = UDim2.new(Porcentage,0,0,8)
 					ValueLabel.Text = Value..Simbol
-					callback(GlobalSliderValue)
+					flag.Value(GlobalSliderValue)
+					Pcall(callback,GlobalSliderValue)
 				end
+				flag.Call(SetValue)
 
 				Zip.InputBegan:Connect(function(Input)
 					if Input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -2751,10 +2706,8 @@ function DiscordLib:Window(text)
 					Zip.Position = UDim2.new(Porcentage, -6,-0.644999981, 0)
 					CurrentValueFrame.Size = UDim2.new(Porcentage,0,0,8)
 					ValueLabel.Text = Value..Simbol
-					callback(Value)
-				end
-				function SliderFunc:Type()
-					return "Slider"
+					flag.Value(Value)
+					Pcall(callback,Value)
 				end
 				SetValue(start)
 
@@ -2790,8 +2743,11 @@ function DiscordLib:Window(text)
 				Seperator2.Position = UDim2.new(0, 0, 0, 4)
 				Seperator2.Size = UDim2.new(0, 401, 0, 1)
 			end
-			function ChannelContent:Dropdown(text, list, callback)
+			function ChannelContent:Dropdown(text, options, callback)
 				local DropFunc = {}
+				local options = (type(options) ~= 'table' and {}) or options
+				local list = options.List or {}
+				local flag = SaveItem(options.Flag,'List')
 				local itemcount = 0
 				local framesize = 0
 				local DropTog = false
@@ -3004,6 +2960,7 @@ function DiscordLib:Window(text)
 
 					Item.MouseButton1Click:Connect(function()
 						CurrentSelectedText.Text = v
+						flag.Value(v)
 						Pcall(callback, v)
 						Dropdown.Size = UDim2.new(0, 403, 0, 73)
 						DropdownFrameMain.Visible = false
@@ -3022,8 +2979,10 @@ function DiscordLib:Window(text)
 					local txt = txt or "..."
 					txt = tostring(txt)
 					CurrentSelectedText.Text = txt
+					flag.Value(txt)
 					Pcall(callback, txt)
 				end
+				flag.Call(DropFunc.SetText)
 
 				function DropFunc:Clear(a)
 					for i,v in next, DropItemHolder:GetChildren() do
@@ -3115,6 +3074,7 @@ function DiscordLib:Window(text)
 
 						Item.MouseButton1Click:Connect(function()
 							CurrentSelectedText.Text = v
+							flag.Value(v)
 							Pcall(callback, v)
 							Dropdown.Size = UDim2.new(0, 403, 0, 73)
 							DropdownFrameMain.Visible = false
@@ -3176,6 +3136,7 @@ function DiscordLib:Window(text)
 
 					Item.MouseButton1Click:Connect(function()
 						CurrentSelectedText.Text = textadd
+						flag.Value(textadd)
 						Pcall(callback, textadd)
 						Dropdown.Size = UDim2.new(0, 403, 0, 73)
 						DropdownFrameMain.Visible = false
@@ -3188,16 +3149,7 @@ function DiscordLib:Window(text)
 					DropdownFrameMain.Size = UDim2.new(0, 392, 0, framesize + 6)
 					DropdownFrameMainOutline.Size = UDim2.new(0, 396, 0, framesize + 10)
 				end
-				function DropFunc:ChangeType(t)
-					if t == 1 then
-						Type = 'Text'
-					elseif t == 2 then
-						Type = 'Refresh'
-					end
-				end
-				function DropFunc:Type()
-					return Type
-				end
+				
 				function DropFunc:AddToolTip(Text)
 					if tostring(Text):gsub(" ","") ~= "" then
 						DropdownFrameMain.MouseEnter:Connect(function()
@@ -3212,7 +3164,10 @@ function DiscordLib:Window(text)
 				end
 				return DropFunc
 			end
-			function ChannelContent:Colorpicker(text, preset, callback)
+			function ChannelContent:Colorpicker(text, options, callback)
+				local options = (type(options) ~= 'table' and {}) or options
+				local flag = SaveItem(options.Flag or text,'Color')
+				local preset = options.Default or Color3.new(0, 0, 0)
 				local OldToggleColor = Color3.fromRGB(0, 0, 0)
 				local OldColor = Color3.fromRGB(0, 0, 0)
 				local OldColorSelectionPosition = nil
@@ -3349,7 +3304,7 @@ function DiscordLib:Window(text)
 				local function UpdateColorPicker(nope)
 					PresetClr.BackgroundColor3 = Color3.fromHSV(ColorH, ColorS, ColorV)
 					Color.BackgroundColor3 = Color3.fromHSV(ColorH, 1, 1)
-
+					flag.Value(PresetClr.BackgroundColor3)
 					Pcall(callback, PresetClr.BackgroundColor3)
 				end
 
@@ -3359,6 +3314,7 @@ function DiscordLib:Window(text)
 
 				PresetClr.BackgroundColor3 = preset
 				Color.BackgroundColor3 = preset
+				flag.Value(preset)
 				Pcall(callback, preset)
 
 				Color.InputBegan:Connect(
@@ -3438,8 +3394,10 @@ function DiscordLib:Window(text)
 					ColorV = 1 - (math.clamp(ColorSelection.AbsolutePosition.Y - Color.AbsolutePosition.Y, 0, Color.AbsoluteSize.Y) / Color.AbsoluteSize.Y)
 					PresetClr.BackgroundColor3 = col
 					Color.BackgroundColor3 = col
+					flag.Value(col)
 					Pcall(callback, col)
 				end
+				flag.Call(ColorpickerFunc.SetColor)
 
 				function ColorpickerFunc:Type()
 					return "Color"
@@ -3461,7 +3419,11 @@ function DiscordLib:Window(text)
 				return ColorpickerFunc
 			end
 
-			function ChannelContent:Textbox(text, placetext, disapper, callback)
+			function ChannelContent:Textbox(text, options, callback)
+				local options = (type(options) ~= 'table' and {}) or options
+				local placetext = options.Text or ''
+				local vanishtext = options.Vanish
+				local flag = SaveItem(Settings.Flag or text,'Box')
 				local Textbox = Instance.new("Frame")
 				local TextboxTitle = Instance.new("TextLabel")
 				local TextboxFrameOutline = Instance.new("Frame")
@@ -3543,8 +3505,9 @@ function DiscordLib:Window(text)
 					):Play()
 					if ep then
 						if #TextBox.Text > 0 then
+							flag.Value(TextBox.Text)
 							Pcall(callback, TextBox.Text)
-							if disapper then
+							if vanishtext then
 								TextBox.Text = ""
 							end
 						end
@@ -3555,9 +3518,11 @@ function DiscordLib:Window(text)
 					local txt = txt or ''
 					if txt:gsub(' ','') ~= '' then
 						TextBox.Text = txt
+						flag.Value(txt)
 						Pcall(callback, txt)
 					end
 				end
+				flag.Call(TextBoxFunc.SetTextBox)
 
 				function TextBoxFunc:Type()
 					return "TextBox"
@@ -3623,9 +3588,11 @@ function DiscordLib:Window(text)
 				end
 			end
 
-			function ChannelContent:Bind(text, presetbind, lock, callback)
-				local Key = presetbind.Name
-				local lock = lock or false
+			function ChannelContent:Bind(text, options, callback)
+				local options = (type(options) ~= 'table' and {}) or options
+				local Key = (type(options.Key) == 'string' and options.Key) or (options.Key and options.Key.Name)
+				local lock = options.Lock or false
+				local flag = SaveItem(options.Flag or text,'Bind')
 				local Keybind = Instance.new("TextButton")
 				local KeybindTitle = Instance.new("TextLabel")
 				local KeybindText = Instance.new("TextLabel")
@@ -3664,7 +3631,7 @@ function DiscordLib:Window(text)
 				KeybindText.Position = UDim2.new(0, 316, 0, 0)
 				KeybindText.Size = UDim2.new(0, 85, 0, 30)
 				KeybindText.Font = Enum.Font.Gotham
-				KeybindText.Text = '['..presetbind.Name..']'
+				KeybindText.Text = '['..Key..']'
 				KeybindText.TextColor3 = Color3.fromRGB(127, 131, 137)
 				KeybindText.TextSize = 14.000
 				KeybindText.TextXAlignment = Enum.TextXAlignment.Right
@@ -3678,6 +3645,7 @@ function DiscordLib:Window(text)
 						if inputwait.KeyCode.Name ~= "Unknown" then
 							KeybindText.Text = '['..inputwait.KeyCode.Name..']'
 							Key = inputwait.KeyCode.Name
+							flag.Value(inputwait.KeyCode.Name)
 						end
 						KeybindChanging = false
 					end
@@ -3700,6 +3668,7 @@ function DiscordLib:Window(text)
 						Key = bind
 					end
 				end
+				flag.Call(KeyBindFunc.SetBind)
 
 				function KeyBindFunc:Lock(bool)
 					lock = bool or false
