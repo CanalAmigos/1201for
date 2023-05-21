@@ -40,6 +40,7 @@ local function SaveInfo()
 end
 
 local function SaveItem(flag,type)
+	if flag == 'IgnoreFlag' then return {['Value']=function() end,['Call']=function() end} end
 	DiscordLib.Items[flag] = {type=type,value=nil,call=nil}
 	return {['Value'] = function(value)
 		DiscordLib.Items[flag].value = value
@@ -3422,7 +3423,7 @@ function DiscordLib:Window(text)
 			function ChannelContent:Textbox(text, options, callback)
 				local options = (type(options) ~= 'table' and {}) or options
 				local placetext = options.Text or ''
-				local vanishtext = options.Vanish
+				local vanishtext = options.Vanish == true
 				local flag = SaveItem(Settings.Flag or text,'Box')
 				local Textbox = Instance.new("Frame")
 				local TextboxTitle = Instance.new("TextLabel")
