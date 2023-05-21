@@ -1798,11 +1798,13 @@ function DiscordLib:Window(text)
 	function ServerHold:LoadSave(path)
 		if type(isfile) == "function" and type(readfile) == "function" then
 			if isfile(path) then
+				print('Loading',path,'!')
 				local decode = HttpService:JSONDecode(readfile(path))
 				for i,v in pairs(decode) do
 					for o,v in pairs(v) do
 						local f = DiscordLib.Items[o]
 						if f then
+							print('['..o..']','=',tostring(v))
 							Pcall(f.call,v)
 						end
 					end
