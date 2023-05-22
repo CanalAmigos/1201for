@@ -2472,7 +2472,7 @@ function DiscordLib:Window(text)
 				end)
 
 
-				function ToggleFunc:SetToggle(bool)
+				local function SetToggle(bool)
 					toggled = (bool == true)
 					if toggled then
 						Icon.ImageColor3 = Color3.fromRGB(67,181,129)
@@ -2490,9 +2490,10 @@ function DiscordLib:Window(text)
 					flag.Value(toggled)
 					Pcall(callback, toggled)
 				end
-				flag.Call(ToggleFunc.SetToggle)
+				ToggleFunc.SetToggle = SetToggle
+				flag.Call(SetToggle)
 				flag.Value(toggled)
-				Pcall(ToggleFunc.SetToggle,toggled)
+				Pcall(SetToggle,toggled)
 				
 				function ToggleFunc:GetValue()
 					return toggled
@@ -2977,14 +2978,15 @@ function DiscordLib:Window(text)
 				end
 
 
-				function DropFunc:SetText(txt)
+				local function SetText(txt)
 					local txt = txt or "..."
 					txt = tostring(txt)
 					CurrentSelectedText.Text = txt
 					flag.Value(txt)
 					Pcall(callback, txt)
 				end
-				flag.Call(DropFunc.SetText)
+				DropFunc.SetText = SetText
+				flag.Call(SetText)
 
 				function DropFunc:Clear(a)
 					for i,v in next, DropItemHolder:GetChildren() do
@@ -3388,7 +3390,7 @@ function DiscordLib:Window(text)
 				)
 
 
-				function ColorpickerFunc:SetColor(col)
+				local function SetColor(col)
 					ColorSelection.Position = UDim2.new(col and select(3, Color3.toHSV(col)))
 					HueSelection.Position = UDim2.new(0.48, 0, 1 - select(1, Color3.toHSV(col)))
 					ColorH = 1 - (math.clamp(HueSelection.AbsolutePosition.Y - Hue.AbsolutePosition.Y, 0, Hue.AbsoluteSize.Y) / Hue.AbsoluteSize.Y)
@@ -3399,7 +3401,8 @@ function DiscordLib:Window(text)
 					flag.Value(col)
 					Pcall(callback, col)
 				end
-				flag.Call(ColorpickerFunc.SetColor)
+				ColorpickerFunc.SetColor = SetColor
+				flag.Call(SetColor)
 
 				function ColorpickerFunc:Type()
 					return "Color"
@@ -3516,7 +3519,7 @@ function DiscordLib:Window(text)
 					end
 				end)
 
-				function TextBoxFunc:SetTextBox(txt)
+				local function SetTextBox(txt)
 					local txt = txt or ''
 					if txt:gsub(' ','') ~= '' then
 						TextBox.Text = txt
@@ -3524,7 +3527,8 @@ function DiscordLib:Window(text)
 						Pcall(callback, txt)
 					end
 				end
-				flag.Call(TextBoxFunc.SetTextBox)
+				TextBoxFunc.SetTextBox = SetTextBox
+				flag.Call(SetTextBox)
 
 				function TextBoxFunc:Type()
 					return "TextBox"
@@ -3663,14 +3667,15 @@ function DiscordLib:Window(text)
 					end
 				end)
 
-				function KeyBindFunc:SetBind(bind)
+				local function SetBind(bind)
 					bind = bind.Name
 					if bind ~= "Unknown" then
 						KeybindText.Text = '['..bind..']'
 						Key = bind
 					end
 				end
-				flag.Call(KeyBindFunc.SetBind)
+				KeyBindFunc.SetBind = SetBind
+				flag.Call(SetBind)
 
 				function KeyBindFunc:Lock(bool)
 					lock = bool or false
