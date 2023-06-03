@@ -40,7 +40,8 @@ local function SaveInfo()
 end
 
 local function SaveItem(flag,type)
-	if flag == 'IgnoreFlag' then return {['Value']=function() end,['Call']=function() end} end
+	if flag == 'IgnoreFlag' or tostring(flag):gsub(' ','') == '' then return {['Value']=function() end,['Call']=function() end} end
+	flag = (DiscordLib.Items[flag] and tostring(flag)..'#'..#DiscordLib.Items) or flag
 	DiscordLib.Items[flag] = {type=type,value=nil,call=nil}
 	return {['Value'] = function(value)
 		DiscordLib.Items[flag].value = value
@@ -1798,16 +1799,20 @@ function DiscordLib:Window(text)
 	function ServerHold:LoadSave(path)
 		if type(isfile) == "function" and type(readfile) == "function" then
 			if isfile(path) then
-				local decode = HttpService:JSONDecode(readfile(path))
-				for i,v in pairs(decode) do
-					for o,v in pairs(v) do
-						local f = DiscordLib.Items[o]
-						if f then
-							Pcall(f.call,v)
+				pcall(function()
+					local decode = HttpService:JSONDecode(readfile(path))
+					for i,v in pairs(decode) do
+						for o,v in pairs(v) do
+							pcall(function()
+								local f = DiscordLib.Items[o]
+								if f then
+									Pcall(f.call,v)
+								end
+							end)
 						end
 					end
-				end
-				return true
+					return true
+				end)
 			end
 		end
 		return false
