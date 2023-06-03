@@ -1799,20 +1799,18 @@ function DiscordLib:Window(text)
 	function ServerHold:LoadSave(path)
 		if type(isfile) == "function" and type(readfile) == "function" then
 			if isfile(path) then
-				pcall(function()
+				return pcall(function()
 					local decode = HttpService:JSONDecode(readfile(path))
 					for i,v in pairs(decode) do
 						for o,v in pairs(v) do
-							pcall(function()
-								local f = DiscordLib.Items[o]
-								if f then
-									Pcall(f.call,v)
-								end
-							end)
+							local f = DiscordLib.Items[o]
+							if f then
+								Pcall(f.call,v)
+							end
 						end
 					end
 					return true
-				end)
+				end) == true
 			end
 		end
 		return false
