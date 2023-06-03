@@ -1785,13 +1785,17 @@ function DiscordLib:Window(text)
 
 	function ServerHold:Save(path)
 		if type(writefile) == "function" then
-			local Configs = {}
-			for i,v in pairs(DiscordLib.Items) do
-				Configs[v.type] = (type(Configs[v.type]) ~= 'table' and {}) or Configs[v.type]
-				Configs[v.type][i] = v.value
-			end
-			writefile(path,HttpService:JSONEncode(Configs))
-			return true
+			return pcall(function()
+				local Configs = {}
+				for i,v in pairs(DiscordLib.Items) do
+					if v.value ~= nil then
+						Configs[v.type] = (type(Configs[v.type]) ~= 'table' and {}) or Configs[v.type]
+						Configs[v.type][i] = v.value
+					end
+				end
+				writefile(path,HttpService:JSONEncode(Configs))
+				return true
+			end) == true
 		end
 		return false
 	end
