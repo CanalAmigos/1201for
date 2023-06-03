@@ -2986,7 +2986,6 @@ function DiscordLib:Window(text)
 
 				local function SetText(txt)
 					local txt = txt or "..."
-					txt = tostring(txt)
 					CurrentSelectedText.Text = txt
 					flag.Value(txt)
 					Pcall(callback, txt)
