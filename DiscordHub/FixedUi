@@ -2755,6 +2755,7 @@ function DiscordLib:Window(text)
 				local DropFunc = {}
 				local options = (type(options) ~= 'table' and {}) or options
 				local list = options.List or {}
+				local default = options.Default or list[1] or '...'
 				local flag = SaveItem(options.Flag or text,'List')
 				local itemcount = 0
 				local framesize = 0
@@ -2819,7 +2820,7 @@ function DiscordLib:Window(text)
 				CurrentSelectedText.Position = UDim2.new(0.0178571437, 0, 0, 0)
 				CurrentSelectedText.Size = UDim2.new(0, 193, 0, 32)
 				CurrentSelectedText.Font = Enum.Font.Gotham
-				CurrentSelectedText.Text = "..."
+				CurrentSelectedText.Text = default
 				CurrentSelectedText.TextColor3 = Color3.fromRGB(212, 212, 212)
 				CurrentSelectedText.TextSize = 14.000
 				CurrentSelectedText.TextXAlignment = Enum.TextXAlignment.Left
