@@ -2757,7 +2757,7 @@ function DiscordLib:Window(text)
 				local DropFunc = {}
 				local options = (type(options) ~= 'table' and {}) or options
 				local list = options.List or {}
-				local default = options.Default or list[1] or '...'
+				local default = options.Default or '...'
 				local flag = SaveItem(options.Flag or text,'List')
 				local itemcount = 0
 				local framesize = 0
