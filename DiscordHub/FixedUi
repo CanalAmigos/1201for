@@ -3315,7 +3315,7 @@ function DiscordLib:Window(text)
 				local function UpdateColorPicker(nope)
 					PresetClr.BackgroundColor3 = Color3.fromHSV(ColorH, ColorS, ColorV)
 					Color.BackgroundColor3 = Color3.fromHSV(ColorH, 1, 1)
-					flag.Value(PresetClr.BackgroundColor3)
+					flag.Value({Color3.toHSV(PresetClr.BackgroundColor3)})
 					Pcall(callback, PresetClr.BackgroundColor3)
 				end
 
@@ -3325,7 +3325,7 @@ function DiscordLib:Window(text)
 
 				PresetClr.BackgroundColor3 = preset
 				Color.BackgroundColor3 = preset
-				flag.Value(preset)
+				flag.Value({Color3.toHSV(preset)})
 				Pcall(callback, preset)
 
 				Color.InputBegan:Connect(
@@ -3398,6 +3398,7 @@ function DiscordLib:Window(text)
 
 
 				local function SetColor(col)
+					if type(col) == 'table' then col = Color3.fromHSV(col[1],col[2],col[3]) end
 					ColorSelection.Position = UDim2.new(col and select(3, Color3.toHSV(col)))
 					HueSelection.Position = UDim2.new(0.48, 0, 1 - select(1, Color3.toHSV(col)))
 					ColorH = 1 - (math.clamp(HueSelection.AbsolutePosition.Y - Hue.AbsolutePosition.Y, 0, Hue.AbsoluteSize.Y) / Hue.AbsoluteSize.Y)
@@ -3405,7 +3406,7 @@ function DiscordLib:Window(text)
 					ColorV = 1 - (math.clamp(ColorSelection.AbsolutePosition.Y - Color.AbsolutePosition.Y, 0, Color.AbsoluteSize.Y) / Color.AbsoluteSize.Y)
 					PresetClr.BackgroundColor3 = col
 					Color.BackgroundColor3 = col
-					flag.Value(col)
+					flag.Value({Color3.toHSV(col)})
 					Pcall(callback, col)
 				end
 				ColorpickerFunc.SetColor = SetColor
