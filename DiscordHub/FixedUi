@@ -1793,7 +1793,7 @@ function DiscordLib:Window(text)
 						Configs[v.type][i] = v.value
 					end
 				end
-				writefile(('"'..path..'"'),HttpService:JSONEncode(Configs))
+				writefile(path,HttpService:JSONEncode(Configs))
 				return true
 			end) == true
 		end
