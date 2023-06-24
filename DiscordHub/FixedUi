@@ -2337,6 +2337,7 @@ function DiscordLib:Window(text)
 			function ChannelContent:Toggle(text,options,callback)
 				local options = (type(options) ~= 'table' and {}) or options
 				local toggled = options.Default == true
+				local callback = callback or function() end
 				local flag = SaveItem(options.Flag or text,'Toggle')
 				local Toggle = Instance.new("TextButton")
 				local ToggleTitle = Instance.new("TextLabel")
@@ -2745,6 +2746,7 @@ function DiscordLib:Window(text)
 				local options = (type(options) ~= 'table' and {}) or options
 				local list = options.List or {}
 				local default = options.Default or '...'
+				local callback = callback or function() end
 				local flag = SaveItem(options.Flag or text,'List')
 				local itemcount = 0
 				local framesize = 0
@@ -3166,6 +3168,7 @@ function DiscordLib:Window(text)
 				local options = (type(options) ~= 'table' and {}) or options
 				local flag = SaveItem(options.Flag or text,'Color')
 				local preset = options.Default or Color3.new(0, 0, 0)
+				local callback = callback or function() end
 				local OldToggleColor = Color3.fromRGB(0, 0, 0)
 				local OldColor = Color3.fromRGB(0, 0, 0)
 				local OldColorSelectionPosition = nil
@@ -3424,6 +3427,7 @@ function DiscordLib:Window(text)
 				local placetext = options.Text or ''
 				local vanishtext = (options.Vanish == true)
 				local flag = SaveItem(options.Flag or text,'Box')
+				local callback = callback or function() end
 				local Textbox = Instance.new("Frame")
 				local TextboxTitle = Instance.new("TextLabel")
 				local TextboxFrameOutline = Instance.new("Frame")
@@ -3594,6 +3598,7 @@ function DiscordLib:Window(text)
 				local Key = (type(options.Key) == 'string' and options.Key) or (options.Key and options.Key.Name)
 				local lock = options.Lock or false
 				local flag = SaveItem(options.Flag or text,'Bind')
+				local callback = callback or function() end
 				local Keybind = Instance.new("TextButton")
 				local KeybindTitle = Instance.new("TextLabel")
 				local KeybindText = Instance.new("TextLabel")
