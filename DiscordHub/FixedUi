@@ -28,7 +28,7 @@ end
 
 local function SaveItem(flag,type)
 	if flag == 'IgnoreFlag' or tostring(flag):gsub(' ','') == '' then return {['Value']=function() end,['Call']=function() end} end
-	flag = (DiscordLib.Items[flag] and tostring(flag)..'#'..#DiscordLib.Items) or flag
+	flag = (DiscordLib.Items[flag] and tostring(flag)..' #'..#DiscordLib.Items) or flag
 	DiscordLib.Items[flag] = {type=type,value=nil,call=nil}
 	return {['Value'] = function(value)
 		DiscordLib.Items[flag].value = value
@@ -1770,7 +1770,7 @@ function DiscordLib:Window(text)
 	isfile = (isfile)
 	readfile = (readfile)
 
-	function ServerHold:Save(path)
+	function ServerHold:Save(path,others)
 		if type(writefile) == "function" then
 			return pcall(function()
 				local Configs = {}
@@ -1778,6 +1778,16 @@ function DiscordLib:Window(text)
 					if v.value ~= nil then
 						Configs[v.type] = (type(Configs[v.type]) ~= 'table' and {}) or Configs[v.type]
 						Configs[v.type][i] = v.value
+					end
+				end
+				if others and type(others) == 'table' then
+					local n = 0
+					for i,v in pairs(others) do n+=1
+						if v ~= nil then
+							Configs['Others'] = (type(Configs['Others']) ~= 'table' and {}) or Configs['Others']
+							local i = (Configs['Others'][i] ~= nil and i..' #'..n) or i
+							Configs['Others'][i] = v
+						end
 					end
 				end
 				writefile(path,HttpService:JSONEncode(Configs))
@@ -1789,17 +1799,22 @@ function DiscordLib:Window(text)
 	function ServerHold:LoadSave(path)
 		if type(isfile) == "function" and type(readfile) == "function" then
 			if isfile(path) then
-				return pcall(function()
+				local Others = {}
+				return (pcall(function()
 					local decode = HttpService:JSONDecode(readfile(path))
 					for i,v in pairs(decode) do
 						for o,v in pairs(v) do
-							local f = DiscordLib.Items[o]
-							if f then
-								Pcall(f.call,v)
+							if i ~= 'Others' then
+								local f = DiscordLib.Items[o]
+								if f then
+									Pcall(f.call,v)
+								end
+							else
+								Others[o] = v
 							end
 						end
 					end
-				end) == true
+				end) == true), Others
 			end
 		end
 		return false
