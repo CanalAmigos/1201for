@@ -2349,7 +2349,7 @@ function DiscordLib:Window(text)
 			end
 			function ChannelContent:Toggle(text,options,callback)
 				local options = (type(options) ~= 'table' and {}) or options
-				local toggled = options.Default == true
+				local toggled = options.Default == true or options.default == true
 				local callback = callback or function() end
 				local flag = SaveItem(options.Flag or text,'Toggle')
 				local Toggle = Instance.new("TextButton")
@@ -2529,12 +2529,12 @@ function DiscordLib:Window(text)
 				local text = text or ""
 				local options = (type(options) ~= 'table' and {}) or options
 				local flag = SaveItem(options.Flag or text,'Slider')
-				local min = options.min or options.Start or 0
-				local max = options.max or options.Start or 0
-				local start = options.Start or min or 0
-				local precise = options.Precise or false
+				local min = (options.min or options.Min) or (options.Start or options.start) or 0
+				local max = (options.max or options.Max) or (options.Start or options.start) or 0
+				local start = (options.Start or options.start) or min
+				local precise = (options.Precise or options.precise) or false
 				local callback = callback or function() end
-				local Simbol = options.Simbol or ""
+				local Simbol = (options.Simbol or options.simbol) or ""
 				local GlobalSliderValue = 0
 				local Dragging = false
 				local SliderFunc = {}
@@ -2757,8 +2757,8 @@ function DiscordLib:Window(text)
 			function ChannelContent:Dropdown(text, options, callback)
 				local DropFunc = {}
 				local options = (type(options) ~= 'table' and {}) or options
-				local list = options.List or {}
-				local default = options.Default or '...'
+				local list = (options.List or options.list) or {}
+				local default = (options.Default or options.default) or '...'
 				local callback = callback or function() end
 				local flag = SaveItem(options.Flag or text,'List')
 				local itemcount = 0
@@ -3180,7 +3180,7 @@ function DiscordLib:Window(text)
 			function ChannelContent:Colorpicker(text, options, callback)
 				local options = (type(options) ~= 'table' and {}) or options
 				local flag = SaveItem(options.Flag or text,'Color')
-				local preset = options.Default or Color3.new(0, 0, 0)
+				local preset = (options.Default or options.default) or Color3.new(0, 0, 0)
 				local callback = callback or function() end
 				local OldToggleColor = Color3.fromRGB(0, 0, 0)
 				local OldColor = Color3.fromRGB(0, 0, 0)
@@ -3437,8 +3437,8 @@ function DiscordLib:Window(text)
 
 			function ChannelContent:Textbox(text, options, callback)
 				local options = (type(options) ~= 'table' and {}) or options
-				local placetext = options.Text or ''
-				local vanishtext = (options.Vanish == true)
+				local placetext = (options.Text or options.text) or ''
+				local vanishtext = (options.Vanish or options.vanish) == true
 				local flag = SaveItem(options.Flag or text,'Box')
 				local callback = callback or function() end
 				local Textbox = Instance.new("Frame")
@@ -3608,8 +3608,8 @@ function DiscordLib:Window(text)
 
 			function ChannelContent:Bind(text, options, callback)
 				local options = (type(options) ~= 'table' and {}) or options
-				local Key = (type(options.Key) == 'string' and options.Key) or (options.Key and options.Key.Name)
-				local lock = options.Lock or false
+				local Key = (type(options.Key) == 'string' and options.Key) or (options.Key and options.Key.Name) or (type(options.key) == 'string' and options.key) or (options.key and options.key.Name)
+				local lock = (options.Lock or options.lock) or false
 				local flag = SaveItem(options.Flag or text,'Bind')
 				local callback = callback or function() end
 				local Keybind = Instance.new("TextButton")
@@ -3675,7 +3675,7 @@ function DiscordLib:Window(text)
 					if Discord == nil then KeyDown:Disconnect(); return end
 					if not pressed and not KeybindChanging then
 						if current.KeyCode.Name == Key then
-							Pcall(callback)
+							Pcall(callback,Enum.KeyCode[Key])
 						end
 					end
 				end)
