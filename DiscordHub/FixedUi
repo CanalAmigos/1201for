@@ -112,9 +112,18 @@ local Discord = Instance.new("ScreenGui")
 Discord.Name = "Discord"
 Discord.Parent = game.CoreGui
 Discord.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+local MaxSizeFrame = Instance.new("Frame")
+MaxSizeFrame.Parent = Discord
+MaxSizeFrame.Size = UDim2.new(1,0,1,0)
+local MaxSizeScreen = MaxSizeFrame.AbsolutePosition
+MaxSizeFrame:Destroy()
 
 function DiscordLib:GetGui()
 	return Discord
+end
+
+function DiscordLib:GetScreenSize()
+	return MaxSizeScreen
 end
 
 function Pcall(func,...)
@@ -2938,11 +2947,14 @@ function DiscordLib:Window(text)
 					DropTog = not DropTog
 				end)
 
-
+				if #list < 1 then framesize = 0; end
 				for i,v in next, list do
-					if #list == 0 then break end
-					itemcount = itemcount + 1	
-					framesize = 29*itemcount
+					itemcount = itemcount + 1
+					if itemcount >= 4 then
+						framesize = 29*4
+					else
+						framesize = 29*itemcount
+					end
 
 					local Item = Instance.new("TextButton")
 					local ItemCorner = Instance.new("UICorner")
@@ -3053,10 +3065,15 @@ function DiscordLib:Window(text)
 
 				function DropFunc:Refresh(list)
 					DropFunc:Clear(true)
+					local list = list or {}
+					if #list < 1 then framesize = 0; end
 					for i,v in next, list do
 						itemcount = itemcount + 1
-
-						framesize = 29*itemcount
+						if itemcount >= 4 then
+							framesize = 29*4
+						else
+							framesize = 29*itemcount
+						end
 
 						local Item = Instance.new("TextButton")
 						local ItemCorner = Instance.new("UICorner")
@@ -3117,8 +3134,13 @@ function DiscordLib:Window(text)
 				end
 
 				function DropFunc:Add(textadd)
+					if not textadd or tostring(textadd):gsub(' ','') == '' then framesize = 0; return end
 					itemcount = itemcount + 1
-					framesize = 29*itemcount
+					if itemcount >= 4 then
+						framesize = 29*4
+					else
+						framesize = 29*itemcount
+					end
 
 					local Item = Instance.new("TextButton")
 					local ItemCorner = Instance.new("UICorner")
