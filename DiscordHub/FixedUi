@@ -115,7 +115,7 @@ Discord.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 local MaxSizeFrame = Instance.new("Frame")
 MaxSizeFrame.Parent = Discord
 MaxSizeFrame.Size = UDim2.new(1,0,1,0)
-local MaxSizeScreen = MaxSizeFrame.AbsolutePosition
+local MaxSizeScreen = MaxSizeFrame.AbsoluteSize
 MaxSizeFrame:Destroy()
 
 function DiscordLib:GetGui()
