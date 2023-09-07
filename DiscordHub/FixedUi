@@ -26,12 +26,12 @@ local function SaveInfo()
 	writefile("discordlibinfo.txt", HttpService:JSONEncode(userinfo));
 end
 
-local function FindNumber(flag)
+local function FindNumber(flag,type)
 	local count = 0
 	if DiscordLib.Items[flag] then
-		for i,_ in pairs(DiscordLib.Items) do
+		for i,v in pairs(DiscordLib.Items) do
 			local i = tostring(i)
-			if i == flag or string.gsub(tostring(i),'%d+','') == tostring(flag)..' #' then
+			if (i == flag or string.gsub(tostring(i),'%d+','') == tostring(flag)..' #') and v.type == type then
 				count += 1
 			end
 		end
@@ -40,10 +40,10 @@ local function FindNumber(flag)
 	return flag
 end
 
-local function SaveItem(flag,type)
-	if flag == 'IgnoreFlag' or tostring(flag):gsub(' ','') == '' then return {['Value']=function() end,['Call']=function() end} end
+local function SaveItem(flag,Type)
+	if type(flag) ~= 'string' or flag == 'IgnoreFlag' or tostring(flag):gsub(' ','') == '' then return {['Value']=function() end,['Call']=function() end} end
 	flag = FindNumber(flag)
-	DiscordLib.Items[flag] = {type=type,value=nil,call=nil}
+	DiscordLib.Items[flag] = {type=Type,value=nil,call=nil}
 	return {['Value'] = function(value)
 		DiscordLib.Items[flag].value = value
 	end,
