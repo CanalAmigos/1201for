@@ -2925,6 +2925,7 @@ function DiscordLib:Window(text)
 				DropItemHolder.CanvasSize = UDim2.new(0, 0, 0, 0)
 				DropItemHolder.AutomaticCanvasSize = Enum.AutomaticSize.Y
 				DropItemHolder.BorderSizePixel = 0
+				DropItemHolder.ScrollBarThickness = 6
 				DropItemHolder.ScrollBarImageColor3 = Color3.fromRGB(28, 29, 32)
 
 				DropItemHolderLayout.Name = "ItemHolderLayout"
