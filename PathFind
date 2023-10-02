@@ -12,17 +12,15 @@ Module['PathFind'] = function(target: Vector3)
 		AgentCanClimb = true
 	})
 	path:ComputeAsync(Root.Position, target)
-	if path.Status == Enum.PathStatus.Success then
-		local waypoints = path:GetWaypoints()
-		for i, waypoint in ipairs(waypoints) do
-			if not Humanoid then break end
-			Humanoid:MoveTo(waypoint.Position)
-			repeat RunService.Stepped:Wait() until not Humanoid or Humanoid.MoveDirection ~= Vector3.zero
-			repeat RunService.Stepped:Wait() until not Humanoid or Humanoid.MoveDirection == Vector3.zero
-			if not Humanoid then break end
-			if waypoint.Action == Enum.PathWaypointAction.Jump then
-				Humanoid.Jump = true
-			end
+	local waypoints = path:GetWaypoints()
+	for i, waypoint in ipairs(waypoints) do
+		if not Humanoid then break end
+		Humanoid:MoveTo(waypoint.Position)
+		repeat RunService.Stepped:Wait() until not Humanoid or Humanoid.MoveDirection ~= Vector3.zero
+		repeat RunService.Stepped:Wait() until not Humanoid or Humanoid.MoveDirection == Vector3.zero
+		if not Humanoid then break end
+		if waypoint.Action == Enum.PathWaypointAction.Jump then
+			Humanoid.Jump = true
 		end
 	end
 end
