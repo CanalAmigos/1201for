@@ -8,14 +8,17 @@ Module['PathFind'] = function(target: Vector3)
 	local Root = lp.Character:FindFirstChild("HumanoidRootPart")
 	local path = PathfindingService:CreatePath({
 		AgentCanJump = true,
-		WaypointSpacing = 1
+		WaypointSpacing = 1,
+		AgentCanClimb = true
 	})
+	if path.Status == Enum.PathStatus.NoPath then return end
 	path:ComputeAsync(Root.Position, target)
 	local waypoints = path:GetWaypoints()
 	for i, waypoint in ipairs(waypoints) do
 		if not Humanoid then break end
 		Humanoid:MoveTo(waypoint.Position)
-		repeat RunService.Stepped:Wait() until not Humanoid or Humanoid.MoveDirection == Vector3.zero
+		repeat RunService.Stepped:Wait() until not Humanoid or Humanoid.MoveDirection ~= Vector3.new(0,0,0)
+		repeat RunService.Stepped:Wait() until not Humanoid or Humanoid.MoveDirection == Vector3.new(0,0,0)
 		if not Humanoid then break end
 		if waypoint.Action == Enum.PathWaypointAction.Jump then
 			Humanoid.Jump = true
