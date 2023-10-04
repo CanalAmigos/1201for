@@ -8,8 +8,7 @@ Module['PathFind'] = function(target: Vector3)
 	local Root = lp.Character:FindFirstChild("HumanoidRootPart")
 	local path = PathfindingService:CreatePath({
 		AgentCanJump = true,
-		WaypointSpacing = 1,
-		AgentCanClimb = true
+		WaypointSpacing = 1
 	})
 	path:ComputeAsync(Root.Position, target)
 	if path.Status == Enum.PathStatus.Success then
