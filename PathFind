@@ -6,24 +6,42 @@ Module['PathFind'] = function(target: Vector3)
 	local lp = game:GetService('Players').LocalPlayer
 	local Humanoid = lp.Character.Humanoid
 	local Root = lp.Character:FindFirstChild("HumanoidRootPart")
+	local TakeControl = require(lp.PlayerScript:WaitForChild('PlayerModule')):GetControls()
+	local PathBlocked = false
+	local CurrentWaypoint = 0
 	local path = PathfindingService:CreatePath({
 		AgentCanJump = true,
 		WaypointSpacing = 1
 	})
-	path:ComputeAsync(Root.Position, target)
-	if path.Status == Enum.PathStatus.Success then
-		local waypoints = path:GetWaypoints()
-		for i, waypoint in ipairs(waypoints) do
-			if Humanoid == nil then break end
-			Humanoid:MoveTo(waypoint.Position)
-			repeat RunService.Stepped:Wait() until Humanoid == nil or Humanoid.MoveDirection ~= Vector3.zero
-			repeat RunService.Stepped:Wait() until Humanoid == nil or Humanoid.MoveDirection == Vector3.zero
-			if Humanoid == nil then break end
-			if waypoint.Action == Enum.PathWaypointAction.Jump then
-				Humanoid.Jump = true
+	TakeControl:Disable()
+	local function Compute(waypoint)
+		if waypoint > CurrentWaypoint then
+			path:ComputeAsync(Root.Position, target)
+			if path.Status == Enum.PathStatus.Success then
+				PathBlocked = false
+				pcall(function()
+					local waypoints = path:GetWaypoints()
+					for i, waypoint in ipairs(waypoints) do
+						CurrentWaypoint = i
+						if Humanoid == nil then break end
+						Humanoid:MoveTo(waypoint.Position)
+						Humanoid.MoveToFinished:Wait()
+						if Humanoid == nil then break end
+						if PathBlocked then PathBlocked = false; Compute(i); break end
+						if waypoint.Action == Enum.PathWaypointAction.Jump then
+							Humanoid.Jump = true
+						end
+					end
+				end)
 			end
 		end
 	end
+	local Block = path.Blocked:Connect(function()
+		PathBlocked = true
+	end)
+	Compute(1)
+	TakeControl:Enable()
+	Block:Disconnect()
 end
 
 return Module
