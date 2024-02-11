@@ -669,7 +669,14 @@ local defaults = nil; do
 			local mouseUpConnection;
 			local mouseEnter;
 			
-			pcall(function()
+			local function disconnect()
+				if renderSteppedConnection then renderSteppedConnection:disconnect() end
+				if inputBeganConnection then inputBeganConnection:disconnect() end
+				if inputEndedConnection then inputEndedConnection:disconnect() end
+				if mouseUpConnection then mouseUpConnection:disconnect() end
+			end
+
+			check:FindFirstChild(name).Container.MouseEnter:connect(function()
 				local function update()
 					if mouseEnter then
 						if renderSteppedConnection then renderSteppedConnection:disconnect() end 
@@ -691,13 +698,6 @@ local defaults = nil; do
 					end
 				end
 
-				local function disconnect()
-					if renderSteppedConnection then renderSteppedConnection:disconnect() end
-					if inputBeganConnection then inputBeganConnection:disconnect() end
-					if inputEndedConnection then inputEndedConnection:disconnect() end
-					if mouseUpConnection then mouseUpConnection:disconnect() end
-				end
-
 				inputBeganConnection = check:FindFirstChild(name).Container.InputBegan:connect(function(input)
 					if input.UserInputType == Enum.UserInputType.MouseButton1 then
 						update()
@@ -716,14 +716,11 @@ local defaults = nil; do
 						disconnect()
 					end
 				end)
-			end)
-
-			check:FindFirstChild(name).Container.MouseEnter:connect(function()
 				mouseEnter = true
 			end) 
 			check:FindFirstChild(name).Container.MouseLeave:connect(function()
 				mouseEnter = false
-				if renderSteppedConnection then renderSteppedConnection:disconnect() end 
+				disconnect()
 			end)
 
 			if default ~= min then
