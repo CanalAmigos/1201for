@@ -667,27 +667,28 @@ local defaults = nil; do
 			local inputEndedConnection;
 			local mouseDownConnection;
 			local mouseUpConnection;
-
-			check:FindFirstChild(name).Container.MouseEnter:connect(function()
+			local mouseEnter;
+			
+			pcall(function()
 				local function update()
-					if renderSteppedConnection then renderSteppedConnection:disconnect() end 
+					if mouseEnter then
+						if renderSteppedConnection then renderSteppedConnection:disconnect() end 
+						renderSteppedConnection = game:GetService('RunService').RenderStepped:connect(function()
+							local mouse = game:GetService("UserInputService"):GetMouseLocation()
+							local percent = math.clamp((mouse.X - overlay.Container.AbsolutePosition.X) / (overlay.Container.AbsoluteSize.X),0,1)
 
+							overlay.Container.Button.Position = UDim2.new(math.clamp(percent, 0, 0.99), 0, 0, 1)
 
-					renderSteppedConnection = game:GetService('RunService').RenderStepped:connect(function()
-						local mouse = game:GetService("UserInputService"):GetMouseLocation()
-						local percent = math.clamp((mouse.X - overlay.Container.AbsolutePosition.X) / (overlay.Container.AbsoluteSize.X),0,1)
+							local SliderPrecise = ((percent * max) / max) * (max - min) + min
+							local SliderNonPrecise = math.floor(SliderPrecise)
+							local SliderValue = precise and SliderNonPrecise or SliderPrecise
+							local value = tonumber(string.format("%.1f", tostring(SliderValue)))
 
-						overlay.Container.Button.Position = UDim2.new(math.clamp(percent, 0, 0.99), 0, 0, 1)
-						
-						local SliderPrecise = ((percent * max) / max) * (max - min) + min
-						local SliderNonPrecise = math.floor(SliderPrecise)
-						local SliderValue = precise and SliderNonPrecise or SliderPrecise
-						local value = tonumber(string.format("%.1f", tostring(SliderValue)))
-
-						overlay.Container.ValueLabel.Text = value;
-						self:FireCallBack(callback,tonumber(value))
-						location[flag] = tonumber(value)
-					end)
+							overlay.Container.ValueLabel.Text = value;
+							self:FireCallBack(callback,tonumber(value))
+							location[flag] = tonumber(value)
+						end)
+					end
 				end
 
 				local function disconnect()
@@ -715,7 +716,15 @@ local defaults = nil; do
 						disconnect()
 					end
 				end)
+			end)
+
+			check:FindFirstChild(name).Container.MouseEnter:connect(function()
+				mouseEnter = true
 			end) 
+			check:FindFirstChild(name).Container.MouseLeave:connect(function()
+				mouseEnter = false
+				if renderSteppedConnection then renderSteppedConnection:disconnect() end 
+			end)
 
 			if default ~= min then
 				local percent = 1 - ((max - default) / (max - min))
