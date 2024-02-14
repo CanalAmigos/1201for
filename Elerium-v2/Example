@@ -1,3 +1,5 @@
+-- This library is not mine ok?
+
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/CanalAmigos/1201for/main/Elerium-v2/Library"))()
 
 local window = library:AddWindow("SkyWars GUI thing", {
