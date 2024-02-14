@@ -10,6 +10,7 @@ local ui_options = {
 	toggle_key = Enum.KeyCode.RightShift,
 	can_resize = false,
 }
+ui_options.__index = ui_options
 
 do
 	local imgui = game:GetService("CoreGui"):FindFirstChild("imgui")
@@ -953,7 +954,8 @@ function library:AddWindow(title, options)
 	windows = windows + 1
 	local dropdown_open = false
 	title = tostring(title or "New Window")
-	options = (typeof(options) == "table" and setmetatable(options,ui_options)) or ui_options
+	options = (typeof(options) ~= "table" and ui_options) or options
+	setmetatable(options,ui_options)
 	options.tween_time = 0.1
 
 	local Window = Prefabs:FindFirstChild("Window"):Clone()
