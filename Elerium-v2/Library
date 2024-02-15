@@ -1354,21 +1354,33 @@ function library:AddWindow(title, options)
 								end
 							end)
 
-							function slider_data:Set(new_value)
-								new_value = tonumber(new_value) or 0
-								new_value = (((new_value >= 0 and new_value <= 100) and new_value) / 100)
+							function slider_data:Set(x)
+								if tonumber(x) then
+									local x = tonumber(x)/slider_options.max
+									local min = 0
+									local max = 1
 
-								Resize(indicator, {Size = UDim2.new(new_value or 0, 0, 0, 20)}, options.tween_time)
-								local p = math.floor((new_value or 0) * 100)
+									local size = min
+									if x >= min and x <= max then
+										size = x
+									elseif x < min then
+										size = min
+									elseif x > max then
+										size = max
+									end
 
-								local maxv = slider_options.max
-								local minv = slider_options.min
-								local diff = maxv - minv
+									Resize(indicator, {Size = UDim2.new(size or min, 0, 0, 20)}, options.tween_time)
+									local p = math.floor((size or min) * 100)
 
-								sel_value = math.floor(((diff / 100) * p) + minv)
+									local maxv = slider_options.max
+									local minv = slider_options.min
+									local diff = maxv - minv
 
-								value.Text = tostring(sel_value)
-								pcall(callback, sel_value)
+									sel_value = math.floor(((diff / 100) * p) + minv)
+
+									value.Text = tostring(sel_value)
+									pcall(callback, sel_value)
+								end
 							end
 
 							slider_data:Set(slider_options["min"])
