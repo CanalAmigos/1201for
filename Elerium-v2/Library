@@ -10,7 +10,6 @@ local ui_options = {
 	toggle_key = Enum.KeyCode.RightShift,
 	can_resize = false,
 }
-ui_options.__index = ui_options
 
 do
 	local imgui = game:GetService("CoreGui"):FindFirstChild("imgui")
@@ -39,7 +38,7 @@ local TextBox_Roundify_4px = Instance.new("ImageLabel")
 local Slider = Instance.new("ImageLabel")
 local Title_2 = Instance.new("TextLabel")
 local Indicator = Instance.new("ImageLabel")
-local Value = Instance.new("TextLabel")
+local Value = Instance.new("TextBox")
 local TextLabel = Instance.new("TextLabel")
 local TextLabel_2 = Instance.new("TextLabel")
 local Circle = Instance.new("ImageLabel")
@@ -300,6 +299,8 @@ Value.Font = Enum.Font.GothamBold
 Value.Text = "0%"
 Value.TextColor3 = Color3.new(0.784314, 0.784314, 0.784314)
 Value.TextSize = 14
+Value.ClearTextOnFocus = false
+Value.PlaceholderText = ''
 
 TextLabel.Parent = Slider
 TextLabel.BackgroundColor3 = Color3.new(1, 1, 1)
@@ -955,7 +956,7 @@ function library:AddWindow(title, options)
 	local dropdown_open = false
 	title = tostring(title or "New Window")
 	options = (typeof(options) ~= "table" and ui_options) or options
-	setmetatable(options,ui_options)
+	setmetatable(options,{__index=ui_options})
 	options.tween_time = 0.1
 
 	local Window = Prefabs:FindFirstChild("Window"):Clone()
@@ -1269,6 +1270,7 @@ function library:AddWindow(title, options)
 							["max"] = slider_options.max or 100,
 							["readonly"] = slider_options.readonly or false,
 						}
+						local sel_value = ''
 
 						local slider = Prefabs:FindFirstChild("Slider"):Clone()
 
@@ -1325,7 +1327,7 @@ function library:AddWindow(title, options)
 												local minv = slider_options.min
 												local diff = maxv - minv
 
-												local sel_value = math.floor(((diff / 100) * p) + minv)
+												sel_value = math.floor(((diff / 100) * p) + minv)
 
 												value.Text = tostring(sel_value)
 												pcall(callback, sel_value)
@@ -1341,6 +1343,16 @@ function library:AddWindow(title, options)
 									Held = false
 								end
 							end)
+							value.FocusLost:Connect(function(a)
+								if a and not slider_options.readonly then
+									local num = tonumber(value.Text)
+									if num then
+										slider_data:Set(num)
+									else
+										value.Text = tostring(sel_value)
+									end
+								end
+							end)
 
 							function slider_data:Set(new_value)
 								new_value = tonumber(new_value) or 0
@@ -1353,7 +1365,7 @@ function library:AddWindow(title, options)
 								local minv = slider_options.min
 								local diff = maxv - minv
 
-								local sel_value = math.floor(((diff / 100) * p) + minv)
+								sel_value = math.floor(((diff / 100) * p) + minv)
 
 								value.Text = tostring(sel_value)
 								pcall(callback, sel_value)
