@@ -1265,12 +1265,14 @@ function library:AddWindow(title, options)
 						slider_text = tostring(slider_text or "New Slider")
 						callback = typeof(callback) == "function" and callback or function()end
 						slider_options = typeof(slider_options) == "table" and slider_options or {}
-						slider_options = {
+						local a_t = {
 							["min"] = slider_options.min or 0,
 							["max"] = slider_options.max or 100,
 							["readonly"] = slider_options.readonly or false,
+							['symbol'] = '',
+							['precise'] = true
 						}
-						local sel_value = ''
+						setmetatable(slider_options,{__index=a_t})
 
 						local slider = Prefabs:FindFirstChild("Slider"):Clone()
 
@@ -1287,100 +1289,59 @@ function library:AddWindow(title, options)
 						title.Text = slider_text
 
 						do -- Slider Math
-							local Entered = false
-							slider.MouseEnter:Connect(function()
-								Entered = true
-								Window.Draggable = false
-							end)
-							slider.MouseLeave:Connect(function()
-								Entered = false
-								Window.Draggable = true
-							end)
+							local GlobalSliderValue = 0
+							local Dragging = false
+							local function Sliding(Input)
+								local Position = UDim2.new(math.clamp((Input.Position.X - slider.AbsolutePosition.X) / slider.AbsoluteSize.X,0,1),0,0,20)
+								Resize(indicator, {Size = Position}, options.tween_time)
+								local SliderPrecise = ((Position.X.Scale * slider_options.max) / slider_options.max) * (slider_options.max - slider_options.min) + slider_options.min
+								local SliderNonPrecise = math.floor(((Position.X.Scale * slider_options.max) / slider_options.max) * (slider_options.max - slider_options.min) + slider_options.min)
+								local SliderValue = slider_options.precise and SliderNonPrecise or SliderPrecise
+								SliderValue = tonumber(string.format("%.2f", SliderValue))
+								GlobalSliderValue = SliderValue
+								value.Text = tostring(SliderValue)..slider_options.symbol
+								pcall(callback, Value)
+							end
+							local function SetValue(Value)
+								GlobalSliderValue = Value
+								local def = math.clamp(Value, slider_options.min, slider_options.max)
+								local Porcentage = (def - slider_options.min) / (slider_options.max - slider_options.min)
+								Resize(indicator, {Size = UDim2.new(Porcentage, 0, 0, 20)}, options.tween_time)
+								value.Text = Value
+								pcall(callback, Value)
+							end
 
-							local Held = false
-							UIS.InputBegan:Connect(function(inputObject)
-								if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
-									Held = true
-
-									spawn(function() -- Loop check
-										if Entered and not slider_options.readonly then
-											while Held and (not dropdown_open) do
-												local mouse_location = gMouse()
-												local x = (slider.AbsoluteSize.X - (slider.AbsoluteSize.X - ((mouse_location.X - slider.AbsolutePosition.X)) + 1)) / slider.AbsoluteSize.X
-
-												local min = 0
-												local max = 1
-
-												local size = min
-												if x >= min and x <= max then
-													size = x
-												elseif x < min then
-													size = min
-												elseif x > max then
-													size = max
-												end
-
-												Resize(indicator, {Size = UDim2.new(size or min, 0, 0, 20)}, options.tween_time)
-												local p = math.floor((size or min) * 100)
-
-												local maxv = slider_options.max
-												local minv = slider_options.min
-												local diff = maxv - minv
-
-												sel_value = math.floor(((diff / 100) * p) + minv)
-
-												value.Text = tostring(sel_value)
-												pcall(callback, sel_value)
-
-												RS.Heartbeat:Wait()
-											end
-										end
-									end)
+							slider.InputBegan:Connect(function(inputObject)
+								if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+									Sliding(Input)
+									Dragging = true
+									Window.Draggable = false
 								end
 							end)
-							UIS.InputEnded:Connect(function(inputObject)
-								if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
-									Held = false
+							slider.InputEnded:Connect(function(inputObject)
+								if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+									Dragging = false
+									Window.Draggable = true
+								end
+							end)
+							UIS.InputChanged:Connect(function(Input)
+								if Dragging and Input.UserInputType == Enum.UserInputType.MouseMovement then
+									Sliding(Input)
 								end
 							end)
 							value.FocusLost:Connect(function(a)
 								if a and not slider_options.readonly then
 									local num = tonumber(value.Text)
 									if num then
-										slider_data:Set(num)
+										SetValue(num)
 									else
-										value.Text = tostring(sel_value)
+										value.Text = tostring(GlobalSliderValue)
 									end
 								end
 							end)
 
 							function slider_data:Set(x)
-								if tonumber(x) then
-									local x = tonumber(x)/slider_options.max
-									local min = 0
-									local max = 1
-
-									local size = min
-									if x >= min and x <= max then
-										size = x
-									elseif x < min then
-										size = min
-									elseif x > max then
-										size = max
-									end
-
-									Resize(indicator, {Size = UDim2.new(size or min, 0, 0, 20)}, options.tween_time)
-									local p = math.floor((size or min) * 100)
-
-									local maxv = slider_options.max
-									local minv = slider_options.min
-									local diff = maxv - minv
-
-									sel_value = math.floor(((diff / 100) * p) + minv)
-
-									value.Text = tostring(sel_value)
-									pcall(callback, sel_value)
-								end
+								SetValue(x)
 							end
 
 							slider_data:Set(slider_options["min"])
