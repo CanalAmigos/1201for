@@ -889,9 +889,8 @@ local function hasprop(object, prop)
 end
 
 local function gTlower(t,i: string) -- Insert or insert, it will return :)
-	local a = i:sub(2)
-	local b = i:sub(1,1)
-	return t[i] or t[(b:upper())..a]
+	local a,b = i:sub(2),i:sub(1,1)
+	return t[i] or t[(b:upper())..a] -- Example: table['hello'], table['Hello']
 end
 
 local function gNameLen(obj)
@@ -1271,15 +1270,15 @@ function library:AddWindow(title, options)
 						slider_text = tostring(slider_text or "New Slider")
 						callback = typeof(callback) == "function" and callback or function()end
 						slider_options = typeof(slider_options) == "table" and slider_options or {}
-						local a_t = {
-							["min"] = slider_options.min or 0,
-							["max"] = slider_options.max or 100,
-							['default'] = slider_options.default,
-							["readonly"] = slider_options.readonly or false,
-							['symbol'] = '',
-							['precise'] = true
+						slider_options.__index = {
+							["min"] = gTlower(slider_options,'min') or 0,
+							["max"] = gTlower(slider_options,'max') or 100,
+							--['default'] = gTlower(slider_options,'default') or 0,
+							["readonly"] = gTlower(slider_options,'readonly') or false,
+							['symbol'] = gTlower(slider_options,'symbol') or '',
+							['precise'] = gTlower(slider_options,'precise') or true
 						}
-						setmetatable(slider_options,{__index=a_t})
+						slider_options.default = gTlower(slider_options,'default') or slider_options.min or 0
 
 						local slider = Prefabs:FindFirstChild("Slider"):Clone()
 
@@ -1292,6 +1291,7 @@ function library:AddWindow(title, options)
 						title.ZIndex = title.ZIndex + (windows * 10)
 						indicator.ZIndex = indicator.ZIndex + (windows * 10)
 						value.ZIndex = value.ZIndex + (windows * 10)
+						value.Text = slider_options.default..slider_options.symbol
 
 						title.Text = slider_text
 
@@ -1351,7 +1351,7 @@ function library:AddWindow(title, options)
 								SetValue(x)
 							end
 
-							slider_data:Set(slider_options["min"])
+							slider_data:Set(slider_options["default"])
 						end
 
 						return slider_data, slider
@@ -1363,7 +1363,7 @@ function library:AddWindow(title, options)
 						keybind_name = tostring(keybind_name or "New Keybind")
 						callback = typeof(callback) == "function" and callback or function()end
 						keybind_options = typeof(keybind_options) == "table" and keybind_options or {}
-						keybind_options = {
+						keybind_options.__index = {
 							["standard"] = gTlower(keybind_options,'standard') or Enum.KeyCode.RightShift,
 						}
 
@@ -1422,10 +1422,14 @@ function library:AddWindow(title, options)
 						return keybind_data, keybind
 					end
 
-					function tab_data:AddDropdown(dropdown_name, callback)
+					function tab_data:AddDropdown(dropdown_name, callback, dropdown_options)
 						local dropdown_data = {}
 						dropdown_name = tostring(dropdown_name or "New Dropdown")
 						callback = typeof(callback) == "function" and callback or function()end
+						dropdown_options = type(dropdown_options) == 'table' and dropdown_options or {}
+						dropdown_options.__index = {
+							['list'] = gTlower(dropdown_options,'list') or {}
+						}
 
 						local dropdown = Prefabs:FindFirstChild("Dropdown"):Clone()
 						local box = dropdown:FindFirstChild("Box")
@@ -1507,6 +1511,17 @@ function library:AddWindow(title, options)
 
 							return object, object_data
 						end
+						
+						function dropdown_data:AddList(n)
+							local objects_data = {}
+							n = (type(n) == 'table' and n) or {}
+							for i,v in pairs(n) do
+								objects_data[i] = dropdown_data:Add(v)
+							end
+							return objects_data
+						end
+						
+						dropdown_data:AddList(dropdown_options.list)
 
 						return dropdown_data, dropdown
 					end
