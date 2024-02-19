@@ -1270,14 +1270,14 @@ function library:AddWindow(title, options)
 						slider_text = tostring(slider_text or "New Slider")
 						callback = typeof(callback) == "function" and callback or function()end
 						slider_options = typeof(slider_options) == "table" and slider_options or {}
-						slider_options.__index = {
+						setmetatable(slider_options,{__index={
 							["min"] = gTlower(slider_options,'min') or 0,
 							["max"] = gTlower(slider_options,'max') or 100,
 							--['default'] = gTlower(slider_options,'default') or 0,
 							["readonly"] = gTlower(slider_options,'readonly') or false,
 							['symbol'] = gTlower(slider_options,'symbol') or '',
 							['precise'] = gTlower(slider_options,'precise') or true
-						}
+						}})
 						slider_options.default = gTlower(slider_options,'default') or slider_options.min or 0
 
 						local slider = Prefabs:FindFirstChild("Slider"):Clone()
@@ -1363,9 +1363,9 @@ function library:AddWindow(title, options)
 						keybind_name = tostring(keybind_name or "New Keybind")
 						callback = typeof(callback) == "function" and callback or function()end
 						keybind_options = typeof(keybind_options) == "table" and keybind_options or {}
-						keybind_options.__index = {
+						setmetatable(keybind_options,{__index={
 							["standard"] = gTlower(keybind_options,'standard') or Enum.KeyCode.RightShift,
-						}
+						}})
 
 						local keybind = Prefabs:FindFirstChild("Keybind"):Clone()
 						local input = keybind:FindFirstChild("Input")
@@ -1427,9 +1427,9 @@ function library:AddWindow(title, options)
 						dropdown_name = tostring(dropdown_name or "New Dropdown")
 						callback = typeof(callback) == "function" and callback or function()end
 						dropdown_options = type(dropdown_options) == 'table' and dropdown_options or {}
-						dropdown_options.__index = {
+						setmetatable(dropdown_options,{__index={
 							['list'] = gTlower(dropdown_options,'list') or {}
-						}
+						}})
 
 						local dropdown = Prefabs:FindFirstChild("Dropdown"):Clone()
 						local box = dropdown:FindFirstChild("Box")
