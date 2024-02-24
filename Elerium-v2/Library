@@ -114,7 +114,7 @@ Window.Parent = Prefabs
 Window.Active = true
 Window.BackgroundColor3 = Color3.new(1, 1, 1)
 Window.BackgroundTransparency = 1
-Window.ClipsDescendants = false
+Window.ClipsDescendants = true
 Window.Position = UDim2.new(0, 20, 0, 20)
 Window.Selectable = true
 Window.Size = UDim2.new(0, 200, 0, 200)
@@ -179,6 +179,7 @@ Tabs.Position = UDim2.new(0, 15, 0, 60)
 Tabs.Size = UDim2.new(1, -30, 1, -60)
 Tabs.AutomaticCanvasSize = Enum.AutomaticSize.Y
 Tabs.CanvasSize = UDim2.new(0,0,0,0)
+Tabs.ClipsDescendants = false
 
 Title.Name = "Title"
 Title.Parent = Window
