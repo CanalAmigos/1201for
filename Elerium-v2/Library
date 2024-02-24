@@ -1446,7 +1446,7 @@ function library:AddWindow(title, options)
 						local indicator = dropdown:FindFirstChild("Indicator")
 						dropdown.ZIndex = dropdown.ZIndex + (windows * 10)
 						box.ZIndex = box.ZIndex + (windows * 10)
-						objects.ZIndex = objects.ZIndex + (windows * 10)
+						objects.ZIndex = objects.ZIndex + (windows * 10) + 5
 						indicator.ZIndex = indicator.ZIndex + (windows * 10)
 						dropdown:GetChildren()[3].ZIndex = dropdown:GetChildren()[3].ZIndex + (windows * 10)
 
@@ -1485,7 +1485,7 @@ function library:AddWindow(title, options)
 
 							object.Parent = objects
 							object.Text = n
-							object.ZIndex = object.ZIndex + (windows * 10)
+							object.ZIndex = object.ZIndex + (windows * 10) + 5
 
 							object.MouseEnter:Connect(function()
 								object.BackgroundColor3 = options.main_color
