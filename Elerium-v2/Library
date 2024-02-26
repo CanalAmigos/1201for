@@ -340,10 +340,11 @@ UIListLayout_3.FillDirection = Enum.FillDirection.Horizontal
 UIListLayout_3.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout_3.Padding = UDim.new(0, 20)
 
-DropFrame.Size = UDim2.fromOffset(200,175)
+DropFrame.Size = UDim2.new(0, 200, 0, 20)
 DropFrame.BackgroundTransparency = 1
 DropFrame.Name = "DropdowHolder"
 DropFrame.Parent = Prefabs
+DropFrame.AutomaticSize = Enum.AutomaticSize.Y
 
 Dropdown.Name = "Dropdown"
 Dropdown.Parent = DropFrame
