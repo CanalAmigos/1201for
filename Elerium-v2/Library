@@ -1147,7 +1147,9 @@ function library:AddWindow(title, options)
 						end
 					end
 					for i, v in next, tabs:GetChildren() do
-						v.Visible = false
+						if not v:IsA('UIListLayout') then
+							v.Visible = false
+						end
 					end
 
 					Resize(new_button, {Size = UDim2.new(0, new_button.AbsoluteSize.X, 0, 25)}, options.tween_time)
