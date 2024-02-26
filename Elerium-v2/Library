@@ -26,6 +26,7 @@ local Toggle = Instance.new("ImageButton")
 local Base = Instance.new("ImageLabel")
 local Top = Instance.new("ImageLabel")
 local Tabs = Instance.new("ScrollingFrame")
+local TabsList = Instance.new("UIListLayout")
 local Title = Instance.new("TextLabel")
 local TabSelection = Instance.new("ImageLabel")
 local TabButtons = Instance.new("Frame")
@@ -43,6 +44,7 @@ local TextLabel = Instance.new("TextLabel")
 local TextLabel_2 = Instance.new("TextLabel")
 local Circle = Instance.new("ImageLabel")
 local UIListLayout_3 = Instance.new("UIListLayout")
+local DropFrame = Instance.new("Frame")
 local Dropdown = Instance.new("TextButton")
 local Indicator_2 = Instance.new("ImageLabel")
 local Box = Instance.new("ImageButton")
@@ -179,6 +181,10 @@ Tabs.Position = UDim2.new(0, 15, 0, 60)
 Tabs.Size = UDim2.new(1, -30, 1, -60)
 Tabs.AutomaticCanvasSize = Enum.AutomaticSize.Y
 Tabs.CanvasSize = UDim2.new(0,0,0,0)
+
+TabsList.Name = "UiTabs"
+TabsList.Padding = UDim.new(0,7)
+TabsList.Parent = Tabs
 
 Title.Name = "Title"
 Title.Parent = Window
@@ -334,8 +340,13 @@ UIListLayout_3.FillDirection = Enum.FillDirection.Horizontal
 UIListLayout_3.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout_3.Padding = UDim.new(0, 20)
 
+DropFrame.Size = UDim2.fromOffset(200,175)
+DropFrame.BackgroundTransparency = 1
+DropFrame.Name = "DropdowHolder"
+DropFrame.Parent = Prefabs
+
 Dropdown.Name = "Dropdown"
-Dropdown.Parent = Prefabs
+Dropdown.Parent = DropFrame
 Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
 Dropdown.BackgroundTransparency = 1
 Dropdown.BorderSizePixel = 0
@@ -847,11 +858,6 @@ local function Resize(part, new, _delay)
 	tween:Play()
 end
 
-local function ReCanvas()
-	local x,y = Tabs.AbsoluteCanvasSize.X,Tabs.AbsoluteCanvasSize.Y
-	Tabs.CanvasSize = UDim2.new(0,x,0,y)
-end
-
 local function rgbtohsv(r, g, b) -- idk who made this function, but thanks
 	r, g, b = r / 255, g / 255, b / 255
 	local max, min = math.max(r, g, b), math.min(r, g, b)
@@ -1003,9 +1009,6 @@ function library:AddWindow(title, options)
 	Window.Draggable = true
 
 	do -- Resize Window
-		Tabs.ChildAdded:Connect(function()
-			ReCanvas()
-		end)
 		
 		local oldIcon = mouse.Icon
 		local Entered = false
@@ -1439,8 +1442,9 @@ function library:AddWindow(title, options)
 						setmetatable(dropdown_options,{__index={
 							['list'] = gTlower(dropdown_options,'list') or {}
 						}})
-
-						local dropdown = Prefabs:FindFirstChild("Dropdown"):Clone()
+						
+						local frame = Prefabs:FindFirstChild("DropFrame")
+						local dropdown = frame:FindFirstChild("Dropdown"):Clone()
 						local box = dropdown:FindFirstChild("Box")
 						local objects = box:FindFirstChild("Objects")
 						local indicator = dropdown:FindFirstChild("Indicator")
@@ -1474,7 +1478,6 @@ function library:AddWindow(title, options)
 								Resize(box, {Size = UDim2.new(1, 0, 0, 0)}, options.tween_time)
 								Resize(indicator, {Rotation = -90}, options.tween_time)
 							end
-							ReCanvas()
 						end)
 
 						function dropdown_data:Add(n)
