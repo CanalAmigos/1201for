@@ -1443,7 +1443,7 @@ function library:AddWindow(title, options)
 							['list'] = gTlower(dropdown_options,'list') or {}
 						}})
 						
-						local frame = Prefabs:FindFirstChild("DropFrame")
+						local frame = Prefabs:FindFirstChild("DropdowHolder")
 						local dropdown = frame:FindFirstChild("Dropdown"):Clone()
 						local box = dropdown:FindFirstChild("Box")
 						local objects = box:FindFirstChild("Objects")
