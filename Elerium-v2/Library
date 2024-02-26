@@ -1335,14 +1335,14 @@ function library:AddWindow(title, options)
 								pcall(callback, Value)
 							end
 
-							indicator.InputBegan:Connect(function(inputObject)
+							slider.InputBegan:Connect(function(inputObject)
 								if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
 									Sliding(inputObject)
 									Dragging = true
 									Window.Draggable = false
 								end
 							end)
-							indicator.InputEnded:Connect(function(inputObject)
+							slider.InputEnded:Connect(function(inputObject)
 								if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
 									Dragging = false
 									Window.Draggable = true
