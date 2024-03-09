@@ -94,6 +94,7 @@ local Windows = Instance.new("Frame")
 
 imgui.Name = "imgui"
 imgui.Parent = game:GetService("CoreGui")
+imgui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
 Prefabs.Name = "Prefabs"
 Prefabs.Parent = imgui
@@ -391,6 +392,7 @@ Objects.Size = UDim2.new(1, 0, 1, 0)
 Objects.ZIndex = 3
 Objects.CanvasSize = UDim2.new(0, 0, 0, 0)
 Objects.ScrollBarThickness = 8
+Objects.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
 UIListLayout_4.Parent = Objects
 UIListLayout_4.SortOrder = Enum.SortOrder.LayoutOrder
@@ -1468,10 +1470,6 @@ function library:AddWindow(title, options)
 							open = not open
 
 							local len = (#objects:GetChildren() - 1) * 20
-							if #objects:GetChildren() - 1 >= 10 then
-								len = 10 * 20
-								objects.CanvasSize = UDim2.new(0, 0, (#objects:GetChildren() - 1) * 0.1, 0)
-							end
 
 							if open then -- Open
 								if dropdown_open then return end
@@ -1504,10 +1502,6 @@ function library:AddWindow(title, options)
 
 							if open then
 								local len = (#objects:GetChildren() - 1) * 20
-								if #objects:GetChildren() - 1 >= 10 then
-									len = 10 * 20
-									objects.CanvasSize = UDim2.new(0, 0, (#objects:GetChildren() - 1) * 0.1, 0)
-								end
 								Resize(box, {Size = UDim2.new(1, 0, 0, len)}, options.tween_time)
 							end
 
