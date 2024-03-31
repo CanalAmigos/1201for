@@ -118,7 +118,7 @@ Window.Parent = Prefabs
 Window.Active = true
 Window.BackgroundColor3 = Color3.new(1, 1, 1)
 Window.BackgroundTransparency = 1
-Window.ClipsDescendants = true
+Window.ClipsDescendants = false
 Window.Position = UDim2.new(0, 20, 0, 20)
 Window.Selectable = true
 Window.Size = UDim2.new(0, 200, 0, 200)
@@ -1012,7 +1012,7 @@ function library:AddWindow(title, options)
 	Window.Draggable = true
 
 	do -- Resize Window
-		
+
 		local oldIcon = mouse.Icon
 		local Entered = false
 		Resizer.MouseEnter:Connect(function()
@@ -1449,7 +1449,7 @@ function library:AddWindow(title, options)
 						setmetatable(dropdown_options,{__index={
 							['list'] = gTlower(dropdown_options,'list') or {}
 						}})
-						
+
 						local frame = Prefabs:FindFirstChild("DropdowHolder")
 						local dropdown = frame:FindFirstChild("Dropdown"):Clone()
 						local box = dropdown:FindFirstChild("Box")
@@ -1522,7 +1522,7 @@ function library:AddWindow(title, options)
 
 							return object, object_data
 						end
-						
+
 						function dropdown_data:AddList(n)
 							local objects_data = {}
 							n = (type(n) == 'table' and n) or {}
@@ -1531,7 +1531,7 @@ function library:AddWindow(title, options)
 							end
 							return objects_data
 						end
-						
+
 						dropdown_data:AddList(dropdown_options.list)
 
 						return dropdown_data, dropdown
