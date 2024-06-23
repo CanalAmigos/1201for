@@ -76,7 +76,7 @@ function library:CreateGui(title)
 	Main.BackgroundColor3 = Color3.fromRGB(57, 57, 57)
 	Main.BorderColor3 = Color3.fromRGB(0, 255, 255)
 	Main.BorderSizePixel = 0
-	Main.Position = UDim2.new(0.371, 0,0.406, 0)
+	Main.Position = UDim2.new(0.014, 0,0.038, 0)
 	Main.Size = UDim2.new(0, 280, 0, 345)
 
 	UICorner.Parent = Main
