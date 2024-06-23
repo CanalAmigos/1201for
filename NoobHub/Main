@@ -513,6 +513,15 @@ function library:CreateGui(title)
 		local Icon = Instance.new("TextLabel")
 		local UICorner_2 = Instance.new("UICorner")
 		
+		local function UpdateSize()
+			if Toggled then
+				local Y = UIListL.AbsoluteContentSize.Y
+				Holder_.Size = UDim2.new(1, 0, 0, Y+10)
+			else
+				Holder_.Size = UDim2.new(1, 0, 0, 0)
+			end
+		end
+		
 		local function Toggle(value)
 			if value == nil then
 				if Toggled then
@@ -538,6 +547,7 @@ function library:CreateGui(title)
 				end
 				Tween:Create(Icon,TweenInfo.new(0.2,Enum.EasingStyle.Linear,Enum.EasingDirection.Out),{Rotation = -90}):Play()
 			end
+			UpdateSize()
 		end
 		
 		DropDown.Name = "DropDown"
@@ -578,11 +588,6 @@ function library:CreateGui(title)
 		UIListL.HorizontalAlignment = Enum.HorizontalAlignment.Center
 		UIListL.SortOrder = Enum.SortOrder.LayoutOrder
 		UIListL.Padding = UDim.new(0,-1)
-		
-		local function UpdateSize()
-			local Y = UIListL.AbsoluteContentSize.Y
-			Holder_.Size = UDim2.new(1, 0, 0, Y+10)
-		end
 
 		Open.Name = "Open"
 		Open.Parent = DropDown
