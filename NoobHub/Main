@@ -250,6 +250,14 @@ function library:CreateGui(title)
 		end
 	end
 	
+	function Gui:ChangeToggle(value) -- change if is visible or not :)
+		if type(value) == "boolean" then
+			Main.Visible = value
+		else
+			Main.Visible = not Main.Visible
+		end
+	end
+	
 	function Gui:CreateToggle(title,value,callback)
 		local title = title or "[Toggle]"
 		local value = value or false
