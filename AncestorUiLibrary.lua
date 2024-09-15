@@ -1,6 +1,6 @@
 local lib = {}
-if game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild'Ancestor'then 
-	game:GetService("Players").LocalPlayer.PlayerGui.Ancestor:Destroy()
+if game:GetService('CoreGui'):FindFirstChild('Ancestor') then 
+	game:GetService('CoreGui').Ancestor:Destroy()
 end
 
 function lib:Create(type, proprieties)
@@ -15,7 +15,7 @@ function lib:Create(type, proprieties)
 	return instance
 end
 
-local CoreGui = game:GetService("Players").LocalPlayer.PlayerGui
+local CoreGui = game:GetService('CoreGui')
 local TweenService = game:GetService("TweenService")
 local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
 local UIS = game:GetService("UserInputService")
@@ -1806,10 +1806,10 @@ function lib:Main()
 	end
 
 	main.Close.MouseButton1Click:Connect(function()
-		game:GetService("Players").LocalPlayer.PlayerGui.Ancestor:Destroy()
+		game:GetService('CoreGui').Ancestor:Destroy()
 	end)
 
-	main.ScreenGui.Parent = game:GetService("Players").LocalPlayer.PlayerGui
+	main.ScreenGui.Parent = game:GetService('CoreGui')
 	main.MainBody.Parent = main.ScreenGui
 	main.TopBar.Parent = main.MainBody
 	main.TopBarGradient.Parent = main.TopBar
