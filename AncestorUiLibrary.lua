@@ -274,37 +274,7 @@ function lib:Main()
 		end
 	end
 
-	local dragInput
-	local dragStart
-	local startPos
-	local dragging
-
-	local function update(input)
-		local delta = input.Position - dragStart
-		main.MainBody:TweenPosition(UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y),'Out','Linear',0.01,true)
-	end
-
-	main.MainBody.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 then
-			dragging = true
-			dragStart = input.Position
-			startPos = main.MainBody.Position
-			repeat wait() until input.UserInputState == Enum.UserInputState.End
-			dragging = false
-		end
-	end)
-
-	main.MainBody.InputChanged:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseMovement then
-			dragInput = input
-		end
-	end)
-
-	game:GetService("UserInputService").InputChanged:Connect(function(input)
-		if input == dragInput and dragging then
-			update(input)
-		end
-	end)
+	main.MainBody.Draggable = true
 
 	main.TopBar = lib:Create("Frame", {
 		Name = "TopBar",
