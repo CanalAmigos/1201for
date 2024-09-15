@@ -1136,28 +1136,15 @@ function lib:Main()
 
 				if Options and Options.options and not Playerlist then
 					optionstable = Options.options
-				elseif Options and Options.options and Playerlist then
+				elseif Playerlist then
 					optionstable = {}
-					for g,f in pairs(Options.options) do
-						if i==1 then 
-							i=5
-						end
-						table.insert(optionstable, f)
-					end
 					local list = game:GetService("Players"):GetChildren()
 					for i,v in pairs(list) do
 						if v:IsA("Player") then
 							table.insert(optionstable, v.Name);
 						end
 					end
-				elseif Options and not Options.options and Playerlist then
-					optionstable = {}
-					local list = game:GetService("Players"):GetChildren()
-					for i,v in pairs(list) do
-						if v:IsA("Player")then
-							table.insert(optionstable, v.Name);
-						end
-					end                                 
+					table.sort(optionstable,function(a,b) return a:lower() < b:lower() end)
 				end
 
 				dd.ddback = lib:Create("ImageLabel", {
@@ -1258,6 +1245,7 @@ function lib:Main()
 								table.insert(optionstable, v.Name)
 							end
 						end
+						table.sort(optionstable,function(a,b) return a:lower() < b:lower() end)
 					end
 
 					for i,v in next, dd.ddscrolling:GetChildren() do
@@ -1323,7 +1311,22 @@ function lib:Main()
 						end)
 					end
 				end
-
+				
+				if Playerlist then
+					local pls = game:GetService("Players")
+					pls.PlayerAdded:Connect(function(v)
+						if not table.find(optionstable,v.Name) then
+							table.insert(optionstable,v.Name)
+						end
+						table.sort(optionstable,function(a,b) return a:lower() < b:lower() end)
+					end)
+					pls.PlayerRemoving:Connect(function(v)
+						local i = table.find(optionstable,v.Name)
+						if i then
+							table.remove(optionstable,i)
+						end
+					end)
+				end
 				refreshlist()
 
 				dd.ddbutton.Text = optionstable and optionstable[1] or "None"
@@ -1333,7 +1336,7 @@ function lib:Main()
 					if Options and Options.CallBack then
 						optionstable = Options.CallBack()
 					end
-					refreshlist()
+					--refreshlist()
 					dd.ddmp.Text = "-"
 					dd.dd.Visible = true
 					TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {CanvasSize = UDim2.new(0, 0, 0, dd.ddscrolling["UIListLayout"].AbsoluteContentSize.Y) + UDim2.new(0,0,0,5)}):Play()
@@ -1345,12 +1348,12 @@ function lib:Main()
 						optionstable = Options.CallBack()
 					end
 					if toggled then 
-						refreshlist()
+						--refreshlist()
 						dd.ddmp.Text = "-"
 						dd.dd.Visible = true
 						TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {CanvasSize = UDim2.new(0, 0, 0, dd.ddscrolling["UIListLayout"].AbsoluteContentSize.Y) + UDim2.new(0,0,0,5)}):Play()
 					else 
-						refreshlist()
+						--refreshlist()
 						dd.ddmp.Text = "+"
 						dd.dd.Visible = false
 						TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {CanvasSize = UDim2.new(0, 0, 0, dd.ddscrolling["UIListLayout"].AbsoluteContentSize.Y) + UDim2.new(0,0,0,5)}):Play()
@@ -1389,6 +1392,12 @@ function lib:Main()
 
 						if CallBack then
 							CallBack(dvalue)
+						end
+					end,
+					Refresh = function(v)
+						if not Playerlist then
+							optionstable = v or {}
+							refreshlist()
 						end
 					end,
 				}   
