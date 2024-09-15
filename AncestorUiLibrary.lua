@@ -750,6 +750,7 @@ function lib:Main()
 					TextColor3 = Color3.fromRGB(255, 255, 255),
 					TextSize = 16.000,
 					TextWrapped = true,
+					RichText = true,
 				})
 
 				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,40)
