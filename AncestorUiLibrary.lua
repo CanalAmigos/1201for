@@ -898,7 +898,7 @@ function lib:Main()
 						local v = math.clamp(v,Min,Max)
 						local def = math.clamp(v, Min, Max)
 						local Porcentage = (def - Min) / (Max - Min)
-						sliders.slider.Position = UDim2.new(Porcentage, 0, 0, 0)
+						TweenService:Create(sliders.sliderinner, TweenInfo.new(0.04), {Size = UDim2.new(Porcentage, 0, 1, -2)}):Play()
 						sliders.slidervalue.Text = tostring(v)
 					end,
 				}
