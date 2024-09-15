@@ -680,7 +680,34 @@ function lib:Main()
 
 				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,40)
 
-				return toggles
+				return {
+					Toggle = function()
+						toggled = not toggled
+
+						if toggled then 
+							TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0.700523198, 0, 0, 0)}):Play()
+						else 
+							TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0, 0, 0, 0)}):Play()
+						end
+
+						if CallBack then 
+							CallBack(toggled)
+						end 
+					end,
+					ChangeToggle = function(v)
+						toggled = v
+
+						if toggled then 
+							TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0.700523198, 0, 0, 0)}):Play()
+						else 
+							TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0, 0, 0, 0)}):Play()
+						end
+
+						if CallBack then 
+							CallBack(toggled)
+						end 
+					end,
+				}
 			end
 
 			function sections:TextLabel(Text)
@@ -866,7 +893,15 @@ function lib:Main()
 				sliders.sliderinner.Parent = sliders.slider
 				sliders.slidervalue.Parent = sliders.darkoutline
 
-				return sliders
+				return {
+					SetValue = function(v)
+						local v = math.clamp(v,Min,Max)
+						local def = math.clamp(v, Min, Max)
+						local Porcentage = (def - Min) / (Max - Min)
+						sliders.slider.Position = UDim2.new(Porcentage, 0, 0, 0)
+						sliders.slidervalue.Text = tostring(v)
+					end,
+				}
 			end 
 
 			function sections:TextBox(Name, CallBack, PlaceholderText, AutoName)
@@ -1315,7 +1350,16 @@ function lib:Main()
 
 				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,40)
 
-				return dd   
+				return {
+					SetCurrent = function(v)
+						dd.ddbutton.Text = v
+						dvalue = v
+
+						if CallBack then
+							CallBack(dvalue)
+						end
+					end,
+				}   
 			end 
 
 			function sections:ColorPicker(Name, CallBack, Default)
