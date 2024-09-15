@@ -1081,7 +1081,9 @@ function lib:Main()
 				game:GetService("UserInputService").InputBegan:Connect(function(i, GPE)
 					if kbind and i.KeyCode == kbind and not GPE then
 						if CallBack then
-							CallBack(i.KeyCode)
+							pcall(function()
+								CallBack(kbind)
+							end)
 						end
 					end
 				end)
