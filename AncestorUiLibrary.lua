@@ -338,6 +338,7 @@ function lib:Main()
 	})
 	
 	MakeDraggable(main.TopBar,main.MainBody)
+	MakeDraggable(main.MainBody,main.MainBody)
 
 	main.TopBarGradient = lib:Create("UIGradient", {
 		Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(8, 45, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(8, 45, 255))},
