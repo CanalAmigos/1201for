@@ -744,7 +744,7 @@ function lib:Main()
 					BackgroundTransparency = 1.000,
 					BorderSizePixel = 0,
 					Position = UDim2.new(0, 0, -0.103448279, 0),
-					Size = UDim2.new(0, 476, 0, 35),
+					Size = UDim2.new(0, 484, 0, 35),
 					Font = Enum.Font.GothamSemibold,
 					Text = Text,
 					TextColor3 = Color3.fromRGB(255, 255, 255),
@@ -759,6 +759,36 @@ function lib:Main()
 				textlabels.textlabel.Parent = textlabels.textlabelframe2
 
 				return textlabels
+			end
+			
+			function sections:Separator()
+				local a = lib:Create("ImageLabel", {
+					Name = "TextLabel",
+					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+					BackgroundTransparency = 1.000,
+					Position = UDim2.new(0.00415800419, 0, 0.86175108, 0),
+					Size = UDim2.new(0, 484, 0, 35),
+					Image = "rbxassetid://3570695787",
+					ImageColor3 = Color3.fromRGB(65, 65, 65),
+					ScaleType = Enum.ScaleType.Slice,
+					SliceCenter = Rect.new(100, 100, 100, 100),
+					SliceScale = 0.040,
+				})
+				a.Parent = categories.Container
+
+				local b = lib:Create("Frame", {
+					Name = "TextLabelFrame",
+					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+					Position = UDim2.new(0.009999929, 0, 0.0857142881, 0),
+					Size = UDim2.new(0, 476, 0, 29),
+				})
+				b.Parent = a
+				
+				local UIGradient = lib:Create('UIGradient',{
+					Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(4, 24, 136)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(6, 35, 197))},
+					Rotation = 0
+				})
+				UIGradient.Parent = b
 			end
 
 			function sections:Slider(Name, CallBack, Min, Max)
