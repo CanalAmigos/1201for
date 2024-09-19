@@ -20,6 +20,247 @@ local TweenService = game:GetService("TweenService")
 local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
 local UIS = game:GetService("UserInputService")
 
+--// Notification \\--
+
+local NotificationFrame
+pcall(function()
+	NotificationFrame = lib:Create('Frame',{
+		Name = "Notification",
+		BackgroundColor3 = Color3.fromRGB(17, 17, 17),
+		BorderColor3 = Color3.fromRGB(47, 47, 47),
+		BorderSizePixel = 2,
+		Position = UDim2.new(0.3, 0, 0.3, 0),
+		Size = UDim2.new(0, 300,0, 200),
+		Visible = false,
+		ZIndex = 5,
+	})
+	NotificationFrame.Parent = lib:Create('ScreenGui',{
+		Name = 'AncestorNotify',
+		ResetOnSpawn = false
+	})
+	NotificationFrame.Parent.Parent = CoreGui
+
+	local Top = lib:Create('Frame',{
+		Name = "Top",
+		BackgroundColor3 = Color3.fromRGB(255, 0, 120),
+		BorderColor3 = Color3.fromRGB(0, 0, 0),
+		BorderSizePixel = 0,
+		Size = UDim2.new(0, 300, 0, 30),
+		ZIndex = 5,
+	})
+	Top.Parent = NotificationFrame
+
+	local UIGradient = lib:Create('UIGradient',{
+		Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(8, 45, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(8, 45, 255))},
+		Rotation = 90
+	})
+	UIGradient.Parent = Top
+
+	local Title = lib:Create('TextLabel',{
+		Name = "Title",
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		BackgroundTransparency = 1.000,
+		BorderSizePixel = 0,
+		Position = UDim2.new(0, 9,0, 0),
+		Size = UDim2.new(0, 87, 0, 30),
+		Font = Enum.Font.GothamBold,
+		Text = "Notification",
+		TextColor3 = Color3.fromRGB(255, 255, 255),
+		TextSize = 20.000,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		ZIndex = 5,
+	})
+	Title.Parent = Top
+
+	local TextField = lib:Create('TextLabel',{
+		Name = "TextField",
+		BackgroundColor3 = Color3.fromRGB(17, 17, 17),
+		BackgroundTransparency = 0,
+		BorderColor3 = Color3.fromRGB(0, 0, 0),
+		BorderSizePixel = 0,
+		Position = UDim2.new(0, 5,0, 34),
+		Size = UDim2.new(0, 290, 0, 120),
+		Font = Enum.Font.SourceSans,
+		Text = "...",
+		TextColor3 = Color3.fromRGB(255, 255, 255),
+		TextSize = 22,
+		--TextScaled = true,
+		TextWrapped = true,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextYAlignment = Enum.TextYAlignment.Top,
+		ZIndex = 5,
+	})
+	TextField.Parent = NotificationFrame
+
+	local TextSize = lib:Create('UITextSizeConstraint',{})
+	TextSize.Parent = TextField
+
+	local Button1 = lib:Create('Frame',{
+		Name = "Button1",
+		BackgroundColor3 = Color3.fromRGB(85, 255, 0),
+		BorderColor3 = Color3.fromRGB(40, 210, 0),
+		BorderSizePixel = 2,
+		Position = UDim2.new(0, 5,0, 163),
+		Size = UDim2.new(0, 100, 0, 30),
+		Visible = false,
+		ZIndex = 5,
+	})
+	Button1.Parent = NotificationFrame
+
+	local Text_3 = lib:Create('TextButton',{
+		Name = "Text",
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		BackgroundTransparency = 1.000,
+		BorderColor3 = Color3.fromRGB(0, 0, 0),
+		BorderSizePixel = 0,
+		Size = UDim2.new(1, 0, 1, 0),
+		Font = Enum.Font.SourceSans,
+		Text = "Yes",
+		TextColor3 = Color3.fromRGB(255, 255, 255),
+		TextSize = 20.000,
+		TextStrokeTransparency = 0.500,
+		ZIndex = 5,
+	})
+	Text_3.Parent = Button1
+
+	local Button2 = lib:Create('Frame',{
+		Name = "Button2",
+		BackgroundColor3 = Color3.fromRGB(197, 0, 0),
+		BorderColor3 = Color3.fromRGB(137, 0, 0),
+		BorderSizePixel = 2,
+		Position = UDim2.new(0, 194,0, 163),
+		Size = UDim2.new(0, 100, 0, 30),
+		Visible = false,
+		ZIndex = 5,
+	})
+	Button2.Parent = NotificationFrame
+
+	local Text = lib:Create('TextButton',{
+		Name = "Text",
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		BackgroundTransparency = 1.000,
+		BorderColor3 = Color3.fromRGB(0, 0, 0),
+		BorderSizePixel = 0,
+		Size = UDim2.new(1, 0, 1, 0),
+		Font = Enum.Font.SourceSans,
+		Text = "No",
+		TextColor3 = Color3.fromRGB(255, 255, 255),
+		TextSize = 20.000,
+		TextStrokeTransparency = 0.500,
+		ZIndex = 5.
+	})
+	Text.Parent = Button2
+
+	local Button3 = lib:Create('Frame',{
+		Name = "Button3",
+		BackgroundColor3 = Color3.fromRGB(85, 255, 0),
+		BorderColor3 = Color3.fromRGB(40, 210, 0),
+		BorderSizePixel = 2,
+		Position = UDim2.new(0, 95,0, 163),
+		Size = UDim2.new(0, 100, 0, 30),
+		Visible = false,
+		ZIndex = 5,
+	})
+	Button3.Parent = NotificationFrame
+
+	local Text_2 = lib:Create('TextButton',{
+		Name = "Text",
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		BackgroundTransparency = 1.000,
+		BorderColor3 = Color3.fromRGB(0, 0, 0),
+		BorderSizePixel = 0,
+		Size = UDim2.new(1, 0, 1, 0),
+		Font = Enum.Font.SourceSans,
+		Text = "Ok",
+		TextColor3 = Color3.fromRGB(255, 255, 255),
+		TextSize = 20.000,
+		TextStrokeTransparency = 0.500,
+		ZIndex = 5,
+	})
+	Text_2.Parent = Button3
+end)
+
+local NotifyQueq,busy,lastreturn = {},false,nil
+function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,NoWait)
+	if string.gsub(Title,'%D+',' ') ~= '' and string.gsub(Text,'%D+',' ') ~= '' then
+		if busy then
+			if NoWait then
+				NotifyQueq[#NotifyQueq+1] = {Title,Text,Buttons or {},Duration or 5}
+			else
+				local s,r = nil,nil
+				NotifyQueq[#NotifyQueq+1] = {Title,Text,Buttons or {},Duration or 5,function(v) s=true;r=v end}
+				repeat task.wait() until s
+				return r
+			end
+			return
+		else
+			busy = true
+		end
+		local Main = NotificationFrame
+		local TitleT = Main.Top.Title
+		local Button1 = Main.Button1
+		local Button2 = Main.Button2
+		local Button3 = Main.Button3
+		local TextField = Main.TextField
+
+		local function Run(Title: string,Text: string,Buttons: {string},Duration,Queq: boolean)
+			local Choice,skip = nil,false
+			TitleT.Text = Title
+			TextField.Text = Text
+			if #Buttons > 0 and #Buttons < 2 then
+				Button3.Text.Text = Buttons[1]
+				Button3.Visible = true
+			elseif #Buttons > 0 then
+				Button1.Text.Text = Buttons[1]
+				Button1.Visible = true
+				Button2.Text.Text = Buttons[2]
+				Button2.Visible = true
+			end
+			Button1.Text.MouseButton1Up:Once(function()
+				if skip then return end
+				Choice = Buttons[1]
+				skip = true
+			end)
+			Button2.Text.MouseButton1Up:Once(function()
+				if skip then return end
+				Choice = Buttons[2]
+				skip = true
+			end)
+			Button3.Text.MouseButton1Up:Once(function()
+				if skip then return end
+				Choice = Buttons[1]
+				skip = true
+			end)
+			Main.Visible = true
+			local t = tick()
+			repeat task.wait() until tick()-t >= (tonumber(Duration) or 5) or skip
+			Main.Visible = false
+			Button1.Visible = false
+			Button2.Visible = false
+			Button3.Visible = false
+			if Queq then
+				table.remove(NotifyQueq,1)
+			end
+			if #NotifyQueq > 0 then
+				local next = NotifyQueq[1]
+				if next[5] then
+					(next[5])(Run(next[1],next[2],next[3] or {},next[4] or 5,true))
+				else
+					spawn(pcall(Run,next[1],next[2],next[3] or {},next[4] or 5,true))
+				end
+			else
+				busy = false
+			end
+			return Choice
+		end
+		if NoWait then
+			spawn(pcall(Run,Title,Text,Buttons or {},Duration or 5,false))
+		else
+			return Run(Title,Text,Buttons or {},Duration or 5,false)
+		end
+	end
+end
+
 function lib:Main()
 	local main = {}
 	local firstC = true
@@ -36,243 +277,6 @@ function lib:Main()
 		Position = UDim2.new(0.3, 0, 0.3, 0),
 		Size = UDim2.new(0, 554, 0, 304),
 	})
-
-	--// Notification \\--
-	
-	local NotificationFrame
-	pcall(function()
-		NotificationFrame = lib:Create('Frame',{
-			Name = "Notification",
-			BackgroundColor3 = Color3.fromRGB(17, 17, 17),
-			BorderColor3 = Color3.fromRGB(47, 47, 47),
-			BorderSizePixel = 2,
-			Position = UDim2.new(0.3, 0, 0.3, 0),
-			Size = UDim2.new(0, 300,0, 200),
-			Visible = false,
-			ZIndex = 5,
-		})
-		NotificationFrame.Parent = main.ScreenGui
-
-		local Top = lib:Create('Frame',{
-			Name = "Top",
-			BackgroundColor3 = Color3.fromRGB(255, 0, 120),
-			BorderColor3 = Color3.fromRGB(0, 0, 0),
-			BorderSizePixel = 0,
-			Size = UDim2.new(0, 300, 0, 30),
-			ZIndex = 5,
-		})
-		Top.Parent = NotificationFrame
-		
-		local UIGradient = lib:Create('UIGradient',{
-			Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(8, 45, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(8, 45, 255))},
-			Rotation = 90
-		})
-		UIGradient.Parent = Top
-		
-		local Title = lib:Create('TextLabel',{
-			Name = "Title",
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-			BackgroundTransparency = 1.000,
-			BorderSizePixel = 0,
-			Position = UDim2.new(0, 9,0, 0),
-			Size = UDim2.new(0, 87, 0, 30),
-			Font = Enum.Font.GothamBold,
-			Text = "Notification",
-			TextColor3 = Color3.fromRGB(255, 255, 255),
-			TextSize = 20.000,
-			TextXAlignment = Enum.TextXAlignment.Left,
-			ZIndex = 5,
-		})
-		Title.Parent = Top
-		
-		local TextField = lib:Create('TextLabel',{
-			Name = "TextField",
-			BackgroundColor3 = Color3.fromRGB(17, 17, 17),
-			BackgroundTransparency = 0,
-			BorderColor3 = Color3.fromRGB(0, 0, 0),
-			BorderSizePixel = 0,
-			Position = UDim2.new(0, 5,0, 34),
-			Size = UDim2.new(0, 290, 0, 120),
-			Font = Enum.Font.SourceSans,
-			Text = "...",
-			TextColor3 = Color3.fromRGB(255, 255, 255),
-			TextSize = 22,
-			--TextScaled = true,
-			TextWrapped = true,
-			TextXAlignment = Enum.TextXAlignment.Left,
-			TextYAlignment = Enum.TextYAlignment.Top,
-			ZIndex = 5,
-		})
-		TextField.Parent = NotificationFrame
-		
-		local TextSize = lib:Create('UITextSizeConstraint',{})
-		TextSize.Parent = TextField
-		
-		local Button1 = lib:Create('Frame',{
-			Name = "Button1",
-			BackgroundColor3 = Color3.fromRGB(85, 255, 0),
-			BorderColor3 = Color3.fromRGB(40, 210, 0),
-			BorderSizePixel = 2,
-			Position = UDim2.new(0, 5,0, 163),
-			Size = UDim2.new(0, 100, 0, 30),
-			Visible = false,
-			ZIndex = 5,
-		})
-		Button1.Parent = NotificationFrame
-		
-		local Text_3 = lib:Create('TextButton',{
-			Name = "Text",
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-			BackgroundTransparency = 1.000,
-			BorderColor3 = Color3.fromRGB(0, 0, 0),
-			BorderSizePixel = 0,
-			Size = UDim2.new(1, 0, 1, 0),
-			Font = Enum.Font.SourceSans,
-			Text = "Yes",
-			TextColor3 = Color3.fromRGB(255, 255, 255),
-			TextSize = 20.000,
-			TextStrokeTransparency = 0.500,
-			ZIndex = 5,
-		})
-		Text_3.Parent = Button1
-		
-		local Button2 = lib:Create('Frame',{
-			Name = "Button2",
-			BackgroundColor3 = Color3.fromRGB(197, 0, 0),
-			BorderColor3 = Color3.fromRGB(137, 0, 0),
-			BorderSizePixel = 2,
-			Position = UDim2.new(0, 194,0, 163),
-			Size = UDim2.new(0, 100, 0, 30),
-			Visible = false,
-			ZIndex = 5,
-		})
-		Button2.Parent = NotificationFrame
-		
-		local Text = lib:Create('TextButton',{
-			Name = "Text",
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-			BackgroundTransparency = 1.000,
-			BorderColor3 = Color3.fromRGB(0, 0, 0),
-			BorderSizePixel = 0,
-			Size = UDim2.new(1, 0, 1, 0),
-			Font = Enum.Font.SourceSans,
-			Text = "No",
-			TextColor3 = Color3.fromRGB(255, 255, 255),
-			TextSize = 20.000,
-			TextStrokeTransparency = 0.500,
-			ZIndex = 5.
-		})
-		Text.Parent = Button2
-		
-		local Button3 = lib:Create('Frame',{
-			Name = "Button3",
-			BackgroundColor3 = Color3.fromRGB(85, 255, 0),
-			BorderColor3 = Color3.fromRGB(40, 210, 0),
-			BorderSizePixel = 2,
-			Position = UDim2.new(0, 95,0, 163),
-			Size = UDim2.new(0, 100, 0, 30),
-			Visible = false,
-			ZIndex = 5,
-		})
-		Button3.Parent = NotificationFrame
-		
-		local Text_2 = lib:Create('TextButton',{
-			Name = "Text",
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-			BackgroundTransparency = 1.000,
-			BorderColor3 = Color3.fromRGB(0, 0, 0),
-			BorderSizePixel = 0,
-			Size = UDim2.new(1, 0, 1, 0),
-			Font = Enum.Font.SourceSans,
-			Text = "Ok",
-			TextColor3 = Color3.fromRGB(255, 255, 255),
-			TextSize = 20.000,
-			TextStrokeTransparency = 0.500,
-			ZIndex = 5,
-		})
-		Text_2.Parent = Button3
-	end)
-	
-	local NotifyQueq,busy,lastreturn = {},false,nil
-	function main:Notification(Title: string,Text: string,Buttons: {string},Duration,NoWait)
-		if string.gsub(Title,'%D+',' ') ~= '' and string.gsub(Text,'%D+',' ') ~= '' then
-			if busy then
-				if NoWait then
-					NotifyQueq[#NotifyQueq+1] = {Title,Text,Buttons or {},Duration or 5}
-				else
-					local s,r = nil,nil
-					NotifyQueq[#NotifyQueq+1] = {Title,Text,Buttons or {},Duration or 5,function(v) s=true;r=v end}
-					repeat task.wait() until s
-					return r
-				end
-				return
-			else
-				busy = true
-			end
-			local Main = NotificationFrame
-			local TitleT = Main.Top.Title
-			local Button1 = Main.Button1
-			local Button2 = Main.Button2
-			local Button3 = Main.Button3
-			local TextField = Main.TextField
-			
-			local function Run(Title: string,Text: string,Buttons: {string},Duration,Queq: boolean)
-				local Choice,skip = nil,false
-				TitleT.Text = Title
-				TextField.Text = Text
-				if #Buttons > 0 and #Buttons < 2 then
-					Button3.Text.Text = Buttons[1]
-					Button3.Visible = true
-				elseif #Buttons > 0 then
-					Button1.Text.Text = Buttons[1]
-					Button1.Visible = true
-					Button2.Text.Text = Buttons[2]
-					Button2.Visible = true
-				end
-				Button1.Text.MouseButton1Up:Once(function()
-					if skip then return end
-					Choice = Buttons[1]
-					skip = true
-				end)
-				Button2.Text.MouseButton1Up:Once(function()
-					if skip then return end
-					Choice = Buttons[2]
-					skip = true
-				end)
-				Button3.Text.MouseButton1Up:Once(function()
-					if skip then return end
-					Choice = Buttons[1]
-					skip = true
-				end)
-				Main.Visible = true
-				local t = tick()
-				repeat task.wait() until tick()-t >= (tonumber(Duration) or 5) or skip
-				Main.Visible = false
-				Button1.Visible = false
-				Button2.Visible = false
-				Button3.Visible = false
-				if Queq then
-					table.remove(NotifyQueq,1)
-				end
-				if #NotifyQueq > 0 then
-					local next = NotifyQueq[1]
-					if next[5] then
-						(next[5])(Run(next[1],next[2],next[3] or {},next[4] or 5,true))
-					else
-						spawn(pcall(Run,next[1],next[2],next[3] or {},next[4] or 5,true))
-					end
-				else
-					busy = false
-				end
-				return Choice
-			end
-			if NoWait then
-				spawn(pcall(Run,Title,Text,Buttons or {},Duration or 5,false))
-			else
-				return Run(Title,Text,Buttons or {},Duration or 5,false)
-			end
-		end
-	end
 	
 	local function MakeDraggable(topbarobject, object)
 		local Dragging = nil
@@ -765,7 +769,7 @@ function lib:Main()
 					SliceCenter = Rect.new(100, 100, 100, 100),
 					SliceScale = 0.04,
 				})
-
+				
 				textlabels.textlabel = lib:Create("TextLabel", {          
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 1.000,
@@ -953,7 +957,6 @@ function lib:Main()
 
 				return {
 					SetValue = function(v)
-						local v = math.clamp(v,Min,Max)
 						local def = math.clamp(v, Min, Max)
 						local Porcentage = (def - Min) / (Max - Min)
 						TweenService:Create(sliders.sliderinner, TweenInfo.new(0.04), {Size = UDim2.new(Porcentage, 0, 1, -2)}):Play()
