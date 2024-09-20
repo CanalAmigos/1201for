@@ -36,7 +36,8 @@ pcall(function()
 	})
 	NotificationFrame.Parent = lib:Create('ScreenGui',{
 		Name = 'AncestorNotify',
-		ResetOnSpawn = false
+		ResetOnSpawn = false,
+		DisplayOrder = 2
 	})
 	NotificationFrame.Parent.Parent = CoreGui
 
