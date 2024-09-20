@@ -185,7 +185,7 @@ local NotifyQueq,busy,lastreturn = {},false,nil
 function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,NoWait)
 	if string.gsub(Title,'%D+',' ') ~= '' and string.gsub(Text,'%D+',' ') ~= '' then
 		if busy then
-			if NoWait then
+			if NoWait == true then
 				NotifyQueq[#NotifyQueq+1] = {Title,Text,Buttons or {},Duration or 5}
 			else
 				local s,r = nil,nil
@@ -244,7 +244,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			end
 			if #NotifyQueq > 0 then
 				local next = NotifyQueq[1]
-				if next[5] then
+				if type(next[5]) == 'function' then
 					spawn(function()
 						(next[5])(Run(next[1],next[2],next[3] or {},next[4] or 5,true))
 					end)
@@ -258,8 +258,10 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			end
 			return Choice
 		end
-		if NoWait then
-			spawn(pcall(Run,Title,Text,Buttons or {},Duration or 5,false))
+		if NoWait == true then
+			spawn(function()
+				Run(Title,Text,Buttons or {},Duration or 5,false)
+			end)
 		else
 			return Run(Title,Text,Buttons or {},Duration or 5,false)
 		end
