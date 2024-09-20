@@ -208,12 +208,12 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			TitleT.Text = Title
 			TextField.Text = Text
 			if #Buttons > 0 and #Buttons < 2 then
-				Button3.Text.Text = Buttons[1]
+				Button3.Text.Text = Buttons[1] -- Midle
 				Button3.Visible = true
 			elseif #Buttons > 0 then
-				Button1.Text.Text = Buttons[1]
+				Button1.Text.Text = Buttons[1] -- Left
 				Button1.Visible = true
-				Button2.Text.Text = Buttons[2]
+				Button2.Text.Text = Buttons[2] -- Right
 				Button2.Visible = true
 			end
 			Button1.Text.MouseButton1Up:Once(function()
@@ -244,9 +244,13 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			if #NotifyQueq > 0 then
 				local next = NotifyQueq[1]
 				if next[5] then
-					(next[5])(Run(next[1],next[2],next[3] or {},next[4] or 5,true))
+					spawn(function()
+						(next[5])(Run(next[1],next[2],next[3] or {},next[4] or 5,true))
+					end)
 				else
-					spawn(pcall(Run,next[1],next[2],next[3] or {},next[4] or 5,true))
+					spawn(function()
+						Run(next[1],next[2],next[3] or {},next[4] or 5,true)
+					end)
 				end
 			else
 				busy = false
