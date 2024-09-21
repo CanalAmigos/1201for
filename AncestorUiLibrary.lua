@@ -20,6 +20,10 @@ local TweenService = game:GetService("TweenService")
 local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
 local UIS = game:GetService("UserInputService")
 
+function GetCenter(frame: Frame)
+	return UDim2.new(0.5, -frame.AbsoluteSize.X / 2, 0.5, -frame.AbsoluteSize.Y / 2)
+end
+
 --// Notification \\--
 
 local NotificationFrame
@@ -29,11 +33,11 @@ pcall(function()
 		BackgroundColor3 = Color3.fromRGB(17, 17, 17),
 		BorderColor3 = Color3.fromRGB(47, 47, 47),
 		BorderSizePixel = 2,
-		Position = UDim2.new(0.3, 0, 0.3, 0),
 		Size = UDim2.new(0, 300,0, 200),
 		Visible = false,
 		ZIndex = 5,
 	})
+	NotificationFrame.Position = GetCenter(NotificationFrame)
 	NotificationFrame.Parent = lib:Create('ScreenGui',{
 		Name = 'AncestorNotify',
 		ResetOnSpawn = false,
@@ -281,9 +285,9 @@ function lib:Main()
 		Name = "MainBody",
 		BackgroundColor3 = Color3.fromRGB(25, 25, 25),
 		BorderSizePixel = 0,
-		Position = UDim2.new(0.3, 0, 0.3, 0),
 		Size = UDim2.new(0, 554, 0, 304),
 	})
+	main.MainBody.Position = GetCenter(NotificationFrame)
 	
 	local function MakeDraggable(topbarobject, object)
 		local Dragging = nil
