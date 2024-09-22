@@ -24,6 +24,16 @@ function GetCenter(frame: Frame)
 	return UDim2.new(0.5, -frame.AbsoluteSize.X / 2, 0.5, -frame.AbsoluteSize.Y / 2)
 end
 
+function GetIndex(t: {any},i: any)
+	local r = nil
+	if type(i) == 'string' then
+		r = t[i] or t[i:lower()]
+	elseif tonumber(i) then
+		r = r[i]
+	end
+	return r
+end
+
 --// Notification \\--
 
 local NotificationFrame
@@ -1170,15 +1180,24 @@ function lib:Main()
 				return kb
 			end
 
-			function sections:DropDown(Name, CallBack, Options, Playerlist)
+			function sections:DropDown(Name, CallBack, Options)
 				local dd = {}
 				local toggled = false
 				local dvalue 
 				local optionstable = {}
+				
+				local Options = Options or {}
+				local Default = {
+					playerlist = false,
+					default = "None",
+					callback = (function() end),
+					options = {}
+				}
+				setmetatable(Options,{__index=Default})
 
-				if Options and Options.options and not Playerlist then
-					optionstable = Options.options
-				elseif Playerlist then
+				if Options and GetIndex(Options,'Options') and not GetIndex(Options,'Playerlist') then
+					optionstable = GetIndex(Options,'Options')
+				elseif GetIndex(Options,'Playerlist') then
 					optionstable = {}
 					local list = game:GetService("Players"):GetChildren()
 					for i,v in pairs(list) do
@@ -1279,7 +1298,7 @@ function lib:Main()
 				})
 
 				local function refreshlist()
-					if Playerlist then 
+					if GetIndex(Options,'Playerlist') then 
 						optionstable = {}
 						local list = game.Players:GetChildren()
 						for i,v in pairs(list) do
@@ -1354,29 +1373,31 @@ function lib:Main()
 					end
 				end
 				
-				if Playerlist then
+				if GetIndex(Options,'Playerlist') then
 					local pls = game:GetService("Players")
 					pls.PlayerAdded:Connect(function(v)
 						if not table.find(optionstable,v.Name) then
 							table.insert(optionstable,v.Name)
 						end
 						table.sort(optionstable,function(a,b) return a:lower() < b:lower() end)
+						refreshlist()
 					end)
 					pls.PlayerRemoving:Connect(function(v)
 						local i = table.find(optionstable,v.Name)
 						if i then
 							table.remove(optionstable,i)
 						end
+						refreshlist()
 					end)
 				end
 				refreshlist()
 
-				dd.ddbutton.Text = optionstable and optionstable[1] or "None"
+				dd.ddbutton.Text = GetIndex(Options,'Default')
 
 				dd.ddbutton.Focused:Connect(function()
 					toggled = true
-					if Options and Options.CallBack then
-						optionstable = Options.CallBack()
+					if Options and GetIndex(Options,'CallBack') then
+						optionstable = GetIndex(Options,'CallBack')
 					end
 					--refreshlist()
 					dd.ddmp.Text = "-"
@@ -1386,8 +1407,8 @@ function lib:Main()
 
 				dd.ddmp.MouseButton1Click:Connect(function()
 					toggled = not toggled
-					if Options and Options.CallBack then
-						optionstable = Options.CallBack()
+					if Options and GetIndex(Options,'CallBack') then
+						optionstable = GetIndex(Options,'CallBack')
 					end
 					if toggled then 
 						--refreshlist()
@@ -1437,7 +1458,7 @@ function lib:Main()
 						end
 					end,
 					Refresh = function(v)
-						if not Playerlist then
+						if not GetIndex(Options,'Playerlist') then
 							optionstable = v or {}
 							refreshlist()
 						end
