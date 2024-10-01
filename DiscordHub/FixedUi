@@ -2508,7 +2508,7 @@ function DiscordLib:Window(text)
 
 				local function SetToggle(bool)
 					toggled = (bool == true)
-					if toggled == false then
+					if toggled == true then
 						TweenService:Create(
 							Icon,
 							TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
@@ -2532,7 +2532,6 @@ function DiscordLib:Window(text)
 							TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 							{ImageTransparency = 0}
 						):Play()
-						toggled = true
 					else
 						TweenService:Create(
 							Icon,
@@ -2557,7 +2556,6 @@ function DiscordLib:Window(text)
 							TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 							{ImageTransparency = 0}
 						):Play()
-						toggled = false
 					end
 					flag.Value(toggled)
 					Pcall(callback, toggled)
