@@ -2560,11 +2560,13 @@ function DiscordLib:Window(text)
 					flag.Value(toggled)
 					Pcall(callback, toggled)
 				end
-				ToggleFunc.SetToggle = SetToggle
 				flag.Call(SetToggle)
 				flag.Value(toggled)
 				Pcall(SetToggle,toggled)
 				
+				function ToggleFunc:SetToggle(b: boolean)
+					SetToggle(b)
+				end
 				function ToggleFunc:GetValue()
 					return toggled
 				end
