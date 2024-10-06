@@ -2369,6 +2369,7 @@ function DiscordLib:Window(text)
 							ToolTip.Visible = false
 						end)
 					end
+					return ButtonFunc
 				end
 
 				return ButtonFunc
@@ -2585,6 +2586,7 @@ function DiscordLib:Window(text)
 							ToolTip.Visible = false
 						end)
 					end
+					return ToggleFunc
 				end
 				return ToggleFunc
 			end
@@ -2797,6 +2799,7 @@ function DiscordLib:Window(text)
 							ToolTip.Visible = false
 						end)
 					end
+					return SliderFunc
 				end
 				return SliderFunc
 			end
@@ -3251,6 +3254,7 @@ function DiscordLib:Window(text)
 							ToolTip.Visible = false
 						end)
 					end
+					return DropFunc
 				end
 				return DropFunc
 			end
@@ -3507,6 +3511,7 @@ function DiscordLib:Window(text)
 							ToolTip.Visible = false
 						end)
 					end
+					return ColorpickerFunc
 				end
 
 				return ColorpickerFunc
@@ -3634,6 +3639,7 @@ function DiscordLib:Window(text)
 							ToolTip.Visible = false
 						end)
 					end
+					return TextBoxFunc
 				end
 
 				return TextBoxFunc
@@ -3680,6 +3686,7 @@ function DiscordLib:Window(text)
 							ToolTip.Visible = false
 						end)
 					end
+					return LabelFunc
 				end
 				
 				function LabelFunc:ChangeText(Text)
@@ -3687,6 +3694,7 @@ function DiscordLib:Window(text)
 						LabelTitle.Text = tostring(Text)
 					end
 				end
+				return LabelFunc
 			end
 
 			function ChannelContent:Bind(text, options, callback)
@@ -3796,6 +3804,7 @@ function DiscordLib:Window(text)
 							ToolTip.Visible = false
 						end)
 					end
+					return KeyBindFunc
 				end
 				return KeyBindFunc
 			end
