@@ -433,6 +433,126 @@ function library:CreateGui(title)
 		end
 		return ToggleL
 	end
+	function Gui:CreateKeyBind(title,key,callback)
+		local title = title or "[KeyBind]"
+		local key = key or 'NONE'
+		local callback = callback or function() end
+		local Lock = false
+		
+		local KeyBindL = {}
+		
+		local KeyBind = Instance.new("Frame")
+		local UICorner = Instance.new("UICorner")
+		local Text = Instance.new("TextLabel")
+		local UIText = Instance.new("UITextSizeConstraint")
+		local Key = Instance.new("TextLabel")
+		local UIText_2 = Instance.new("UITextSizeConstraint")
+		local UICorner_2 = Instance.new("UICorner")
+		
+		KeyBind.Name = "KeyBind"
+		KeyBind.Parent = Holder
+		KeyBind.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
+		KeyBind.BorderColor3 = Color3.fromRGB(27, 42, 53)
+		KeyBind.Size = UDim2.new(0.962962985, 0, 0.166666672, 0)
+
+		UICorner.Parent = KeyBind
+
+		Text.Name = "Text"
+		Text.Parent = KeyBind
+		Text.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Text.BackgroundTransparency = 1.000
+		Text.BorderColor3 = Color3.fromRGB(27, 42, 53)
+		Text.Position = UDim2.new(0.0269230772, 0, 0, 0)
+		Text.Size = UDim2.new(0.696153939, 0, 1, 0)
+		Text.Font = Enum.Font.SourceSansSemibold
+		Text.Text = "Title"
+		Text.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Text.TextSize = 21
+		Text.TextWrapped = true
+		Text.TextXAlignment = Enum.TextXAlignment.Left
+
+		UIText.Name = "UIText"
+		UIText.Parent = Text
+
+		Key.Name = "Key"
+		Key.Parent = KeyBind
+		Key.AnchorPoint = Vector2.new(0.200000003, 0)
+		Key.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
+		Key.BorderColor3 = Color3.fromRGB(27, 42, 53)
+		Key.Position = UDim2.new(0.769230902, 0, 0.200000003, 0)
+		Key.Size = UDim2.new(0.230769232, 0, 0.600000024, 0)
+		Key.Font = Enum.Font.SourceSansSemibold
+		Key.Text = "[ NONE ]"
+		Key.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Key.TextSize = 14
+		Key.TextWrapped = true
+
+		UIText_2.Name = "UIText"
+		UIText_2.Parent = Key
+
+		UICorner_2.CornerRadius = UDim.new(0, 5)
+		UICorner_2.Parent = Key
+		
+		local WaitingForBind = false
+		local Selected = nil
+		local Blacklist = {"W","A","S","D","Slash","Tab","Backspace","Escape","Space","Delete","Unknown","Backquote"}
+		
+		if table.find(Blacklist, key) then
+			Key.Text = "[ NONE ]"
+			Selected = 'NONE'
+		else
+			Key.Text = "[ "..key.." ]"
+			Selected = key
+		end
+
+		Key.MouseButton1Click:Connect(function()
+			if not Lock then
+				Key.Text = "[ . . . ]"
+				WaitingForBind = true
+			end
+		end)
+
+		userIn.InputBegan:Connect(function(Input)
+			if WaitingForBind and Input.UserInputType == Enum.UserInputType.Keyboard then
+				local Keyy = Input.KeyCode.Name
+				if not table.find(Blacklist, Keyy) then
+					Key.Text = "[ "..Keyy.." ]"
+					Selected = Keyy
+				else
+					Key.Text = "[ NONE ]"
+					Selected = "NONE"
+				end
+				WaitingForBind = false
+			elseif Input.UserInputType == Enum.UserInputType.Keyboard then
+				if Input.KeyCode.Name == Selected then
+					if callback then
+						callback(Input.KeyCode.Name)
+					end
+				end
+			end
+		end)
+
+		function KeyBindL:Lock(Value)
+			Value = Value or true
+			if Value then
+				Lock = true
+			else
+				Lock = false
+			end
+		end
+
+		function KeyBindL:SetBind(Keyy)
+			local Keyy = Keyy or "NONE"
+			Key.Text = "[ "..Keyy.." ]"
+			Selected = Keyy
+		end
+
+		function KeyBindL:GetBind()
+			return Selected
+		end
+
+		return KeyBindL
+	end
 	function Gui:CreateTextBox(title,onlynumbers,callback)
 		local title = title or "[TextBox]"
 		local onlynumbers = onlynumbers or false
@@ -868,7 +988,7 @@ function library:CreateGui(title)
 			callback(value)
 		end
 
-		function SliderL:GetValue(Value)
+		function SliderL:GetValue()
 			return GlobalSliderValue
 		end
 
