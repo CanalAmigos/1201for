@@ -601,6 +601,9 @@ function library:CreateGui(title)
 				else
 					value = Box.Text
 				end
+				if Box.Text ~= value then
+					Box.Text = value
+				end
 				callback(value)
 			end
 		end)
