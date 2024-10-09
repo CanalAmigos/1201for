@@ -31,13 +31,13 @@ function library:CreateGui(title)
 	local Preview = Instance.new("ImageLabel")
 	local UICorner_5 = Instance.new("UICorner")
 	local Togglekey = "RightControl"
-	
+
 	local selectedColor = Color3.fromHSV(0, 0, 1)
 	local colorData = {1,1,1}
 	local mouse1down = false
-	
+
 	local Gui = {}
-	
+
 	local function MakeDraggable(ClickObject, Object)
 		local Dragging,DragInput,DragStart,StartPosition = nil,nil,nil,nil
 		ClickObject.InputBegan:Connect(function(Input)
@@ -80,14 +80,14 @@ function library:CreateGui(title)
 	Main.Size = UDim2.new(0, 280, 0, 345)
 
 	UICorner.Parent = Main
-	
+
 	local function setColor(hue,sat,val)
 		colorData = {hue or colorData[1],sat or colorData[2],val or colorData[3]}
 		selectedColor = Color3.fromHSV(colorData[1],colorData[2],colorData[3])
 		Preview.BackgroundColor3 = selectedColor
 		Value.ImageColor3 = Color3.fromHSV(colorData[1],colorData[2],1)
 	end
-	
+
 	local function inBounds(frame)
 		local x,y = Mouse.X - frame.AbsolutePosition.X,Mouse.Y - frame.AbsolutePosition.Y
 		local maxX,maxY = frame.AbsoluteSize.X,frame.AbsoluteSize.Y
@@ -111,7 +111,7 @@ function library:CreateGui(title)
 			end
 		end
 	end
-	
+
 	Mouse.Move:connect(updateRGB)
 	Mouse.Button1Down:connect(function()mouse1down = true end)
 	Mouse.Button1Up:connect(function()mouse1down = false end)
@@ -124,7 +124,7 @@ function library:CreateGui(title)
 	ColorPicker.Size = UDim2.new(0, 145, 0, 145)
 	ColorPicker.Visible = false
 	ColorPicker.SizeConstraint = Enum.SizeConstraint.RelativeXX
-	
+
 	UICorner_2.Parent = ColorPicker
 
 	RGB.Name = "RGB"
@@ -216,7 +216,7 @@ function library:CreateGui(title)
 	MakeDraggable(Title,Main)
 
 	UICorner_5.Parent = Title
-	
+
 	Title_2.Name = "Title"
 	Title_2.Parent = Title
 	Title_2.Active = true
@@ -235,7 +235,7 @@ function library:CreateGui(title)
 
 	UIText.Name = "UIText"
 	UIText.Parent = Title
-	
+
 	userIn.InputBegan:Connect(function(key)
 		if key.UserInputType == Enum.UserInputType.Keyboard then
 			if key.KeyCode == Enum.KeyCode[Togglekey] then
@@ -243,13 +243,14 @@ function library:CreateGui(title)
 			end
 		end
 	end)
-	
+
 	function Gui:ChangeToggleKey(key)
+		local key = (typeof(key) == 'EnumItem' and key.Name) or key
 		if Enum.KeyCode[key] then
 			Togglekey = tostring(key)
 		end
 	end
-	
+
 	function Gui:ChangeToggle(value) -- change if is visible or not :)
 		if type(value) == "boolean" then
 			Main.Visible = value
@@ -257,14 +258,14 @@ function library:CreateGui(title)
 			Main.Visible = not Main.Visible
 		end
 	end
-	
+
 	function Gui:CreateToggle(title,value,callback)
 		local title = title or "[Toggle]"
 		local value = value or false
 		local callback = callback or function() end
-		
+
 		local ToggleL = {}
-		
+
 		local Toggle = Instance.new("TextButton")
 		local UICorner = Instance.new("UICorner")
 		local Check = Instance.new("ImageButton")
@@ -274,7 +275,7 @@ function library:CreateGui(title)
 		local UIText = Instance.new("UITextSizeConstraint")
 		local Title = Instance.new("TextLabel")
 		local UIText_3 = Instance.new("UITextSizeConstraint")
-		
+
 		local function toggle()
 			if Check.ImageTransparency == 1 then
 				Check.BackgroundColor3 = Color3.fromRGB(255, 0, 127)
@@ -317,7 +318,7 @@ function library:CreateGui(title)
 		end)
 
 		UICorner_2.Parent = Check
-		
+
 		Key.Name = "Key"
 		Key.Parent = Toggle
 		Key.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
@@ -331,7 +332,7 @@ function library:CreateGui(title)
 		Key.TextWrapped = true
 		Key.AutomaticSize = Enum.AutomaticSize.X
 		Key.AnchorPoint = Vector2.new(0.2, 0)
-		
+
 		UICorner_3.CornerRadius = UDim.new(0, 5)
 		UICorner_3.Parent = Key
 
@@ -354,7 +355,7 @@ function library:CreateGui(title)
 
 		UIText_3.Name = "UIText"
 		UIText_3.Parent = Title
-		
+
 		function ToggleL:SetValue(value)
 			local value = value or false
 			if value then
@@ -372,21 +373,21 @@ function library:CreateGui(title)
 			local KeybindL = {}
 			Bind = Bind or "NONE"
 			Lock = Lock or false
-			
+
 			local WaitingForBind = false
 			local Selected = Bind
 			local Blacklist = {"W","A","S","D","Slash","Tab","Backspace","Escape","Space","Delete","Unknown","Backquote"}
-			
+
 			Key.Visible = true
 			Key.Text = "[ "..Bind.." ]"
-			
+
 			Key.MouseButton1Click:Connect(function()
 				if not Lock then
 					Key.Text = "[ . . . ]"
 					WaitingForBind = true
 				end
 			end)
-			
+
 			userIn.InputBegan:Connect(function(Input)
 				if WaitingForBind and Input.UserInputType == Enum.UserInputType.Keyboard then
 					local Keyy = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
@@ -408,7 +409,7 @@ function library:CreateGui(title)
 					end
 				end
 			end)
-			
+
 			function KeybindL:Lock(Value)
 				Value = Value or true
 				if Value then
@@ -436,9 +437,9 @@ function library:CreateGui(title)
 		local title = title or "[TextBox]"
 		local onlynumbers = onlynumbers or false
 		local callback = callback or function() end
-		
+
 		local TextBoxL = {}
-		
+
 		local TextBox = Instance.new("Frame")
 		local UICorner = Instance.new("UICorner")
 		local Box = Instance.new("TextBox")
@@ -496,7 +497,7 @@ function library:CreateGui(title)
 
 		UIText.Name = "UIText"
 		UIText.Parent = Title
-		
+
 		function TextBoxL:SetText(txt)
 			local txt = txt or ""
 			Box.Text = txt
@@ -508,9 +509,9 @@ function library:CreateGui(title)
 		local items = items or {}
 		local callback = callback or function() end
 		local Toggled = false
-		
+
 		local DropDownL = {}
-		
+
 		local DropDown = Instance.new("Frame")
 		local UICorner = Instance.new("UICorner")
 		local Title = Instance.new("TextLabel")
@@ -520,7 +521,7 @@ function library:CreateGui(title)
 		local Open = Instance.new("TextButton")
 		local Icon = Instance.new("TextLabel")
 		local UICorner_2 = Instance.new("UICorner")
-		
+
 		local function UpdateSize()
 			if Toggled then
 				local Y = UIListL.AbsoluteContentSize.Y
@@ -529,7 +530,7 @@ function library:CreateGui(title)
 				Holder_.Size = UDim2.new(1, 0, 0, 0)
 			end
 		end
-		
+
 		local function Toggle(value)
 			if value == nil then
 				if Toggled then
@@ -557,7 +558,7 @@ function library:CreateGui(title)
 			end
 			UpdateSize()
 		end
-		
+
 		DropDown.Name = "DropDown"
 		DropDown.Parent = Holder
 		DropDown.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
@@ -590,7 +591,7 @@ function library:CreateGui(title)
 		Holder_.BackgroundTransparency = 1
 		Holder_.Position = UDim2.new(0, 0, 0, 75)
 		Holder_.Size = UDim2.new(1, 0, 0, 0)
-		
+
 		UIListL.Name = "UIListL"
 		UIListL.Parent = Holder_
 		UIListL.HorizontalAlignment = Enum.HorizontalAlignment.Center
@@ -625,17 +626,17 @@ function library:CreateGui(title)
 		Icon.TextSize = 20
 
 		UICorner_2.Parent = Open
-		
+
 		local function AddItem(text,call)
 			local text = text or "..."
 			local call = call or callback
-			
+
 			local ItemL = {}
-			
+
 			local TextButton = Instance.new("TextButton")
 			local UICorner = Instance.new('UICorner')
 			local UIText = Instance.new("UITextSizeConstraint")
-			
+
 			TextButton.Name = text
 			TextButton.Parent = Holder_
 			TextButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
@@ -661,34 +662,34 @@ function library:CreateGui(title)
 			TextButton.MouseLeave:Connect(function()
 				TextButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 			end)
-			
+
 			UICorner.Name = "UICorner"
 			UICorner.CornerRadius = UDim.new(0,5)
 			UICorner.Parent = TextButton
 
 			UIText.Name = "UIText"
 			UIText.Parent = TextButton
-			
+
 			function ItemL:Remove()
 				Ds:AddItem(TextButton,0)
 				UpdateSize()
 			end
-			
+
 			function ItemL:ChangeText(txt)
 				local txt = txt or "..."
 				if txt:gsub(" ","") ~= "" then
 					TextButton.Text = text
 				end
 			end
-			
+
 			function ItemL:GetText()
 				return TextButton.Text
 			end
-			
+
 			UpdateSize()
 			return ItemL
 		end
-		
+
 		if type(items) == "table" then
 			for i,v in pairs(items) do
 				if v:gsub(" ","") ~= "" then
@@ -696,7 +697,7 @@ function library:CreateGui(title)
 				end
 			end
 		end
-		
+
 		function DropDownL:AddOption(text,callback_)
 			local text = text or "..."
 			local callback_ = callback_ or callback
@@ -704,7 +705,7 @@ function library:CreateGui(title)
 				return AddItem(text,callback_)
 			end
 		end
-		
+
 		function DropDownL:AddOptions(table_,callback_)
 			local table_ = table_ or {}
 			local callback_ = callback_ or callback
@@ -718,7 +719,7 @@ function library:CreateGui(title)
 			end
 			return Return
 		end
-		
+
 		function DropDownL:SetText(text,call)
 			local text = text or "..."
 			local call = call or false
@@ -727,7 +728,7 @@ function library:CreateGui(title)
 				callback(text)
 			end
 		end
-		
+
 		function DropDownL:Reset()
 			for _,v in ipairs(Holder_:GetChildren()) do
 				if v:IsA("TextButton") then
@@ -748,7 +749,7 @@ function library:CreateGui(title)
 		local simbol = simbol or ""
 		local Dragging = false
 		local GlobalSliderValue = 0
-		
+
 		local Slider = Instance.new("Frame")
 		local UICorner = Instance.new("UICorner")
 		local Title = Instance.new("TextLabel")
@@ -759,9 +760,9 @@ function library:CreateGui(title)
 		local UICorner_3 = Instance.new("UICorner")
 		local Value = Instance.new("TextLabel")
 		local UIText_2 = Instance.new("UITextSizeConstraint")
-		
+
 		local SliderL = {}
-		
+
 		local function Sliding(Input)
 			local Position = UDim2.new(math.clamp((Input.Position.X - BarFull.AbsolutePosition.X) / BarFull.AbsoluteSize.X,0,1),0,1,0)
 			Control.Size = Position
@@ -773,7 +774,7 @@ function library:CreateGui(title)
 			Value.Text = tostring(SliderValue)..simbol
 			callback(GlobalSliderValue)
 		end
-		
+
 		local function SetValue(Value)
 			GlobalSliderValue = Value
 			local def = math.clamp(Value, Min, Max)
@@ -822,7 +823,7 @@ function library:CreateGui(title)
 		Control.Parent = BarFull
 		Control.BackgroundColor3 = Color3.fromRGB(57, 57, 57)
 		Control.Size = UDim2.new(Min / Max,0,1,0)
-		
+
 		UICorner_3.Parent = Control
 
 		Value.Name = "Value"
@@ -840,7 +841,7 @@ function library:CreateGui(title)
 
 		UIText_2.Name = "UIText"
 		UIText_2.Parent = Value
-		
+
 		BarFull.InputBegan:Connect(function(Input)
 			if Input.UserInputType == Enum.UserInputType.MouseButton1 then
 				Sliding(Input)
@@ -857,7 +858,7 @@ function library:CreateGui(title)
 				Sliding(Input)
 			end
 		end)
-		
+
 		function SliderL:SetValue(value)
 			GlobalSliderValue = value or GlobalSliderValue
 			local def = math.clamp(GlobalSliderValue, Min, Max)
@@ -866,23 +867,23 @@ function library:CreateGui(title)
 			Value.Text = value..simbol
 			callback(value)
 		end
-		
+
 		function SliderL:GetValue(Value)
 			return GlobalSliderValue
 		end
-		
+
 		SetValue(def)
-		
+
 		return SliderL
 	end
 	function Gui:CreateLabel(text)
 		local text = text or "[Label]"
-		
+
 		local Label = Instance.new("Frame")
 		local UICorner = Instance.new("UICorner")
 		local Text = Instance.new("TextLabel")
 		local UIText = Instance.new("UITextSizeConstraint")
-		
+
 		local LabelL = {}
 
 		Label.Name = "Label"
@@ -908,7 +909,7 @@ function library:CreateGui(title)
 
 		UIText.Name = "UIText"
 		UIText.Parent = Text
-		
+
 		function LabelL:TextColor(color)
 			local color = color or Color3.fromRGB(255, 255, 255)
 			Text.TextColor3 = color
@@ -921,12 +922,12 @@ function library:CreateGui(title)
 	end
 	function Gui:CreateSeparator(text)
 		local text = text or ""
-		
+
 		local Separator = Instance.new("Frame")
 		local UICorner = Instance.new("UICorner")
 		local TextLabel = Instance.new("TextLabel")
 		local UIText = Instance.new("UITextSizeConstraint")
-		
+
 		local SeparatorL = {}
 
 		Separator.Name = "Separator"
@@ -950,7 +951,7 @@ function library:CreateGui(title)
 
 		UIText.Name = "UIText"
 		UIText.Parent = TextLabel
-		
+
 		function SeparatorL:SetText(txt)
 			local txt = txt or ""
 			TextLabel.Text = txt
@@ -962,16 +963,16 @@ function library:CreateGui(title)
 		local color = Color3.toHSV(hsv) or Color3.fromHSV(0, 0, 1)
 		local callback = callback or function() end
 		local Open = false
-		
+
 		local ColorPikerL = {}
-		
+
 		local ColorChanger = Instance.new("TextButton")
 		local UICorner = Instance.new("UICorner")
 		local Color = Instance.new("ImageButton")
 		local UICorner_2 = Instance.new("UICorner")
 		local Title = Instance.new("TextLabel")
 		local UIText = Instance.new("UITextSizeConstraint")
-		
+
 		ColorChanger.Name = "ColorChanger"
 		ColorChanger.Parent = Holder
 		ColorChanger.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
@@ -1039,7 +1040,7 @@ function library:CreateGui(title)
 
 		UIText.Name = "UIText"
 		UIText.Parent = Title
-		
+
 		spawn(function()
 			while true do
 				Rs.RenderStepped:Wait()
@@ -1049,7 +1050,7 @@ function library:CreateGui(title)
 				end
 			end
 		end)
-		
+
 		function ColorPikerL:SetColor(color)
 			local color = color or Color3.new(1, 1, 1)
 			Color.BackgroundColor3 = color
@@ -1061,12 +1062,12 @@ function library:CreateGui(title)
 	function Gui:CreateButton(text,callback)
 		local text = text or "[Button]"
 		local callback = callback or function() end
-		
+
 		local Button = Instance.new("TextButton")
 		local UICorner = Instance.new("UICorner")
 		local Title = Instance.new("TextLabel")
 		local UIText = Instance.new("UITextSizeConstraint")
-		
+
 		local ButtonL = {}
 
 		Button.Name = "Button"
@@ -1101,7 +1102,7 @@ function library:CreateGui(title)
 
 		UIText.Name = "UIText"
 		UIText.Parent = Title
-		
+
 		function ButtonL:SetText(txt)
 			local txt = txt or "[Button]"
 			Title.Text = txt
