@@ -869,6 +869,9 @@ function library:CreateGui(title)
 		function SliderL:GetValue(Value)
 			return GlobalSliderValue
 		end
+		
+		SetValue(def)
+		
 		return SliderL
 	end
 	function Gui:CreateLabel(text)
@@ -953,10 +956,9 @@ function library:CreateGui(title)
 		end
 		return SeparatorL
 	end
-	function Gui:CreateColorPiker(title,hsv,doRGB,callback)
+	function Gui:CreateColorPiker(title,hsv,callback)
 		local title = title or "[ColorPiker]"
-		local color = hsv or Color3.fromHSV(0, 0, 1)
-		local doRGB = doRGB or false
+		local color = Color3.toHSV(hsv) or Color3.fromHSV(0, 0, 1)
 		local callback = callback or function() end
 		local Open = false
 		
@@ -1037,21 +1039,12 @@ function library:CreateGui(title)
 		UIText.Name = "UIText"
 		UIText.Parent = Title
 		
-		local function hsv2rgb(hsv)
-			local color = hsv
-			return Color3.fromRGB(math.floor((color.R*255)+0.5),math.floor((color.G*255)+0.5),math.floor((color.B*255)+0.5))
-		end
-		
 		spawn(function()
 			while true do
 				Rs.RenderStepped:Wait()
 				if Open then
 					Color.BackgroundColor3 = Preview.BackgroundColor3
-					if not doRGB then
-						callback(Color.BackgroundColor3)
-					else
-						callback(hsv2rgb(Color.BackgroundColor3))
-					end
+					callback(Color.BackgroundColor3)
 				end
 			end
 		end)
@@ -1061,7 +1054,7 @@ function library:CreateGui(title)
 			Color.BackgroundColor3 = color
 			callback(color)
 		end
-		ColorPikerL:SetColor(if not doRGB then color else hsv2rgb(color))
+		ColorPikerL:SetColor(color)
 		return ColorPikerL
 	end
 	function Gui:CreateButton(text,callback)
