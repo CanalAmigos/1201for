@@ -740,6 +740,7 @@ function library:CreateGui(title)
 	end
 	function Gui:CreateSlider(title,Max,Min,def,Precise,callback,simbol)
 		local title = title or "[Slider]"
+		local def = def or Min or 0
 		local Max = Max or def or 0
 		local Min = Min or def or 0
 		local Precise = Precise or false
