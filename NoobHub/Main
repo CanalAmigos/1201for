@@ -524,9 +524,10 @@ function library:CreateGui(title)
 				end
 				WaitingForBind = false
 			elseif Input.UserInputType == Enum.UserInputType.Keyboard then
-				if Input.KeyCode.Name == Selected then
+				local keyy = Input.KeyCode.Name
+				if keyy == Selected then
 					if callback then
-						callback(Input.KeyCode.Name)
+						callback(keyy)
 					end
 				end
 			end
@@ -543,8 +544,13 @@ function library:CreateGui(title)
 
 		function KeyBindL:SetBind(Keyy)
 			local Keyy = Keyy or "NONE"
-			Key.Text = "[ "..Keyy.." ]"
-			Selected = Keyy
+			if not table.find(Blacklist , Keyy) then
+				Key.Text = "[ "..Keyy.." ]"
+				Selected = Keyy
+			else
+				key.Text = "[ NONE ]"
+				Selected = 'NONE'
+			end
 		end
 
 		function KeyBindL:GetBind()
