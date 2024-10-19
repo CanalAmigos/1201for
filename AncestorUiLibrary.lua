@@ -195,22 +195,9 @@ pcall(function()
 	Text_2.Parent = Button3
 end)
 
-local NotifyQueq,busy,lastreturn = {},false,nil
-function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,NoWait)
+local NotifyQueq,busy,mainskip = {},false,false
+function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,NoWait,OverWrite)
 	if string.gsub(Title,'%D+',' ') ~= '' and string.gsub(Text,'%D+',' ') ~= '' then
-		if busy then
-			if NoWait == true then
-				NotifyQueq[#NotifyQueq+1] = {Title,Text,Buttons or {},Duration or 5}
-			else
-				local s,r = nil,nil
-				NotifyQueq[#NotifyQueq+1] = {Title,Text,Buttons or {},Duration or 5,function(v) s=true;r=v end}
-				repeat task.wait() until s
-				return r
-			end
-			return
-		else
-			busy = true
-		end
 		local Main = NotificationFrame
 		local TitleT = Main.Top.Title
 		local Button1 = Main.Button1
@@ -248,7 +235,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			end)
 			Main.Visible = true
 			local t = tick()
-			repeat task.wait() until tick()-t >= (tonumber(Duration) or 5) or skip
+			repeat task.wait() until tick()-t >= (tonumber(Duration) or 5) or skip or mainskip
 			Main.Visible = false
 			Button1.Visible = false
 			Button2.Visible = false
@@ -256,7 +243,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			if Queq then
 				table.remove(NotifyQueq,1)
 			end
-			if #NotifyQueq > 0 then
+			if #NotifyQueq > 0 and not mainskip then
 				local next = NotifyQueq[1]
 				if type(next[5]) == 'function' then
 					spawn(function()
@@ -269,8 +256,28 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 				end
 			else
 				busy = false
+				mainskip = false
 			end
 			return Choice
+		end
+		if busy then
+			if not OverWrite then
+				if NoWait == true then
+					NotifyQueq[#NotifyQueq+1] = {Title,Text,Buttons or {},Duration or 5}
+				else
+					local s,r = nil,nil
+					NotifyQueq[#NotifyQueq+1] = {Title,Text,Buttons or {},Duration or 5,function(v) s=true;r=v end}
+					repeat task.wait() until s
+					return r
+				end
+			else
+				mainskip = true
+				repeat task.wait() until mainskip == false
+				Run(Title,Text,Buttons or {},Duration or 5,false)
+			end
+			return
+		else
+			busy = true
 		end
 		if NoWait == true then
 			spawn(function()
@@ -298,7 +305,7 @@ function lib:Main()
 		Size = UDim2.new(0, 554, 0, 304),
 	})
 	main.MainBody.Position = GetCenter(NotificationFrame)
-	
+
 	local function MakeDraggable(topbarobject, object)
 		local Dragging = nil
 		local DragInput = nil
@@ -361,7 +368,7 @@ function lib:Main()
 		BorderSizePixel = 0,
 		Size = UDim2.new(0, 554, 0, 40),
 	})
-	
+
 	MakeDraggable(main.TopBar,main.MainBody)
 	MakeDraggable(main.MainBody,main.MainBody)
 
@@ -564,7 +571,7 @@ function lib:Main()
 
 			categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,40)
 
-			function sections:Button(Name, CallBack, Animated)
+			function sections:Button(Name, Animated, CallBack)
 				local buttons = {}
 
 				buttons.buttonb = lib:Create("ImageLabel", {
@@ -627,7 +634,7 @@ function lib:Main()
 				return buttons 
 			end
 
-			function sections:Toggle(Name, CallBack, Default)
+			function sections:Toggle(Name, Default, CallBack)
 				local toggles = {}
 				local toggled = false
 
@@ -790,7 +797,7 @@ function lib:Main()
 					SliceCenter = Rect.new(100, 100, 100, 100),
 					SliceScale = 0.04,
 				})
-				
+
 				textlabels.textlabel = lib:Create("TextLabel", {          
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 1.000,
@@ -813,7 +820,7 @@ function lib:Main()
 
 				return textlabels
 			end
-			
+
 			function sections:Separator()
 				local a = lib:Create("ImageLabel", {
 					Name = "TextLabel",
@@ -836,7 +843,7 @@ function lib:Main()
 					Size = UDim2.new(0, 476, 0, 29),
 				})
 				b.Parent = a
-				
+
 				local UIGradient = lib:Create('UIGradient',{
 					Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(4, 24, 136)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(6, 35, 197))},
 					Rotation = 0
@@ -844,9 +851,20 @@ function lib:Main()
 				UIGradient.Parent = b
 			end
 
-			function sections:Slider(Name, CallBack, Min, Max)
+			function sections:Slider(Name, Settings, CallBack)
 				local sliders = {}
 				local slidervalue = 0
+				local Settings = Settings or {}
+				Settings.__index = {
+					Max = 0,
+					Min = 0,
+					Default = 0,
+					Precise = false
+				}
+				local Max = Settings.max or Settings.Max
+				local Min = Settings.min or Settings.Min
+				local Default = Settings.default or Settings.Default
+				local Precise = Settings.precise or Settings.Precise
 
 				sliders.sliderb = lib:Create("ImageLabel", {
 					Name = Name.."Slider",
@@ -937,7 +955,7 @@ function lib:Main()
 					Position = UDim2.new(1, -204, 0, 0),
 					Size = UDim2.new(0, 199, 0, 28),
 					Font = Enum.Font.Gotham,
-					Text = Min,
+					Text = Default or Min,
 					TextColor3 = Color3.fromRGB(255, 255, 255),
 					TextSize = 16.000,
 					TextWrapped = true,
@@ -947,7 +965,7 @@ function lib:Main()
 				sliders.slider.MouseButton1Down:Connect(function()
 					local connection = game:GetService("RunService").Heartbeat:Connect(function()
 						local Scale = math.clamp(Mouse.X - sliders.slider.AbsolutePosition.X,0,sliders.slider.AbsoluteSize.X) / sliders.slider.AbsoluteSize.X
-						slidervalue = math.floor(Min + ((Max-Min) * Scale))
+						slidervalue = (Precise and math.floor(Min + ((Max-Min) * Scale))) or Min + ((Max-Min) * Scale)
 						sliders.slidervalue.Text = tostring(slidervalue)
 
 						if CallBack then
@@ -976,17 +994,22 @@ function lib:Main()
 				sliders.sliderinner.Parent = sliders.slider
 				sliders.slidervalue.Parent = sliders.darkoutline
 
-				return {
+				local SetValue do
 					SetValue = function(v)
+						local v = (Precise and math.floor(v or 0)) or (v or 0)
 						local def = math.clamp(v, Min, Max)
 						local Porcentage = (def - Min) / (Max - Min)
 						TweenService:Create(sliders.sliderinner, TweenInfo.new(0.04), {Size = UDim2.new(Porcentage, 0, 1, -2)}):Play()
 						sliders.slidervalue.Text = tostring(v)
-					end,
-				}
+						return SetValue
+					end
+				end
+				SetValue(Default)
+
+				return {SetValue=SetValue}
 			end 
 
-			function sections:TextBox(Name, CallBack, PlaceholderText, AutoName)
+			function sections:TextBox(Name, PlaceholderText, AutoName, CallBack)
 				local tb = {}
 				local text
 
@@ -1067,7 +1090,7 @@ function lib:Main()
 				return tb
 			end 
 
-			function sections:KeyBind(Name, CallBack, Default)
+			function sections:KeyBind(Name, Default, CallBack)
 				local kb = {}
 				local kbind
 
@@ -1180,12 +1203,12 @@ function lib:Main()
 				return kb
 			end
 
-			function sections:DropDown(Name, CallBack, Options)
+			function sections:DropDown(Name, Options, CallBack)
 				local dd = {}
 				local toggled = false
 				local dvalue 
 				local optionstable = {}
-				
+
 				local Options = Options or {}
 				local Default = {
 					playerlist = false,
@@ -1372,7 +1395,7 @@ function lib:Main()
 						end)
 					end
 				end
-				
+
 				if GetIndex(Options,'Playerlist') then
 					local pls = game:GetService("Players")
 					pls.PlayerAdded:Connect(function(v)
@@ -1466,7 +1489,7 @@ function lib:Main()
 				}   
 			end 
 
-			function sections:ColorPicker(Name, CallBack, Default)
+			function sections:ColorPicker(Name, Default, CallBack)
 				local colorstuff = {}
 				local colorpickeropend = false
 				local colorvalue
