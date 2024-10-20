@@ -855,12 +855,13 @@ function lib:Main()
 				local sliders = {}
 				local slidervalue = 0
 				local Settings = Settings or {}
-				Settings.__index = {
+				local Default = {
 					Max = 0,
 					Min = 0,
 					Default = 0,
 					Precise = false
 				}
+				setmetatable(Settings,{__index=Default})
 				local Max = Settings.max or Settings.Max
 				local Min = Settings.min or Settings.Min
 				local Default = Settings.default or Settings.Default
@@ -1309,7 +1310,7 @@ function lib:Main()
 					BackgroundTransparency = 1.000,
 					BorderSizePixel = 0,
 					Position = UDim2.new(0.00206611562, 0, 0.0606060624, 0),
-					Size = UDim2.new(0, 478, 0, 62),
+					Size = UDim2.new(0, 478, 0, 0),
 					ZIndex = 5,
 					CanvasSize = UDim2.new(0, 0, 0, 0),
 					ScrollBarThickness = 7,
@@ -1319,6 +1320,17 @@ function lib:Main()
 					SortOrder = Enum.SortOrder.LayoutOrder,
 					Padding = UDim.new(0, 5),
 				})
+				
+				local function UpdateSize(custom)
+					local i = (custom and #custom) or #optionstable
+					if i < 5 then
+						dd.ddscrolling.Size = UDim2.new(0, 478, 0, i*34)
+					elseif i >= 5 then
+						dd.ddscrolling.Size = UDim2.new(0, 478, 0, 170)
+					else
+						dd.ddscrolling.Size = UDim2.new(0, 478, 0, 0)
+					end
+				end
 
 				local function refreshlist()
 					if GetIndex(Options,'Playerlist') then 
@@ -1394,6 +1406,7 @@ function lib:Main()
 							end
 						end)
 					end
+					UpdateSize()
 				end
 
 				if GetIndex(Options,'Playerlist') then
@@ -1458,6 +1471,7 @@ function lib:Main()
 							end
 						end
 					end
+					UpdateSize(count)
 					TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {CanvasSize = UDim2.new(0, 0, 0, count*34)}):Play()
 				end)
 
@@ -1486,7 +1500,7 @@ function lib:Main()
 							refreshlist()
 						end
 					end,
-				}   
+				}
 			end 
 
 			function sections:ColorPicker(Name, Default, CallBack)
