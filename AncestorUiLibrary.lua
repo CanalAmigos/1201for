@@ -1323,10 +1323,10 @@ function lib:Main()
 
 				local function UpdateSize(custom)
 					local i = tonumber(custom) or #optionstable
-					if i < 3 then
+					if i < 4 then
 						dd.dd.Size = UDim2.new(0, 484, 0, i*33)
-					elseif i >= 3 then
-						dd.dd.Size = UDim2.new(0, 484, 0, 99)
+					elseif i >= 4 then
+						dd.dd.Size = UDim2.new(0, 484, 0, 132)
 					else
 						dd.dd.Size = UDim2.new(0, 484, 0, 0)
 					end
@@ -1483,7 +1483,7 @@ function lib:Main()
 				dd.ddscrolling.Parent = dd.dd
 				dd.ddscrollinglayout.Parent = dd.ddscrolling
 
-				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,60)
+				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,80)
 
 				return {
 					SetCurrent = function(v)
