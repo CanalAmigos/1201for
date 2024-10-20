@@ -1293,7 +1293,7 @@ function lib:Main()
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 1.000,
 					Position = UDim2.new(-0.0105477981, 0, 1.37899256, 0),
-					Size = UDim2.new(0, 484, 0, 66),
+					Size = UDim2.new(0, 484, 0, 99),
 					ZIndex = 5,
 					Visible = false,
 					Image = "rbxassetid://3570695787",
@@ -1310,7 +1310,7 @@ function lib:Main()
 					BackgroundTransparency = 1.000,
 					BorderSizePixel = 0,
 					Position = UDim2.new(0.00206611562, 0, 0.0606060624, 0),
-					Size = UDim2.new(0, 478, 0, 0),
+					Size = UDim2.new(0, 478, 0, 93),
 					ZIndex = 5,
 					CanvasSize = UDim2.new(0, 0, 0, 0),
 					ScrollBarThickness = 7,
@@ -1323,16 +1323,13 @@ function lib:Main()
 
 				local function UpdateSize(custom)
 					local i = tonumber(custom) or #optionstable
-					local size = 35+5
+					local size = dd.ddscrollinglayout.AbsoluteContentSize.Y
 					if i < 5 then
-						dd.ddscrolling.Size = UDim2.new(0, 478, 0, i*size)
-						dd.dd.Size = UDim2.new(0, 484, 0, i*size)
+						--dd.ddscrolling.Size = UDim2.new(0, 478, 0, size+5)
 					elseif i >= 5 then
-						dd.ddscrolling.Size = UDim2.new(0, 478, 0, 5*size)
-						dd.dd.Size = UDim2.new(0, 484, 0, 5*size)
+						--dd.ddscrolling.Size = UDim2.new(0, 478, 0, size+5)
 					else
-						dd.ddscrolling.Size = UDim2.new(0, 478, 0, 0)
-						dd.dd.Size = UDim2.new(0, 484, 0, 0)
+						--dd.ddscrolling.Size = UDim2.new(0, 478, 0, 0)
 					end
 				end
 
@@ -1487,7 +1484,7 @@ function lib:Main()
 				dd.ddscrolling.Parent = dd.dd
 				dd.ddscrollinglayout.Parent = dd.ddscrolling
 
-				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,40)
+				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,60)
 
 				return {
 					SetCurrent = function(v)
