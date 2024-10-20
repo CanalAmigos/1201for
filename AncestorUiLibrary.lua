@@ -1323,7 +1323,7 @@ function lib:Main()
 
 				local function UpdateSize(custom)
 					local i = tonumber(custom) or #optionstable
-					local size = (dd.ddscrollinglayout.AbsoluteContentSize.Y/i)+5
+					local size = 35+5
 					if i < 5 then
 						dd.ddscrolling.Size = UDim2.new(0, 478, 0, i*size)
 						dd.dd.Size = UDim2.new(0, 484, 0, i*size)
