@@ -527,6 +527,7 @@ function lib:Main()
 			CanvasSize = UDim2.new(0,0,.2,1.3),
 			Visible = false,
 		})
+		categories.Container.AutomaticSize = Enum.AutomaticSize.Y
 
 		if firstC then 
 			categories.Container.Visible = true 
@@ -568,8 +569,6 @@ function lib:Main()
 				TextSize = 27.000,
 				TextXAlignment = Enum.TextXAlignment.Left,
 			})
-
-			categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,40)
 
 			function sections:Button(Name, Animated, CallBack)
 				local buttons = {}
@@ -628,8 +627,6 @@ function lib:Main()
 				buttons.buttonb.Parent = categories.Container
 				buttons.buttonframe.Parent = buttons.buttonb
 				buttons.button.Parent = buttons.buttonframe
-
-				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,45)
 
 				return buttons 
 			end
@@ -737,8 +734,6 @@ function lib:Main()
 					end 
 				end)
 
-				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,40)
-
 				return {
 					Toggle = function()
 						toggled = not toggled
@@ -811,8 +806,6 @@ function lib:Main()
 					TextWrapped = true,
 				})
 				textlabels.textlabel.RichText = true
-
-				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,40)
 
 				textlabels.textlabelframe.Parent = categories.Container
 				textlabels.textlabelframe2.Parent = textlabels.textlabelframe
@@ -985,8 +978,6 @@ function lib:Main()
 					end)
 				end)
 
-				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,40)
-
 				sliders.sliderb.Parent = categories.Container
 				sliders.slidertext.Parent = sliders.sliderb
 				sliders.darkoutline.Parent = sliders.sliderb
@@ -1080,8 +1071,6 @@ function lib:Main()
 						CallBack(tb.textbox.Text)
 					end
 				end)
-
-				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,40)
 
 				tb.textboxback.Parent = categories.Container
 				tb.text.Parent = tb.textboxback
@@ -1194,8 +1183,6 @@ function lib:Main()
 					end
 				end)
 
-				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,40)
-
 				kb.kbback.Parent = categories.Container
 				kb.kbtext.Parent = kb.kbback
 				kb.darkoutline.Parent = kb.kbback
@@ -1244,12 +1231,13 @@ function lib:Main()
 					SliceCenter = Rect.new(100, 100, 100, 100),
 					SliceScale = 0.040,
 				})
+				dd.ddback.AutomaticSize = Enum.AutomaticSize.Y
 
 				dd.dddarkoutline = lib:Create("ImageLabel", {
 					Name = "DropDownButtonFrame",
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 1.000,
-					Position = UDim2.new(0.009999929, 0, 0.0857142881, 0),
+					Position = UDim2.new(0, 4, 0, 3),
 					Size = UDim2.new(0, 476, 0, 29),
 					Image = "rbxassetid://3570695787",
 					ImageColor3 = Color3.fromRGB(55, 55, 55),
@@ -1257,7 +1245,7 @@ function lib:Main()
 					SliceCenter = Rect.new(100, 100, 100, 100),
 					SliceScale = 0.040,
 				})
-
+				
 				dd.ddbutton = lib:Create("TextBox", {
 					Name = "DropDownButton",
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
@@ -1292,7 +1280,7 @@ function lib:Main()
 					Name = "DropDown",
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 1.000,
-					Position = UDim2.new(-0.0105477981, 0, 1.37899256, 0),
+					Position = UDim2.new(0, -4, 0, 39),
 					Size = UDim2.new(0, 484, 0, 99),
 					ZIndex = 5,
 					Visible = false,
@@ -1302,6 +1290,7 @@ function lib:Main()
 					SliceCenter = Rect.new(100, 100, 100, 100),
 					SliceScale = 0.040,
 				})
+				dd.dd.AutomaticSize = Enum.AutomaticSize.Y
 
 				dd.ddscrolling = lib:Create("ScrollingFrame", {
 					Name = "SectionConatiner",
@@ -1320,17 +1309,10 @@ function lib:Main()
 					SortOrder = Enum.SortOrder.LayoutOrder,
 					Padding = UDim.new(0, 5),
 				})
-
-				local function UpdateSize(custom)
-					local i = tonumber(custom) or #optionstable
-					if i < 4 then
-						dd.dd.Size = UDim2.new(0, 484, 0, i*33)
-					elseif i >= 4 then
-						dd.dd.Size = UDim2.new(0, 484, 0, 132)
-					else
-						dd.dd.Size = UDim2.new(0, 484, 0, 0)
-					end
-				end
+				
+				dd.ddscrollingpadding = lib:Create("UIPadding", {
+					PaddingLeft = UDim.new(0,3)
+				})
 
 				local function refreshlist()
 					if GetIndex(Options,'Playerlist') then 
@@ -1406,7 +1388,6 @@ function lib:Main()
 							end
 						end)
 					end
-					UpdateSize()
 				end
 
 				if GetIndex(Options,'Playerlist') then
@@ -1471,7 +1452,6 @@ function lib:Main()
 							end
 						end
 					end
-					UpdateSize(count)
 					TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {CanvasSize = UDim2.new(0, 0, 0, count*34)}):Play()
 				end)
 
@@ -1482,8 +1462,7 @@ function lib:Main()
 				dd.dd.Parent = dd.dddarkoutline
 				dd.ddscrolling.Parent = dd.dd
 				dd.ddscrollinglayout.Parent = dd.ddscrolling
-
-				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,80)
+				dd.ddscrollingpadding.Parent = dd.ddscrolling
 
 				return {
 					SetCurrent = function(v)
@@ -1790,8 +1769,6 @@ function lib:Main()
 				colorstuff.rainbowback.Parent = colorstuff.colorpickerframe
 				colorstuff.rainbow.Parent = colorstuff.rainbowback
 				colorstuff.rainbowlocation.Parent = colorstuff.rainbow
-
-				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,40)
 
 				colorstuff.colorpickerb.Parent = categories.Container
 				colorstuff.colorpickerbgray.Parent = colorstuff.colorpickerb
