@@ -527,9 +527,9 @@ function lib:Main()
 			CanvasSize = UDim2.new(0,0,.2,1.3),
 			Visible = false,
 		})
-		categories.Container.AutomaticSize = Enum.AutomaticSize.Y
+		categories.Container.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
-		if firstC then 
+		if firstC then
 			categories.Container.Visible = true 
 		end 
 
