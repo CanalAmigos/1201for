@@ -1281,7 +1281,7 @@ function lib:Main()
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 1.000,
 					Position = UDim2.new(0, -4, 0, 39),
-					Size = UDim2.new(0, 484, 0, 99),
+					Size = UDim2.new(0, 484, 0, 0),
 					ZIndex = 5,
 					Visible = false,
 					Image = "rbxassetid://3570695787",
