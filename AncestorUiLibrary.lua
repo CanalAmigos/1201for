@@ -809,8 +809,8 @@ function lib:Main()
 					TextColor3 = Color3.fromRGB(255, 255, 255),
 					TextSize = 16.000,
 					TextWrapped = true,
-					RichText = true,
 				})
+				textlabels.textlabel.RichText = true
 
 				categories.Container.CanvasSize = categories.Container.CanvasSize + UDim2.new(0,0,0,40)
 
@@ -1322,13 +1322,16 @@ function lib:Main()
 				})
 				
 				local function UpdateSize(custom)
-					local i = (custom and #custom) or #optionstable
+					local i = tonumber(custom) or #optionstable
 					if i < 5 then
 						dd.ddscrolling.Size = UDim2.new(0, 478, 0, i*34)
+						dd.dd.Size = UDim2.new(0, 484, 0, i*34)
 					elseif i >= 5 then
 						dd.ddscrolling.Size = UDim2.new(0, 478, 0, 170)
+						dd.dd.Size = UDim2.new(0, 484, 0, 170)
 					else
 						dd.ddscrolling.Size = UDim2.new(0, 478, 0, 0)
+						dd.dd.Size = UDim2.new(0, 484, 0, 0)
 					end
 				end
 
