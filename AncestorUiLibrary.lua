@@ -1286,7 +1286,7 @@ function lib:Main()
 					Name = "DropDown",
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 1.000,
-					Position = UDim2.new(0, -4, 0, 39),
+					Position = UDim2.new(0, -4, 0, 35),
 					Size = UDim2.new(0, 484, 0, 0),
 					ZIndex = 5,
 					Visible = false,
@@ -1298,19 +1298,15 @@ function lib:Main()
 				})
 				dd.dd.AutomaticSize = Enum.AutomaticSize.Y
 
-				dd.ddscrolling = lib:Create("ScrollingFrame", {
+				dd.ddscrolling = lib:Create("Frame", {
 					Name = "SectionConatiner",
-					Active = true,
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 1.000,
 					BorderSizePixel = 0,
-					Position = UDim2.new(0.00206611562, 0, 0.0606060624, 0),
-					Size = UDim2.new(0, 478, 0, 0),
+					Position = UDim2.new(0.002, 0, 0, 2),
+					Size = UDim2.new(1, 0, 0, 0),
 					ZIndex = 5,
-					CanvasSize = UDim2.new(0, 0, 0, 0),
-					ScrollBarThickness = 7,
 				})
-				dd.ddscrolling.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
 				dd.ddscrollinglayout = lib:Create("UIListLayout", {
 					SortOrder = Enum.SortOrder.LayoutOrder,
@@ -1382,11 +1378,11 @@ function lib:Main()
 								if toggled then 
 									dd.ddmp.Text = "-"
 									dd.dd.Visible = true
-									TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(0, 478, 0, dd.ddscrolling["UIListLayout"].AbsoluteContentSize.Y) + UDim2.new(0,0,0,5)}):Play()
+									TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, dd.ddscrolling["UIListLayout"].AbsoluteContentSize.Y) + UDim2.new(0,0,0,5)}):Play()
 								else 
 									dd.ddmp.Text = "+"
 									dd.dd.Visible = false
-									TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(0, 478, 0, 0)}):Play()
+									TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, 0)}):Play()
 								end
 
 								if CallBack then
@@ -1426,7 +1422,7 @@ function lib:Main()
 					--refreshlist()
 					dd.ddmp.Text = "-"
 					dd.dd.Visible = true
-					TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(0, 478, 0, dd.ddscrolling["UIListLayout"].AbsoluteContentSize.Y) + UDim2.new(0,0,0,5)}):Play()
+					TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, dd.ddscrolling["UIListLayout"].AbsoluteContentSize.Y) + UDim2.new(0,0,0,5)}):Play()
 				end)
 
 				dd.ddmp.MouseButton1Click:Connect(function()
@@ -1438,12 +1434,12 @@ function lib:Main()
 						--refreshlist()
 						dd.ddmp.Text = "-"
 						dd.dd.Visible = true
-						TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(0, 478, 0, dd.ddscrolling["UIListLayout"].AbsoluteContentSize.Y) + UDim2.new(0,0,0,5)}):Play()
+						TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, dd.ddscrolling["UIListLayout"].AbsoluteContentSize.Y) + UDim2.new(0,0,0,5)}):Play()
 					else 
 						--refreshlist()
 						dd.ddmp.Text = "+"
 						dd.dd.Visible = false
-						TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(0, 478, 0, 0)}):Play()
+						TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, 0)}):Play()
 					end
 				end)
 
@@ -1459,7 +1455,7 @@ function lib:Main()
 							end
 						end
 					end
-					TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(0, 478, 0, count*34)}):Play()
+					TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, count*34)}):Play()
 				end)
 
 				dd.ddback.Parent = categories.Container
