@@ -1305,7 +1305,7 @@ function lib:Main()
 					BackgroundTransparency = 1.000,
 					BorderSizePixel = 0,
 					Position = UDim2.new(0.00206611562, 0, 0.0606060624, 0),
-					Size = UDim2.new(0, 478, 0, 93),
+					Size = UDim2.new(0, 478, 0, 0),
 					ZIndex = 5,
 					CanvasSize = UDim2.new(0, 0, 0, 0),
 					ScrollBarThickness = 7,
