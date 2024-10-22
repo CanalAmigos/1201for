@@ -213,9 +213,9 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 				Button3.Text.Text = Buttons[1] -- Midle
 				Button3.Visible = true
 			elseif #Buttons > 0 then
-				Button1.Text.Text = Buttons[1] -- Left
+				Button1.Text.Text = Buttons[1] -- Left, Green
 				Button1.Visible = true
-				Button2.Text.Text = Buttons[2] -- Right
+				Button2.Text.Text = Buttons[2] -- Right, Red
 				Button2.Visible = true
 			end
 			Button1.Text.MouseButton1Up:Once(function()
@@ -273,7 +273,13 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			else
 				mainskip = true
 				repeat task.wait() until mainskip == false
-				Run(Title,Text,Buttons or {},Duration or 5,false)
+				if NoWait == true then
+					spawn(function()
+						Run(Title,Text,Buttons or {},Duration or 5,false)
+					end)
+				else
+					return Run(Title,Text,Buttons or {},Duration or 5,false)
+				end
 			end
 			return
 		else
