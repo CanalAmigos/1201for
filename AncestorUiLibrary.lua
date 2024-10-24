@@ -100,12 +100,12 @@ pcall(function()
 		TextColor3 = Color3.fromRGB(255, 255, 255),
 		TextSize = 22,
 		--TextScaled = true,
-		TextWrapped = true,
 		TextXAlignment = Enum.TextXAlignment.Left,
 		TextYAlignment = Enum.TextYAlignment.Top,
 		ZIndex = 5,
 	})
 	TextField.Parent = NotificationFrame
+	TextField.TextWrapped = true
 
 	local TextSize = lib:Create('UITextSizeConstraint',{})
 	TextSize.Parent = TextField
