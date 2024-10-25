@@ -824,7 +824,8 @@ function lib:Main()
 				local a = lib:Create("ImageLabel", {
 					Name = "TextLabel",
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-					BackgroundTransparency = 1.000,
+					BackgroundTransparency = 1,
+					ImageTransparency = 1,
 					Position = UDim2.new(0.00415800419, 0, 0.86175108, 0),
 					Size = UDim2.new(0, 484, 0, 35),
 					Image = "rbxassetid://3570695787",
@@ -834,7 +835,8 @@ function lib:Main()
 					SliceScale = 0.040,
 				})
 				a.Parent = categories.Container
-
+				
+				--[[
 				local b = lib:Create("Frame", {
 					Name = "TextLabelFrame",
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
@@ -848,6 +850,7 @@ function lib:Main()
 					Rotation = 0
 				})
 				UIGradient.Parent = b
+				--]]
 			end
 
 			function sections:Slider(Name, Settings, CallBack)
