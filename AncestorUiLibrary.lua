@@ -195,7 +195,7 @@ pcall(function()
 	Text_2.Parent = Button3
 end)
 
-local NotifyQueq,busy,mainskip = {},false,false
+local NotifyQueq,busy,mainskip,OverTable = {},false,false,{}
 function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,NoWait,OverWrite)
 	if string.gsub(Title,'%D+',' ') ~= '' and string.gsub(Text,'%D+',' ') ~= '' then
 		local Main = NotificationFrame
@@ -243,20 +243,22 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			if Queq then
 				table.remove(NotifyQueq,1)
 			end
-			if #NotifyQueq > 0 and not mainskip then
-				local next = NotifyQueq[1]
-				if type(next[5]) == 'function' then
-					spawn(function()
-						(next[5])(Run(next[1],next[2],next[3] or {},next[4] or 5,true))
-					end)
-				else
-					spawn(function()
-						Run(next[1],next[2],next[3] or {},next[4] or 5,true)
-					end)
+			if #NotifyQueq > 0 or mainskip then
+				local next = (not mainskip and NotifyQueq[1]) or (mainskip and OverTable)
+				mainskip = false
+				if next then
+					if type(next[5]) == 'function' then
+						spawn(function()
+							(next[5])(Run(next[1],next[2],next[3] or {},next[4] or 5,true))
+						end)
+					else
+						spawn(function()
+							Run(next[1],next[2],next[3] or {},next[4] or 5,true)
+						end)
+					end
 				end
 			else
 				busy = false
-				mainskip = false
 			end
 			return Choice
 		end
@@ -271,14 +273,15 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 					return r
 				end
 			else
-				mainskip = true
-				repeat task.wait() until mainskip == false
 				if NoWait == true then
-					spawn(function()
-						Run(Title,Text,Buttons or {},Duration or 5,false)
-					end)
+					OverTable = {Title,Text,Buttons or {},Duration or 5}
+					mainskip = true
 				else
-					return Run(Title,Text,Buttons or {},Duration or 5,false)
+					local s,r = nil,nil
+					OverTable = {Title,Text,Buttons or {},Duration or 5,function(v) s=true;r=v end}
+					mainskip = true
+					repeat task.wait() until s
+					return r
 				end
 			end
 			return
