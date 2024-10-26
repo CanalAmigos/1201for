@@ -828,8 +828,8 @@ function lib:Main()
 					Name = "Seperator1",
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 1.000,
-					Position = UDim2.new(0, 0, 0.350318581, 0),
-					Size = UDim2.new(0, 100, 0, 8)
+					Position = UDim2.new(0.5, 0, 0, 0),
+					Size = UDim2.new(0, 484, 0, 8)
 				})
 				a.Parent = categories.Container
 				
@@ -838,7 +838,7 @@ function lib:Main()
 					BackgroundColor3 = Color3.fromRGB(66, 69, 74),
 					BorderSizePixel = 0,
 					Position = UDim2.new(0, 0, 0, 4),
-					Size = UDim2.new(0, 401, 0, 1)
+					Size = UDim2.new(1, 0, 0, 1)
 				}).Parent = a
 				
 				--[[
