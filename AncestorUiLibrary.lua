@@ -564,6 +564,14 @@ function lib:Main()
 
 		function categories:Section(Name)
 			local sections = {}
+			local Keybinds = {}
+			
+			sections.LockKeyBind = function(name: string,value: boolean)
+				local v = Keybinds[tostring(name)]
+				if v then
+					v(value)
+				end
+			end
 
 			sections.sectionname = lib:Create("TextLabel", {
 				Name = Name.."Section",
@@ -1102,6 +1110,8 @@ function lib:Main()
 
 			function sections:KeyBind(Name, Default, CallBack)
 				local kb = {}
+				local lock = false
+				local lockkey = false
 				local kbind
 
 				kb.kbback = lib:Create("ImageLabel", {
@@ -1167,7 +1177,7 @@ function lib:Main()
 				end
 				local debounce = false
 				kb.kb.MouseButton1Click:Connect(function()
-					if debounce then 
+					if debounce or lockkey then 
 						return
 					end
 					debounce = true
@@ -1192,9 +1202,13 @@ function lib:Main()
 						end
 					end)
 				end)
+				
+				Keybinds[Name] = function(v)
+					lock = v
+				end
 
 				game:GetService("UserInputService").InputBegan:Connect(function(i, GPE)
-					if kbind and i.KeyCode == kbind and not GPE then
+					if kbind and i.KeyCode == kbind and not GPE and not lock then
 						if CallBack then
 							pcall(function()
 								CallBack(kbind)
@@ -1207,6 +1221,16 @@ function lib:Main()
 				kb.kbtext.Parent = kb.kbback
 				kb.darkoutline.Parent = kb.kbback
 				kb.kb.Parent = kb.darkoutline
+				
+				-->>>[Functions]<<<--
+				
+				kb.Lock = function(v: boolean)
+					lock = v
+				end
+				
+				kb.LockKey = function(v: boolean)
+					lockkey = v
+				end
 
 				return kb
 			end
