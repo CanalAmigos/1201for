@@ -643,6 +643,7 @@ function lib:Main()
 			function sections:Toggle(Name, Default, CallBack)
 				local toggles = {}
 				local toggled = false
+				local toggleBlock = false
 
 				toggles.toggle = lib:Create("ImageButton", {
 					Name = Name.."Toggle",
@@ -730,17 +731,19 @@ function lib:Main()
 				toggles.t3.Parent = toggles.t2
 
 				toggles.toggle.MouseButton1Click:Connect(function()
-					toggled = not toggled
+					if not toggleBlock then
+						toggled = not toggled
 
-					if toggled then 
-						TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0.700523198, 0, 0, 0)}):Play()
-					else 
-						TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0, 0, 0, 0)}):Play()
+						if toggled then 
+							TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0.700523198, 0, 0, 0)}):Play()
+						else 
+							TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0, 0, 0, 0)}):Play()
+						end
+
+						if CallBack then 
+							CallBack(toggled)
+						end 
 					end
-
-					if CallBack then 
-						CallBack(toggled)
-					end 
 				end)
 
 				return {
@@ -769,6 +772,9 @@ function lib:Main()
 						if CallBack then 
 							CallBack(toggled)
 						end 
+					end,
+					Lock = function(v)
+						toggleBlock = v
 					end,
 				}
 			end
