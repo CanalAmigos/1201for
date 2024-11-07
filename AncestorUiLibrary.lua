@@ -34,6 +34,12 @@ function GetIndex(t: {any},i: any)
 	return r
 end
 
+function Disconnect(v)
+	pcall(function()
+		v:Disconnect()
+	end)
+end
+
 --// Notification \\--
 
 local NotificationFrame
@@ -206,7 +212,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 		local TextField = Main.TextField
 
 		local function Run(Title: string,Text: string,Buttons: {string},Duration,Queq: boolean)
-			local Choice,skip = nil,false
+			local Choice,skip,Conections = nil,false,{}
 			TitleT.Text = Title
 			TextField.Text = Text
 			if #Buttons > 0 and #Buttons < 2 then
@@ -218,17 +224,17 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 				Button2.Text.Text = Buttons[2] -- Right, Red
 				Button2.Visible = true
 			end
-			Button1.Text.MouseButton1Up:Once(function()
+			Conections[1] = Button1.Text.MouseButton1Up:Once(function()
 				if skip then return end
 				Choice = Buttons[1]
 				skip = true
 			end)
-			Button2.Text.MouseButton1Up:Once(function()
+			Conections[2] = Button2.Text.MouseButton1Up:Once(function()
 				if skip then return end
 				Choice = Buttons[2]
 				skip = true
 			end)
-			Button3.Text.MouseButton1Up:Once(function()
+			Conections[3] = Button3.Text.MouseButton1Up:Once(function()
 				if skip then return end
 				Choice = Buttons[1]
 				skip = true
@@ -240,6 +246,9 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			Button1.Visible = false
 			Button2.Visible = false
 			Button3.Visible = false
+			for _,v in pairs(Conections) do
+				Disconnect(v)
+			end
 			if Queq then
 				table.remove(NotifyQueq,1)
 			end
@@ -999,7 +1008,7 @@ function lib:Main()
 					UIS.InputEnded:Connect(function(i)
 						if i.UserInputType == Enum.UserInputType.MouseButton1 then
 							if connection then
-								connection:Disconnect()
+								Disconnect(connection)
 								connection = nil
 							end
 						end
@@ -1188,14 +1197,14 @@ function lib:Main()
 							kbind = i.KeyCode
 							debounce = false
 							if c then
-								c:Disconnect()
+								Disconnect(c)
 								c = nil
 							end
 						elseif i.KeyCode == Enum.KeyCode.Backspace then
 							kb.kb.Text = "None"
 							kbind = nil
 							if c then
-								c:Disconnect()
+								Disconnect(c)
 								c = nil
 								debounce = false
 							end
@@ -1915,11 +1924,11 @@ function lib:Main()
 				UIS.InputEnded:Connect(function(Mouse)
 					if Mouse.UserInputType == Enum.UserInputType.MouseButton1 then
 						if(cc) then
-							cc:Disconnect()
+							Disconnect(cc)
 							cc = nil
 						end
 						if(rc) then 
-							rc:Disconnect()
+							Disconnect(rc)
 							rc = nil
 						end
 					end
