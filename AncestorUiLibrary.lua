@@ -310,6 +310,7 @@ end
 function lib:Main()
 	local main = {}
 	local firstC = true
+	local keycode = Enum.KeyCode.LeftControl
 
 	main.ScreenGui = lib:Create("ScreenGui", {
 		Name = "Ancestor",
@@ -323,6 +324,16 @@ function lib:Main()
 		Size = UDim2.new(0, 554, 0, 304),
 	})
 	main.MainBody.Position = GetCenter(NotificationFrame)
+	
+	UIS.InputBegan:Connect(function(k,p)
+		if k.KeyCode == keycode and not p then
+			main.MainBody.Visible = not main.MainBody.Visible
+		end
+	end)
+	
+	function main:ChangeToggleKey(key: Enum.KeyCode)
+		keycode = key
+	end
 
 	local function MakeDraggable(topbarobject, object)
 		local Dragging = nil
