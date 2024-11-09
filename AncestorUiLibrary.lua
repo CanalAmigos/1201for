@@ -307,10 +307,15 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 	end
 end
 
-function lib:Main()
+function lib:Main(Settings)
+	local mainsettings = {}
 	local main = {}
 	local firstC = true
 	local keycode = Enum.KeyCode.LeftControl
+	setmetatable(mainsettings,{__index={
+		CloseButton = true
+	}})
+	mainsettings.CloseButton = Settings.CloseButton or Settings.closebutton
 
 	main.ScreenGui = lib:Create("ScreenGui", {
 		Name = "Ancestor",
@@ -333,6 +338,10 @@ function lib:Main()
 	
 	function main:ChangeToggleKey(key: Enum.KeyCode)
 		keycode = key
+	end
+	
+	function main:GetGui()
+		return main.ScreenGui
 	end
 
 	local function MakeDraggable(topbarobject, object)
@@ -474,41 +483,46 @@ function lib:Main()
 		TextSize = 20.000,
 		TextXAlignment = Enum.TextXAlignment.Left
 	})
+	
+	if mainsettings.CloseButton then
+		main.CloseFrame = lib:Create("ImageLabel", {
+			Name = "CloseFrame",
+			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+			BackgroundTransparency = 1.000,
+			Position = UDim2.new(0.958662987, 0, 0.250000001, 0),
+			Size = UDim2.new(0, 15, 0, 15),
+			Image = "rbxassetid://3570695787",
+			ImageColor3 = Color3.fromRGB(255, 0, 4),
+			ScaleType = Enum.ScaleType.Slice,
+			SliceCenter = Rect.new(100, 100, 100, 100),
+			SliceScale = 0.120,
+			ImageTransparency = 1,
+		})
 
-	main.CloseFrame = lib:Create("ImageLabel", {
-		Name = "CloseFrame",
-		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-		BackgroundTransparency = 1.000,
-		Position = UDim2.new(0.958662987, 0, 0.250000001, 0),
-		Size = UDim2.new(0, 15, 0, 15),
-		Image = "rbxassetid://3570695787",
-		ImageColor3 = Color3.fromRGB(255, 0, 4),
-		ScaleType = Enum.ScaleType.Slice,
-		SliceCenter = Rect.new(100, 100, 100, 100),
-		SliceScale = 0.120,
-		ImageTransparency = 1,
-	})
+		main.Close = lib:Create("TextButton", {
+			Name = "Close",
+			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+			BackgroundTransparency = 1.000,
+			BorderSizePixel = 0,
+			Position = UDim2.new(0, 0, -0.466666669, 0),
+			Size = UDim2.new(0, 15, 0, 25),
+			Font = Enum.Font.SourceSans,
+			Text = "x",
+			TextColor3 = Color3.fromRGB(255, 255, 255),
+			TextSize = 18.000,
+		})
 
-	main.Close = lib:Create("TextButton", {
-		Name = "Close",
-		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-		BackgroundTransparency = 1.000,
-		BorderSizePixel = 0,
-		Position = UDim2.new(0, 0, -0.466666669, 0),
-		Size = UDim2.new(0, 15, 0, 25),
-		Font = Enum.Font.SourceSans,
-		Text = "x",
-		TextColor3 = Color3.fromRGB(255, 255, 255),
-		TextSize = 18.000,
-	})
+		main.Close.MouseEnter:Connect(function()
+			TweenService:Create(main.CloseFrame, TweenInfo.new(0.1), {ImageTransparency = 0}):Play()
+		end)
 
-	main.Close.MouseEnter:Connect(function()
-		TweenService:Create(main.CloseFrame, TweenInfo.new(0.1), {ImageTransparency = 0}):Play()
-	end)
-
-	main.Close.MouseLeave:Connect(function()
-		TweenService:Create(main.CloseFrame, TweenInfo.new(0.1), {ImageTransparency = 1}):Play()
-	end)
+		main.Close.MouseLeave:Connect(function()
+			TweenService:Create(main.CloseFrame, TweenInfo.new(0.1), {ImageTransparency = 1}):Play()
+		end)
+		
+		main.CloseFrame.Parent = main.TopBar
+		main.Close.Parent = main.CloseFrame
+	end
 
 	main.CategoryContainer = lib:Create("ScrollingFrame", {
 		Name = "CategoryContainer",
@@ -2003,10 +2017,12 @@ function lib:Main()
 
 		return categories
 	end
-
-	main.Close.MouseButton1Click:Connect(function()
-		game:GetService('CoreGui').Ancestor:Destroy()
-	end)
+	
+	if mainsettings.CloseButton then
+		main.Close.MouseButton1Click:Connect(function()
+			game:GetService('CoreGui').Ancestor:Destroy()
+		end)
+	end
 
 	main.ScreenGui.Parent = game:GetService('CoreGui')
 	main.MainBody.Parent = main.ScreenGui
@@ -2018,8 +2034,6 @@ function lib:Main()
 	main.LogoText3.Parent = main.LogoTextFolder
 	main.LogoText4.Parent = main.LogoTextFolder
 	main.LogoText5.Parent = main.LogoTextFolder
-	main.CloseFrame.Parent = main.TopBar
-	main.Close.Parent = main.CloseFrame
 	main.CategoryContainer.Parent = main.MainBody
 	main.CategoryPadding.Parent = main.CategoryContainer
 	main.CategoryLayout.Parent = main.CategoryContainer
