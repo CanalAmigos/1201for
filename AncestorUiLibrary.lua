@@ -557,7 +557,7 @@ function lib:Main()
 		})
 
 		categories.ContainerPadding = lib:Create("UIPadding", {
-			PaddingLeft = UDim.new(0, 5),
+			PaddingLeft = UDim.new(0, 0),
 			PaddingBottom = UDim.new(0,5),
 		})
 
@@ -581,9 +581,29 @@ function lib:Main()
 					v(value)
 				end
 			end
+			
+			sections.sectioncontainer = lib:Create("Frame", {
+				Name = `{Name}Section`,
+				BackgroundTransparency = 1,
+				Size = UDim2.new(1, 0, 0, 0)
+			})
+			sections.sectioncontainer.AutomaticSize = Enum.AutomaticSize.Y
+			sections.sectioncontainer.Parent = categories.Container
+			
+			sections.containerLayout = lib:Create("UIListLayout", {
+				SortOrder = Enum.SortOrder.LayoutOrder,
+				Padding = UDim.new(0, 5),
+			})
+			sections.containerLayout.Parent = sections.sectioncontainer
+
+			sections.containerPadding = lib:Create("UIPadding", {
+				PaddingLeft = UDim.new(0, 5),
+				PaddingBottom = UDim.new(0,5),
+			})
+			sections.containerPadding.Parent = sections.sectioncontainer
 
 			sections.sectionname = lib:Create("TextLabel", {
-				Name = Name.."Section",
+				Name = "SectionTitle",
 				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 				BackgroundTransparency = 1.000,
 				BorderSizePixel = 0,
@@ -595,6 +615,7 @@ function lib:Main()
 				TextSize = 27.000,
 				TextXAlignment = Enum.TextXAlignment.Left,
 			})
+			sections.sectionname.Parent = sections.sectioncontainer
 
 			function sections:Button(Name, Animated, CallBack)
 				local buttons = {}
@@ -650,7 +671,7 @@ function lib:Main()
 					end
 				end)
 
-				buttons.buttonb.Parent = categories.Container
+				buttons.buttonb.Parent = sections.sectioncontainer
 				buttons.buttonframe.Parent = buttons.buttonb
 				buttons.button.Parent = buttons.buttonframe
 
@@ -741,7 +762,7 @@ function lib:Main()
 					end 
 				end
 
-				toggles.toggle.Parent = categories.Container
+				toggles.toggle.Parent = sections.sectioncontainer
 				toggles.togglename.Parent = toggles.toggle
 				toggles.t1.Parent = toggles.toggle 
 				toggles.t2.Parent = toggles.t1 
@@ -839,7 +860,7 @@ function lib:Main()
 				})
 				textlabels.textlabel.RichText = true
 
-				textlabels.textlabelframe.Parent = categories.Container
+				textlabels.textlabelframe.Parent = sections.sectioncontainer
 				textlabels.textlabelframe2.Parent = textlabels.textlabelframe
 				textlabels.textlabel.Parent = textlabels.textlabelframe2
 
@@ -854,7 +875,7 @@ function lib:Main()
 					Position = UDim2.new(0.5, 0, 0, 0),
 					Size = UDim2.new(0, 484, 0, 8)
 				})
-				a.Parent = categories.Container
+				a.Parent = sections.sectioncontainer
 				
 				lib:Create("Frame", {
 					Name = "Seperator2",
@@ -1015,7 +1036,7 @@ function lib:Main()
 					end)
 				end)
 
-				sliders.sliderb.Parent = categories.Container
+				sliders.sliderb.Parent = sections.sectioncontainer
 				sliders.slidertext.Parent = sliders.sliderb
 				sliders.darkoutline.Parent = sliders.sliderb
 				sliders.sliderinnerback.Parent = sliders.darkoutline
@@ -1109,7 +1130,7 @@ function lib:Main()
 					end
 				end)
 
-				tb.textboxback.Parent = categories.Container
+				tb.textboxback.Parent = sections.sectioncontainer
 				tb.text.Parent = tb.textboxback
 				tb.darkoutline.Parent = tb.textboxback
 				tb.textbox.Parent = tb.darkoutline
@@ -1226,7 +1247,7 @@ function lib:Main()
 					end
 				end)
 
-				kb.kbback.Parent = categories.Container
+				kb.kbback.Parent = sections.sectioncontainer
 				kb.kbtext.Parent = kb.kbback
 				kb.darkoutline.Parent = kb.kbback
 				kb.kb.Parent = kb.darkoutline
@@ -1505,7 +1526,7 @@ function lib:Main()
 					TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, count*34)}):Play()
 				end)
 
-				dd.ddback.Parent = categories.Container
+				dd.ddback.Parent = sections.sectioncontainer
 				dd.dddarkoutline.Parent = dd.ddback
 				dd.ddbutton.Parent = dd.dddarkoutline
 				dd.ddmp.Parent = dd.dddarkoutline
@@ -1820,7 +1841,7 @@ function lib:Main()
 				colorstuff.rainbow.Parent = colorstuff.rainbowback
 				colorstuff.rainbowlocation.Parent = colorstuff.rainbow
 
-				colorstuff.colorpickerb.Parent = categories.Container
+				colorstuff.colorpickerb.Parent = sections.sectioncontainer
 				colorstuff.colorpickerbgray.Parent = colorstuff.colorpickerb
 				colorstuff.colorpickertext.Parent = colorstuff.colorpickerb
 				colorstuff.colorpickerbutton.Parent = colorstuff.colorpickerbgray
@@ -1956,8 +1977,6 @@ function lib:Main()
 
 				return colorstuff
 			end
-
-			sections.sectionname.Parent = categories.Container
 
 			return sections
 		end
