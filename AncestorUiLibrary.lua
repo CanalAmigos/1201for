@@ -323,7 +323,7 @@ function lib:Main()
 		BorderSizePixel = 0,
 		Size = UDim2.new(0, 554, 0, 304),
 	})
-	main.MainBody.Position = GetCenter(NotificationFrame)
+	main.MainBody.Position = GetCenter(main.MainBody)
 	
 	UIS.InputBegan:Connect(function(k,p)
 		if k.KeyCode == keycode and not p then
