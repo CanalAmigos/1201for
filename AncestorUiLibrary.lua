@@ -307,15 +307,18 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 	end
 end
 
-function lib:Main(Settings)
-	local mainsettings = {}
+function lib:Main(mainsettings)
+	local mainsettings = mainsettings or {}
 	local main = {}
 	local firstC = true
 	local keycode = Enum.KeyCode.LeftControl
-	setmetatable(mainsettings,{__index={
-		CloseButton = true
-	}})
-	mainsettings.CloseButton = Settings.CloseButton or Settings.closebutton
+	setmetatable(mainsettings,{__index=function(t,i)
+		local Defaults = {
+			['CloseButton'] = true
+		}
+		local v = rawget(t,string.lower(i))
+		return (v ~= nil and v) or Defaults[i]
+	end})
 
 	main.ScreenGui = lib:Create("ScreenGui", {
 		Name = "Ancestor",
