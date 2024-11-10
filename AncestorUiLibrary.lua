@@ -603,7 +603,7 @@ function lib:Main(mainsettings)
 			local sections = {}
 			local Keybinds = {}
 			
-			sections.LockKeyBind = function(name: string,all: boolean,value: boolean)
+			sections.LockKeyBind = function(all: boolean,name: string,value: boolean)
 				if all == true then
 					for _,v in pairs(Keybinds) do
 						if v then
