@@ -935,10 +935,10 @@ function lib:Main(mainsettings)
 				local Settings = Settings or {}
 				setmetatable(Settings,{__index=function(t,i)
 					local Defaults = {
-						Max = 0,
-						Min = 0,
-						Default = 0,
-						Precise = false
+						['Max'] = 0,
+						['Min'] = 0,
+						['Default'] = 0,
+						['Precise'] = false
 					}
 					local v = rawget(t,string.lower(i))
 					return (v ~= nil and v) or Defaults[i]
@@ -1303,10 +1303,10 @@ function lib:Main(mainsettings)
 				local Options = Options or {}
 				setmetatable(Options,{__index=function(t,i)
 					local Defaults = {
-						playerlist = false,
-						default = "None",
-						callback = (function() end),
-						options = {}
+						['Playerlist'] = false,
+						['Default'] = "None",
+						['CallBack'] = (function() end),
+						['Options'] = {}
 					}
 					local v = rawget(t,string.lower(i))
 					return (v ~= nil and v) or Defaults[i]
