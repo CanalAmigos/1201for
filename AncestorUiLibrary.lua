@@ -328,7 +328,8 @@ function lib:Main(mainsettings)
 	main.MainBody = lib:Create("Frame", {
 		Name = "MainBody",
 		BackgroundColor3 = Color3.fromRGB(25, 25, 25),
-		BorderSizePixel = 0,
+		BorderColor3 = Color3.fromRGB(47, 47, 47),
+		BorderSizePixel = 2,
 		Size = UDim2.new(0, 554, 0, 304),
 	})
 	main.MainBody.Position = GetCenter(main.MainBody)
