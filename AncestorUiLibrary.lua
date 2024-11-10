@@ -603,10 +603,18 @@ function lib:Main(mainsettings)
 			local sections = {}
 			local Keybinds = {}
 			
-			sections.LockKeyBind = function(name: string,value: boolean)
-				local v = Keybinds[tostring(name)]
-				if v then
-					v(value)
+			sections.LockKeyBind = function(name: string,all: boolean,value: boolean)
+				if all == true then
+					for _,v in pairs(Keybinds) do
+						if v then
+							v(value)
+						end
+					end
+				else
+					local v = Keybinds[tostring(name)]
+					if v then
+						v(value)
+					end
 				end
 			end
 			
