@@ -24,16 +24,6 @@ function GetCenter(frame: Frame)
 	return UDim2.new(0.5, -frame.AbsoluteSize.X / 2, 0.5, -frame.AbsoluteSize.Y / 2)
 end
 
-function GetIndex(t: {any},i: any)
-	local r = nil
-	if type(i) == 'string' then
-		r = t[i] or t[i:lower()]
-	elseif tonumber(i) then
-		r = r[i]
-	end
-	return r
-end
-
 function Disconnect(v)
 	pcall(function()
 		v:Disconnect()
@@ -943,17 +933,20 @@ function lib:Main(mainsettings)
 				local sliders = {}
 				local slidervalue = 0
 				local Settings = Settings or {}
-				local Default = {
-					Max = 0,
-					Min = 0,
-					Default = 0,
-					Precise = false
-				}
-				setmetatable(Settings,{__index=Default})
-				local Max = Settings.max or Settings.Max
-				local Min = Settings.min or Settings.Min
-				local Default = Settings.default or Settings.Default
-				local Precise = Settings.precise or Settings.Precise
+				setmetatable(Settings,{__index=function(t,i)
+					local Defaults = {
+						Max = 0,
+						Min = 0,
+						Default = 0,
+						Precise = false
+					}
+					local v = rawget(t,string.lower(i))
+					return (v ~= nil and v) or Defaults[i]
+				end})
+				local Max = Settings.Max
+				local Min = Settings.Min
+				local Default = Settings.Default
+				local Precise = Settings.Precise
 
 				sliders.sliderb = lib:Create("ImageLabel", {
 					Name = Name.."Slider",
@@ -1307,19 +1300,21 @@ function lib:Main(mainsettings)
 				local toggled = false
 				local dvalue 
 				local optionstable = {}
-
 				local Options = Options or {}
-				local Default = {
-					playerlist = false,
-					default = "None",
-					callback = (function() end),
-					options = {}
-				}
-				setmetatable(Options,{__index=Default})
+				setmetatable(Options,{__index=function(t,i)
+					local Defaults = {
+						playerlist = false,
+						default = "None",
+						callback = (function() end),
+						options = {}
+					}
+					local v = rawget(t,string.lower(i))
+					return (v ~= nil and v) or Defaults[i]
+				end})
 
-				if Options and GetIndex(Options,'Options') and not GetIndex(Options,'Playerlist') then
-					optionstable = GetIndex(Options,'Options')
-				elseif GetIndex(Options,'Playerlist') then
+				if Options and Options.Options and not Options.Playerlist then
+					optionstable = Options.Options
+				elseif Options.Playerlist then
 					optionstable = {}
 					local list = game:GetService("Players"):GetChildren()
 					for i,v in pairs(list) do
@@ -1423,7 +1418,7 @@ function lib:Main(mainsettings)
 				})
 
 				local function refreshlist()
-					if GetIndex(Options,'Playerlist') then 
+					if Options.Playerlist then
 						optionstable = {}
 						local list = game.Players:GetChildren()
 						for i,v in pairs(list) do
@@ -1498,7 +1493,7 @@ function lib:Main(mainsettings)
 					end
 				end
 
-				if GetIndex(Options,'Playerlist') then
+				if Options.Playerlist then
 					local pls = game:GetService("Players")
 					pls.PlayerAdded:Connect(function(v)
 						if not table.find(optionstable,v.Name) then
@@ -1517,12 +1512,12 @@ function lib:Main(mainsettings)
 				end
 				refreshlist()
 
-				dd.ddbutton.Text = GetIndex(Options,'Default')
+				dd.ddbutton.Text = Options.Default
 
 				dd.ddbutton.Focused:Connect(function()
 					toggled = true
-					if Options and GetIndex(Options,'CallBack') then
-						optionstable = GetIndex(Options,'CallBack')
+					if Options and Options.CallBack then
+						optionstable = Options.CallBack
 					end
 					--refreshlist()
 					dd.ddmp.Text = "-"
@@ -1532,8 +1527,8 @@ function lib:Main(mainsettings)
 
 				dd.ddmp.MouseButton1Click:Connect(function()
 					toggled = not toggled
-					if Options and GetIndex(Options,'CallBack') then
-						optionstable = GetIndex(Options,'CallBack')
+					if Options and Options.CallBack then
+						optionstable = Options.CallBack
 					end
 					if toggled then 
 						--refreshlist()
@@ -1582,7 +1577,7 @@ function lib:Main(mainsettings)
 						end
 					end,
 					Refresh = function(v)
-						if not GetIndex(Options,'Playerlist') then
+						if not Options.Playerlist then
 							optionstable = v or {}
 							refreshlist()
 						end
