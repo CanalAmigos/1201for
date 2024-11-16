@@ -192,7 +192,7 @@ pcall(function()
 end)
 
 local NotifyQueq,busy,mainskip,OverTable = {},false,false,{}
-function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,NoWait,OverWrite)
+function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,Options: {('NoWait') -> ('OverWrite') -> boolean})
 	if string.gsub(Title,'%D+',' ') ~= '' and string.gsub(Text,'%D+',' ') ~= '' then
 		local Main = NotificationFrame
 		local TitleT = Main.Top.Title
@@ -261,9 +261,20 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			end
 			return Choice
 		end
+		
+		Options = Options or {}
+		setmetatable(Options,{__index=function(t,i)
+			local Defaults = {
+				['NoWait'] = false,
+				['OverWrite'] = false
+			}
+			local v = rawget(t,string.lower(i))
+			return (v ~= nil and v) or Defaults[i]
+		end})
+		
 		if busy then
-			if not OverWrite then
-				if NoWait == true then
+			if not Options.OverWrite then
+				if Options.NoWait == true then
 					NotifyQueq[#NotifyQueq+1] = {Title,Text,Buttons or {},Duration or 5}
 				else
 					local s,r = nil,nil
@@ -272,7 +283,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 					return r
 				end
 			else
-				if NoWait == true then
+				if Options.NoWait == true then
 					OverTable = {Title,Text,Buttons or {},Duration or 5}
 					mainskip = true
 				else
@@ -287,7 +298,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 		else
 			busy = true
 		end
-		if NoWait == true then
+		if Options.NoWait == true then
 			spawn(function()
 				Run(Title,Text,Buttons or {},Duration or 5,false)
 			end)
