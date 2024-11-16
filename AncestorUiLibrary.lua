@@ -1312,7 +1312,7 @@ function lib:Main(mainsettings)
 					return (v ~= nil and v) or Defaults[i]
 				end})
 
-				if Options and Options.Options and not Options.Playerlist then
+				if Options.Options and not Options.Playerlist then
 					optionstable = Options.Options
 				elseif Options.Playerlist then
 					optionstable = {}
@@ -1471,18 +1471,17 @@ function lib:Main(mainsettings)
 						button.MouseButton1Click:Connect(function()
 							if toggled then
 
-								toggled = not toggled
+								toggled = false
 								dd.ddbutton.Text = v
 								dvalue = v
-
-								if toggled then 
-									dd.ddmp.Text = "-"
-									dd.dd.Visible = true
-									TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, dd.ddscrolling["UIListLayout"].AbsoluteContentSize.Y) + UDim2.new(0,0,0,5)}):Play()
-								else 
-									dd.ddmp.Text = "+"
-									dd.dd.Visible = false
-									TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, 0)}):Play()
+								
+								dd.ddmp.Text = "+"
+								dd.dd.Visible = false
+								TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, 0)}):Play()
+								for i,v in next, dd.ddscrolling:GetChildren() do 
+									if v:IsA("ImageLabel") then
+										v.Visible = true
+									end
 								end
 
 								if CallBack then
