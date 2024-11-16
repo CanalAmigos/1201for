@@ -1418,16 +1418,6 @@ function lib:Main(mainsettings)
 				})
 
 				local function refreshlist()
-					if Options.Playerlist then
-						optionstable = {}
-						local list = game.Players:GetChildren()
-						for i,v in pairs(list) do
-							if v:IsA("Player") then
-								table.insert(optionstable, v.Name)
-							end
-						end
-						table.sort(optionstable,function(a,b) return a:lower() < b:lower() end)
-					end
 
 					for i,v in next, dd.ddscrolling:GetChildren() do
 						if v:IsA("ImageLabel") then
@@ -1508,6 +1498,14 @@ function lib:Main(mainsettings)
 						end
 						refreshlist()
 					end)
+					optionstable = {}
+					local list = game.Players:GetChildren()
+					for i,v in pairs(list) do
+						if v:IsA("Player") then
+							table.insert(optionstable, v.Name)
+						end
+					end
+					table.sort(optionstable,function(a,b) return a:lower() < b:lower() end)
 				end
 				refreshlist()
 
