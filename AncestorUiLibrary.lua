@@ -19,6 +19,7 @@ local CoreGui = game:GetService('CoreGui')
 local TweenService = game:GetService("TweenService")
 local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
 local UIS = game:GetService("UserInputService")
+local TextSrvice = game:GetService("TextService")
 
 function GetCenter(frame: Frame)
 	return UDim2.new(0.5, -frame.AbsoluteSize.X / 2, 0.5, -frame.AbsoluteSize.Y / 2)
@@ -82,6 +83,21 @@ pcall(function()
 		ZIndex = 5,
 	})
 	Title.Parent = Top
+	
+	local TextHolder = lib:Create('ScrollingFrame',{
+		Name = "FieldHolder",
+		BackgroundColor3 = Color3.fromRGB(17, 17, 17),
+		BorderColor3 = Color3.fromRGB(0, 0, 0),
+		BorderSizePixel = 0,
+		ScrollBarThickness = 5,
+		ScrollBarImageColor3 = Color3.fromRGB(161, 161, 161),
+		Position = UDim2.new(0, 0, 0, 34),
+		Size = UDim2.new(0, 300, 0, 120),
+		CanvasSize = UDim2.new(0, 0, 0, 0),
+		ZIndex = 5
+	})
+	TextHolder.Parent = NotificationFrame
+	TextHolder.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
 	local TextField = lib:Create('TextLabel',{
 		Name = "TextField",
@@ -89,7 +105,7 @@ pcall(function()
 		BackgroundTransparency = 0,
 		BorderColor3 = Color3.fromRGB(0, 0, 0),
 		BorderSizePixel = 0,
-		Position = UDim2.new(0, 5,0, 34),
+		Position = UDim2.new(0, 5, 0, 0),
 		Size = UDim2.new(0, 290, 0, 120),
 		Font = Enum.Font.SourceSans,
 		Text = "...",
@@ -100,8 +116,15 @@ pcall(function()
 		TextYAlignment = Enum.TextYAlignment.Top,
 		ZIndex = 5,
 	})
-	TextField.Parent = NotificationFrame
+	TextField.Parent = TextHolder
 	TextField.TextWrapped = true
+	--TextField.AutomaticSize = Enum.AutomaticSize.Y
+	TextField.Changed:Connect(function()
+		local size = TextSrvice:GetTextSize(TextField.Text,22,Enum.Font.SourceSans,Vector2.new(290,math.huge))
+		if typeof(size) == 'Vector2' then
+			TextField.Size = UDim2.fromOffset(290,size.Y)
+		end
+	end)
 
 	local TextSize = lib:Create('UITextSizeConstraint',{})
 	TextSize.Parent = TextField
@@ -199,7 +222,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 		local Button1 = Main.Button1
 		local Button2 = Main.Button2
 		local Button3 = Main.Button3
-		local TextField = Main.TextField
+		local TextField = Main.FieldHolder.TextField
 
 		local function Run(Title: string,Text: string,Buttons: {string},Duration,Queq: boolean)
 			local Choice,skip,Conections = nil,false,{}
