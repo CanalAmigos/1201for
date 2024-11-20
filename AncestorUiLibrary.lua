@@ -1,13 +1,15 @@
 local lib = {}
 if game:GetService('CoreGui'):FindFirstChild('Ancestor') then 
 	game:GetService('CoreGui').Ancestor:Destroy()
+	game:GetService('CoreGui').AncestorNotify:Destroy()
+	game:GetService('CoreGui').AncestorToolTip:Destroy()
 end
 
-function lib:Create(type, proprieties)
+function lib:Create(type, proprieties, parent)
 	local instance = Instance.new(type)
 
 	for i, v in next, proprieties do
-		if instance[i] and proprieties ~= "Parent" then
+		if instance[i] and (proprieties ~= "Parent" or parent) then
 			instance[i] = v
 		end
 	end
@@ -30,6 +32,37 @@ function Disconnect(v)
 		v:Disconnect()
 	end)
 end
+
+local MainToolTip = lib:Create('TextLabel',{
+	BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+	BackgroundTransparency = 0.5,
+	BorderColor3 = Color3.fromRGB(0, 0, 0),
+	Size = UDim2.new(0, 93, 0, 20),
+	Font = Enum.Font.SourceSans,
+	Text = "Fuuuuuuuuuuck",
+	Visible = false,
+	TextColor3 = Color3.fromRGB(200, 200, 200),
+	TextSize = 15,
+	TextStrokeTransparency = 0.750,
+})
+MainToolTip.Parent = lib:Create('ScreenGui',{
+	Name = 'AncestorToolTip',
+	ResetOnSpawn = false,
+	DisplayOrder = 1
+})
+MainToolTip.Parent.Parent = CoreGui
+
+lib:Create('UICorner',{
+	CornerRadius = UDim.new(0, 4),
+	Parent = MainToolTip
+},true)
+
+local TTP
+TTP = game:GetService('RunService').RenderStepped:Connect(function()
+	if MainToolTip == nil then TTP:Disconnect() end
+	MainToolTip.Size = UDim2.new(0,MainToolTip.TextBounds.X + 5,0,MainToolTip.TextBounds.Y + 5)
+	MainToolTip.Position = UDim2.new(0,Mouse.X-(MainToolTip.Size.X.Offset+10),0,Mouse.Y - 5)
+end)
 
 --// Notification \\--
 
@@ -875,6 +908,33 @@ function lib:Main(mainsettings)
 					Lock = function(v)
 						toggleBlock = v
 					end,
+					ToolTip = function(Text)
+						local t = lib:Create('TextButton',{
+							Name = "ToolTip",
+							BackgroundColor3 = Color3.fromRGB(55, 55, 55),
+							BorderColor3 = Color3.fromRGB(0, 0, 0),
+							BorderSizePixel = 0,
+							Position = UDim2.new(0.795, 0, 0.086, 0),
+							Size = UDim2.new(0, 29, 0, 29),
+							Font = Enum.Font.SourceSans,
+							Text = "?",
+							AutoButtonColor = false,
+							TextColor3 = Color3.fromRGB(255, 255, 255),
+							TextSize = 24
+						})
+						t.Parent = toggles.toggle
+						t.MouseButton1Down:Connect(function()
+							MainToolTip.Text = Text
+							MainToolTip.Visible = true
+						end)
+						t.MouseLeave:Connect(function()
+							MainToolTip.Visible = false
+						end)
+						local c = lib:Create('UICorner',{
+							CornerRadius = UDim.new(0, 5)
+						})
+						c.Parent = t
+					end,
 				}
 			end
 
@@ -1198,6 +1258,34 @@ function lib:Main(mainsettings)
 				tb.text.Parent = tb.textboxback
 				tb.darkoutline.Parent = tb.textboxback
 				tb.textbox.Parent = tb.darkoutline
+				
+				tb.ToolTip = function(Text)
+					local t = lib:Create('TextButton',{
+						Name = "ToolTip",
+						BackgroundColor3 = Color3.fromRGB(55, 55, 55),
+						BorderColor3 = Color3.fromRGB(0, 0, 0),
+						BorderSizePixel = 0,
+						Position = UDim2.new(0.196, 0, 0.086, 0),
+						Size = UDim2.new(0, 29, 0, 29),
+						Font = Enum.Font.SourceSans,
+						Text = "?",
+						AutoButtonColor = false,
+						TextColor3 = Color3.fromRGB(255, 255, 255),
+						TextSize = 24
+					})
+					t.Parent = tb.textboxback
+					t.MouseButton1Down:Connect(function()
+						MainToolTip.Text = Text
+						MainToolTip.Visible = true
+					end)
+					t.MouseLeave:Connect(function()
+						MainToolTip.Visible = false
+					end)
+					local c = lib:Create('UICorner',{
+						CornerRadius = UDim.new(0, 5)
+					})
+					c.Parent = t
+				end
 
 				return tb
 			end 
@@ -1324,6 +1412,34 @@ function lib:Main(mainsettings)
 				
 				kb.LockKey = function(v: boolean)
 					lockkey = v
+				end
+				
+				kb.ToolTip = function(Text)
+					local t = lib:Create('TextButton',{
+						Name = "ToolTip",
+						BackgroundColor3 = Color3.fromRGB(55, 55, 55),
+						BorderColor3 = Color3.fromRGB(0, 0, 0),
+						BorderSizePixel = 0,
+						Position = UDim2.new(0.599, 0, 0.086, 0),
+						Size = UDim2.new(0, 29, 0, 29),
+						Font = Enum.Font.SourceSans,
+						Text = "?",
+						AutoButtonColor = false,
+						TextColor3 = Color3.fromRGB(255, 255, 255),
+						TextSize = 24
+					})
+					t.Parent = kb.kbback
+					t.MouseButton1Down:Connect(function()
+						MainToolTip.Text = Text
+						MainToolTip.Visible = true
+					end)
+					t.MouseLeave:Connect(function()
+						MainToolTip.Visible = false
+					end)
+					local c = lib:Create('UICorner',{
+						CornerRadius = UDim.new(0, 5)
+					})
+					c.Parent = t
 				end
 
 				return kb
