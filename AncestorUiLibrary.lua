@@ -249,7 +249,7 @@ end)
 
 local NotifyQueq,busy,mainskip,OverTable = {},false,false,{}
 function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,Options: {('NoWait') -> ('OverWrite') -> boolean})
-	if string.gsub(Title,'%D+',' ') ~= '' and string.gsub(Text,'%D+',' ') ~= '' then
+	if string.gsub(Title,' ','') ~= '' and string.gsub(Text,' ','') ~= '' then
 		local Main = NotificationFrame
 		local TitleT = Main.Top.Title
 		local Button1 = Main.Button1
@@ -257,7 +257,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 		local Button3 = Main.Button3
 		local TextField = Main.FieldHolder.TextField
 
-		local function Run(Title: string,Text: string,Buttons: {string},Duration,Queq: boolean)
+		local function Run(Title: string, Text: string, Buttons: {string}, Duration: number, Queq: boolean)
 			local Choice,skip,Conections = nil,false,{}
 			TitleT.Text = Title
 			TextField.Text = Text
@@ -371,7 +371,8 @@ function lib:Main(mainsettings)
 	local keycode = Enum.KeyCode.LeftControl
 	setmetatable(mainsettings,{__index=function(t,i)
 		local Defaults = {
-			['CloseButton'] = true
+			['CloseButton'] = true,
+			['CloseCall'] = (function() end)
 		}
 		local v = rawget(t,string.lower(i))
 		return (v ~= nil and v) or Defaults[i]
@@ -2175,6 +2176,7 @@ function lib:Main(mainsettings)
 	if mainsettings.CloseButton then
 		main.Close.MouseButton1Click:Connect(function()
 			game:GetService('CoreGui').Ancestor:Destroy()
+			mainsettings.CloseCall()
 		end)
 	end
 
