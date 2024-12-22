@@ -1465,15 +1465,6 @@ function lib:Main(mainsettings)
 
 				if Options.Options and not Options.Playerlist then
 					optionstable = Options.Options
-				elseif Options.Playerlist then
-					optionstable = {}
-					local list = game:GetService("Players"):GetChildren()
-					for i,v in pairs(list) do
-						if v:IsA("Player") then
-							table.insert(optionstable, v.Name);
-						end
-					end
-					table.sort(optionstable,function(a,b) return a:lower() < b:lower() end)
 				end
 
 				dd.ddback = lib:Create("ImageLabel", {
@@ -1664,9 +1655,6 @@ function lib:Main(mainsettings)
 
 				dd.ddbutton.Focused:Connect(function()
 					toggled = true
-					if Options and Options.CallBack then
-						optionstable = Options.CallBack
-					end
 					--refreshlist()
 					dd.ddmp.Text = "-"
 					dd.dd.Visible = true
@@ -1675,9 +1663,6 @@ function lib:Main(mainsettings)
 
 				dd.ddmp.MouseButton1Click:Connect(function()
 					toggled = not toggled
-					if Options and Options.CallBack then
-						optionstable = Options.CallBack
-					end
 					if toggled then 
 						--refreshlist()
 						dd.ddmp.Text = "-"
