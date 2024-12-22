@@ -1504,7 +1504,7 @@ function lib:Main(mainsettings)
 					PlaceholderColor3 = Color3.fromRGB(178, 178, 178),
 					PlaceholderText = "Search...",
 					Position = UDim2.new(0.5,0,0.5,0),
-					Text = tostring(optionstable[1]),
+					Text = '',
 					TextColor3 = Color3.fromRGB(255, 255, 255),
 					TextSize = 16.000,
 					AnchorPoint = Vector2.new(0.5,0.5)
