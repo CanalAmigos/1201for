@@ -1455,6 +1455,7 @@ function lib:Main(mainsettings)
 				setmetatable(Options,{__index=function(t,i)
 					local Defaults = {
 						['Playerlist'] = false,
+						['NoLocalPlayer'] = true,
 						['Default'] = "None",
 						['CallBack'] = (function() end),
 						['Options'] = {}
@@ -1644,7 +1645,9 @@ function lib:Main(mainsettings)
 					local list = game.Players:GetChildren()
 					for i,v in pairs(list) do
 						if v:IsA("Player") then
-							table.insert(optionstable, v.Name)
+							if (Options.NoLocalPlayer and v ~= game.Players.LocalPlayer) or not Options.NoLocalPlayer then
+								table.insert(optionstable, v.Name)
+							end
 						end
 					end
 					table.sort(optionstable,function(a,b) return a:lower() < b:lower() end)
