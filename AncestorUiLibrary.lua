@@ -1449,7 +1449,7 @@ function lib:Main(mainsettings)
 			function sections:DropDown(Name, Options, CallBack)
 				local dd = {}
 				local toggled = false
-				local dvalue 
+				local dvalue = 'None'
 				local optionstable = {}
 				local Options = Options or {}
 				setmetatable(Options,{__index=function(t,i)
@@ -1606,6 +1606,7 @@ function lib:Main(mainsettings)
 
 								toggled = false
 								dd.ddbutton.Text = v
+								
 								dvalue = v
 								
 								dd.ddmp.Text = "+"
@@ -1655,6 +1656,7 @@ function lib:Main(mainsettings)
 				refreshlist()
 
 				dd.ddbutton.Text = Options.Default
+				dvalue = Options.Default
 
 				dd.ddbutton.Focused:Connect(function()
 					toggled = true
@@ -1663,20 +1665,21 @@ function lib:Main(mainsettings)
 					dd.dd.Visible = true
 					TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, dd.ddscrolling["UIListLayout"].AbsoluteContentSize.Y) + UDim2.new(0,0,0,5)}):Play()
 				end)
-
+				
 				dd.ddmp.MouseButton1Click:Connect(function()
 					toggled = not toggled
 					if toggled then 
 						--refreshlist()
 						dd.ddmp.Text = "-"
 						dd.dd.Visible = true
+						dd.ddbutton.Text = ''
 						TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, dd.ddscrolling["UIListLayout"].AbsoluteContentSize.Y) + UDim2.new(0,0,0,5)}):Play()
 					else 
 						--refreshlist()
 						dd.ddmp.Text = "+"
 						dd.dd.Visible = false
 						if string.gsub(dd.ddbutton.Text,' ','') == '' then
-							dd.ddbutton.Text = 'None'
+							dd.ddbutton.Text = dvalue
 						end
 						TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, 0)}):Play()
 					end
