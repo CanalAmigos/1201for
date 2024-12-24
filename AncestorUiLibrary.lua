@@ -1663,16 +1663,6 @@ function lib:Main(mainsettings)
 					dd.dd.Visible = true
 					TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, dd.ddscrolling["UIListLayout"].AbsoluteContentSize.Y) + UDim2.new(0,0,0,5)}):Play()
 				end)
-				
-				dd.ddbutton.FocusLost:Connect(function()
-					if string.gsub(dd.ddbutton.Text,' ','') == '' then
-						toggled = false
-						dd.ddmp.Text = "+"
-						dd.dd.Visible = false
-						dd.ddbutton.Text = 'None'
-						TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, 0)}):Play()
-					end
-				end)
 
 				dd.ddmp.MouseButton1Click:Connect(function()
 					toggled = not toggled
