@@ -941,6 +941,7 @@ function lib:Main(mainsettings)
 
 			function sections:TextLabel(Text)
 				local textlabels = {}
+				local textlabelfuncs = {}
 
 				textlabels.textlabelframe = lib:Create("ImageLabel", {
 					Name = "TextLabel",
@@ -985,8 +986,12 @@ function lib:Main(mainsettings)
 				textlabels.textlabelframe.Parent = sections.sectioncontainer
 				textlabels.textlabelframe2.Parent = textlabels.textlabelframe
 				textlabels.textlabel.Parent = textlabels.textlabelframe2
-
-				return textlabels
+				
+				textlabelfuncs.SetText = function(text: string)
+					textlabels.textlabel.Text = text
+				end
+				
+				return textlabelfuncs
 			end
 
 			function sections:Separator()
