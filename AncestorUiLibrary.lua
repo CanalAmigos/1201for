@@ -1463,7 +1463,7 @@ function lib:Main(mainsettings)
 						['NoLocalPlayer'] = true,
 						['Default'] = Name or "None",
 						['CallBack'] = (function() end),
-						['Options'] = {},
+						--['Options'] = {},
 						['List'] = {}
 					}
 					local v = rawget(t,string.lower(i))
