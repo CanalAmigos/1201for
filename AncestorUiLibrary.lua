@@ -1463,14 +1463,15 @@ function lib:Main(mainsettings)
 						['NoLocalPlayer'] = true,
 						['Default'] = Name or "None",
 						['CallBack'] = (function() end),
-						['Options'] = {}
+						['Options'] = {},
+						['List'] = {}
 					}
 					local v = rawget(t,string.lower(i))
 					return (v ~= nil and v) or Defaults[i]
 				end})
 
-				if Options.Options and not Options.Playerlist then
-					optionstable = Options.Options
+				if (Options.Options or Options.List) and not Options.Playerlist then
+					optionstable = Options.Options or Options.List
 				end
 
 				dd.ddback = lib:Create("ImageLabel", {
