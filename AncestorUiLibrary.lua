@@ -299,7 +299,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 				table.remove(NotifyQueq,1)
 			end
 			if #NotifyQueq > 0 or mainskip then
-				local next = (not mainskip and NotifyQueq[1]) or (mainskip and OverTable)
+				local next = (not mainskip and NotifyQueq[1]) or (mainskip and OverTable[1]) or NotifyQueq[1]
 				mainskip = false
 				if next then
 					if type(next[5]) == 'function' then
