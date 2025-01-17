@@ -1181,6 +1181,9 @@ function lib:Main(mainsettings)
 						local Porcentage = (def - Min) / (Max - Min)
 						TweenService:Create(sliders.sliderinner, TweenInfo.new(0.04), {Size = UDim2.new(Porcentage, 0, 1, -2)}):Play()
 						sliders.slidervalue.Text = tostring(v)
+						if CallBack then
+							CallBack(tostring(v))
+						end
 						return SetValue
 					end
 				end
@@ -1191,6 +1194,7 @@ function lib:Main(mainsettings)
 
 			function sections:TextBox(Name, PlaceholderText, AutoName, CallBack)
 				local tb = {}
+				local returns = {}
 				local text
 
 				tb.textboxback = lib:Create("ImageLabel", {
@@ -1256,7 +1260,9 @@ function lib:Main(mainsettings)
 								tb.textbox.Text = v.Name
 							end
 						end
-						CallBack(tb.textbox.Text)
+						if CallBack then
+							CallBack(tb.textbox.Text)
+						end
 					end
 				end)
 
@@ -1265,7 +1271,7 @@ function lib:Main(mainsettings)
 				tb.darkoutline.Parent = tb.textboxback
 				tb.textbox.Parent = tb.darkoutline
 				
-				tb.ToolTip = function(Text)
+				returns.ToolTip = function(Text)
 					local t = lib:Create('TextButton',{
 						Name = "ToolTip",
 						BackgroundColor3 = Color3.fromRGB(55, 55, 55),
@@ -1292,8 +1298,15 @@ function lib:Main(mainsettings)
 					})
 					c.Parent = t
 				end
+				
+				returns.SetText = function(txt: string)
+					tb.textbox.Text = txt
+					if CallBack then
+						CallBack(tb.text.Text)
+					end
+				end
 
-				return tb
+				return returns
 			end 
 
 			function sections:KeyBind(Name, Default, CallBack)
@@ -2092,7 +2105,6 @@ function lib:Main(mainsettings)
 					local r,g,b = math.floor(Default.r * 255),math.floor(Default.g * 255),math.floor(Default.b * 255)
 					colorbase = Color3.fromRGB(r,g,b)
 					colorstuff.sat.ImageColor3 = colorbase
-					wait(.2)
 					UpdateColorPicker()
 				end
 
@@ -2153,9 +2165,18 @@ function lib:Main(mainsettings)
 						setPickerLight(x,y)
 					end)
 				end)
+				
+				local returns = {}
+				
+				returns.SetColor = function(color: Color3)
+					local Default = Color3.fromHSV(Color3.toHSV(color))
+					local r,g,b = math.floor(Default.r * 255),math.floor(Default.g * 255),math.floor(Default.b * 255)
+					colorbase = Color3.fromRGB(r,g,b)
+					colorstuff.sat.ImageColor3 = colorbase
+					UpdateColorPicker()
+				end
 
-
-				return colorstuff
+				return returns
 			end
 
 			return sections
