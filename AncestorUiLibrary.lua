@@ -1196,6 +1196,7 @@ function lib:Main(mainsettings)
 				local tb = {}
 				local returns = {}
 				local text
+				local wasfocus = false
 
 				tb.textboxback = lib:Create("ImageLabel", {
 					Name = Name.."TextBox",
@@ -1250,18 +1251,30 @@ function lib:Main(mainsettings)
 					TextColor3 = Color3.fromRGB(255, 255, 255),
 					TextSize = 16.000,
 				})
+				
+				tb.textbox.Focused:Connect(function()
+					wasfocus = true
+				end)
 
 				tb.textbox.FocusLost:Connect(function()
-					if not AutoName and CallBack then
-						CallBack(tb.textbox.Text)
-					elseif AutoName then 
-						for i,v in pairs(game.Players:GetChildren()) do
-							if string.match(v.Name:lower(),tb.textbox.Text:lower()) then
-								tb.textbox.Text = v.Name
-							end
-						end
-						if CallBack then
+					if not wasfocus then return end
+					if string.gsub(tb.textbox.Text,' ','') == '' then
+						tb.textbox.Text = text
+					else
+						if not AutoName and CallBack then
+							text = tb.textbox.Text
 							CallBack(tb.textbox.Text)
+						elseif AutoName then
+							for i,v in pairs(game.Players:GetChildren()) do
+								if string.match(v.Name:lower(),tb.textbox.Text:lower()) then
+									tb.textbox.Text = v.Name
+									text = v.Name
+									break
+								end
+							end
+							if CallBack then
+								CallBack(tb.textbox.Text)
+							end
 						end
 					end
 				end)
@@ -1300,10 +1313,8 @@ function lib:Main(mainsettings)
 				end
 				
 				returns.SetText = function(txt: string)
+					text = txt
 					tb.textbox.Text = txt
-					if CallBack then
-						CallBack(txt)
-					end
 				end
 
 				return returns
