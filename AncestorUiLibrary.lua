@@ -1037,7 +1037,7 @@ function lib:Main(mainsettings)
 					local Defaults = {
 						['Max'] = 0,
 						['Min'] = 0,
-						['Default'] = 0,
+						['Start'] = 0,
 						['Precise'] = false
 					}
 					local v = rawget(t,string.lower(i))
@@ -1045,7 +1045,7 @@ function lib:Main(mainsettings)
 				end})
 				local Max = Settings.Max
 				local Min = Settings.Min
-				local Default = Settings.Default
+				local Default = Settings.Default or Settings.Start
 				local Precise = Settings.Precise
 
 				sliders.sliderb = lib:Create("ImageLabel", {
