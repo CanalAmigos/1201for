@@ -940,55 +940,38 @@ function lib:Main(mainsettings)
 			end
 
 			function sections:TextLabel(Text)
-				local textlabels = {}
 				local textlabelfuncs = {}
+				
+				local Label = Instance.new("TextButton")
+				local LabelTitle = Instance.new("TextLabel")
+				
+				Label.Name = "Label"
+				Label.Parent = sections.sectioncontainer
+				Label.BackgroundColor3 = Color3.fromRGB(54, 57, 63)
+				Label.BorderSizePixel = 0
+				Label.Position = UDim2.new(0.261979163, 0, 0.190789461, 0)
+				Label.Size = UDim2.new(0, 401, 0, 30)
+				Label.AutoButtonColor = false
+				Label.Font = Enum.Font.Gotham
+				Label.Text = ""
+				Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+				Label.TextSize = 14.000
 
-				textlabels.textlabelframe = lib:Create("ImageLabel", {
-					Name = "TextLabel",
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-					BackgroundTransparency = 1.000,
-					Position = UDim2.new(0.00415800419, 0, 0.86175108, 0),
-					Size = UDim2.new(0, 484, 0, 35),
-					Image = "rbxassetid://3570695787",
-					ImageColor3 = Color3.fromRGB(65, 65, 65),
-					ScaleType = Enum.ScaleType.Slice,
-					SliceCenter = Rect.new(100, 100, 100, 100),
-					SliceScale = 0.040,
-				})
-
-				textlabels.textlabelframe2 = lib:Create("ImageLabel", {
-					Name = "TextLabelFrame",
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-					BackgroundTransparency = 1.000,
-					Position = UDim2.new(0.009999929, 0, 0.0857142881, 0),
-					Size = UDim2.new(0, 476, 0, 29),
-					Image = "rbxassetid://3570695787",
-					ImageColor3 = Color3.fromRGB(55, 55, 55),
-					ScaleType = Enum.ScaleType.Slice,
-					SliceCenter = Rect.new(100, 100, 100, 100),
-					SliceScale = 0.04,
-				})
-
-				textlabels.textlabel = lib:Create("TextLabel", {          
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-					BackgroundTransparency = 1.000,
-					BorderSizePixel = 0,
-					Position = UDim2.new(0, 0, -0.103448279, 0),
-					Size = UDim2.new(0, 484, 0, 35),
-					Font = Enum.Font.GothamSemibold,
-					Text = Text,
-					TextColor3 = Color3.fromRGB(255, 255, 255),
-					TextSize = 16.000,
-					TextWrapped = true,
-				})
-				textlabels.textlabel.RichText = true
-
-				textlabels.textlabelframe.Parent = sections.sectioncontainer
-				textlabels.textlabelframe2.Parent = textlabels.textlabelframe
-				textlabels.textlabel.Parent = textlabels.textlabelframe2
+				LabelTitle.Name = "LabelTitle"
+				LabelTitle.Parent = Label
+				LabelTitle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				LabelTitle.BackgroundTransparency = 1.000
+				LabelTitle.Position = UDim2.new(0, 5, 0, 0)
+				LabelTitle.Size = UDim2.new(0, 200, 0, 30)
+				LabelTitle.Font = Enum.Font.Gotham
+				LabelTitle.RichText = true
+				LabelTitle.Text = Text
+				LabelTitle.TextColor3 = Color3.fromRGB(127, 131, 137)
+				LabelTitle.TextSize = 14.000
+				LabelTitle.TextXAlignment = Enum.TextXAlignment.Left
 				
 				textlabelfuncs.SetText = function(text: string)
-					textlabels.textlabel.Text = text
+					LabelTitle.Text = text
 				end
 				
 				return textlabelfuncs
