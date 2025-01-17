@@ -1302,7 +1302,7 @@ function lib:Main(mainsettings)
 				returns.SetText = function(txt: string)
 					tb.textbox.Text = txt
 					if CallBack then
-						CallBack(tb.text.Text)
+						CallBack(txt)
 					end
 				end
 
