@@ -298,30 +298,32 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 								local id = #Conections+1
 								Conections[id] = true
 								customevent.Event:Once(function()
-									Conections[id] = v.Script({
-										Color = function(Color: Color3)
-											local s = string.split(finaltext,'\n')
-											if s[i] then
-												v.Color3 = Color
-												s[i] = `<font color="{color3ToHex(v.Color3)}">{v.Text}</font>`
-												finaltext = `{table.concat(s,'\n')}`
-												TextField.Text = finaltext
-											end
-										end,
-										Text = function(txt: string)
-											local s = string.split(finaltext,'\n')
-											if s[i] then
-												if txt == nil or string.gsub(txt,' ','') == '' then
-													s[i] = nil
-												else
-													v.Text = txt
+									Conections[id] = task.spawn(pcall,function() 
+										v.Script({
+											Color = function(Color: Color3)
+												local s = string.split(finaltext,'\n')
+												if s[i] then
+													v.Color3 = Color
 													s[i] = `<font color="{color3ToHex(v.Color3)}">{v.Text}</font>`
+													finaltext = `{table.concat(s,'\n')}`
+													TextField.Text = finaltext
 												end
-												finaltext = `{table.concat(s,'\n')}`
-												TextField.Text = finaltext
+											end,
+											Text = function(txt: string)
+												local s = string.split(finaltext,'\n')
+												if s[i] then
+													if txt == nil or string.gsub(txt,' ','') == '' then
+														s[i] = nil
+													else
+														v.Text = txt
+														s[i] = `<font color="{color3ToHex(v.Color3)}">{v.Text}</font>`
+													end
+													finaltext = `{table.concat(s,'\n')}`
+													TextField.Text = finaltext
+												end
 											end
-										end
-									})
+										})
+									end)
 								end)
 							end
 						end
