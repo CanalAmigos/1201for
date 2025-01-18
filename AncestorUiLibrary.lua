@@ -151,6 +151,7 @@ pcall(function()
 	})
 	TextField.Parent = TextHolder
 	TextField.TextWrapped = true
+	TextField.RichText = true
 	--TextField.AutomaticSize = Enum.AutomaticSize.Y
 	TextField.Changed:Connect(function()
 		local size = TextSrvice:GetTextSize(TextField.Text,22,Enum.Font.SourceSans,Vector2.new(290,math.huge))
@@ -292,7 +293,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 						end
 						if string.gsub(v.Text,' ','') ~= '' then
 							if finaltext ~= '' then finaltext = `{finaltext}\n` end
-							finaltext = `{finaltext}<font color="hsv({tostring(Color3.toHSV(v.Color3)})">{v.Text}</font>`
+							finaltext = `{finaltext}<font color="{color3ToHex(v.Color3)}">{v.Text}</font>`
 							if v.Script and type(v.Script) == 'function' then
 								spawn(function()
 									ids = ids + 1
@@ -303,7 +304,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 											local s = string.split(finaltext,'\n')
 											if s[i] then
 												v.Color3 = Color
-												s[i] = `<font color="hsv({tostring(Color3.toHSV(v.Color3)})">{v.Text}</font>`
+												s[i] = `<font color="{color3ToHex(v.Color3)}">{v.Text}</font>`
 												finaltext = `{table.concat(s,'\n')}`
 												TextField.Text = finaltext
 											end
@@ -315,7 +316,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 													s[i] = nil
 												else
 													v.Text = txt
-													s[i] = `<font color="hsv({tostring(Color3.toHSV(v.Color3))})">{v.Text}</font>`
+													s[i] = `<font color="{color3ToHex(v.Color3)}">{v.Text}</font>`
 												end
 												finaltext = `{table.concat(s,'\n')}`
 												TextField.Text = finaltext
