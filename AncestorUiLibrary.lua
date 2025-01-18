@@ -972,20 +972,20 @@ function lib:Main(mainsettings)
 				--]]
 
 				textlabels.textlabel = lib:Create("TextLabel", {          
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-					BackgroundTransparency = 1.000,
-					BorderSizePixel = 0,
-					Position = GetCenter(textlabels.textlabelframe),
-					Size = UDim2.new(0, 476, 0, 35),
-					Font = Enum.Font.GothamSemibold,
-					Text = Text,
-					TextColor3 = Color or Color3.fromRGB(255, 255, 255),
-					TextSize = 16.000,
+					['BackgroundColor3'] = Color3.fromRGB(255, 255, 255),
+					['BackgroundTransparency'] = 1.000,
+					['BorderSizePixel'] = 0,
+					['Position'] = GetCenter(textlabels.textlabelframe),
+					['Size'] = UDim2.new(0, 476, 0, 35),
+					['Font'] = Enum.Font.GothamSemibold,
+					['Text'] = Text,
+					['TextColor3'] = Color or Color3.fromRGB(255, 255, 255),
+					['TextSize'] = 16.000,
 					['TextWrapped'] = true,
 					['RichText'] = true
 				})
 
-				textlabels.textlabelframe.Parent = categories.Container
+				textlabels.textlabelframe.Parent = sections.sectioncontainer
 				--textlabels.textlabelframe2.Parent = textlabels.textlabelframe
 				textlabels.textlabel.Parent = textlabels.textlabelframe
 				
