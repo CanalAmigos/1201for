@@ -248,19 +248,90 @@ pcall(function()
 end)
 
 local NotifyQueq,busy,mainskip,OverTable = {},false,false,{}
-function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,Options: {('NoWait') -> ('OverWrite') -> boolean})
-	if string.gsub(Title,' ','') ~= '' and string.gsub(Text,' ','') ~= '' then
+function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,Options: {('NoWait') -> ('OverWrite') -> ('Custom') -> boolean})
+	local customevent = Instance.new('BindableEvent')
+	
+	Options = Options or {}
+	setmetatable(Options,{__index=function(t,i)
+		local Defaults = {
+			['NoWait'] = false,
+			['OverWrite'] = false,
+			['Custom'] = false
+		}
+		local v = rawget(t,string.lower(i))
+		return (v ~= nil and v) or Defaults[i]
+	end})
+	
+	if (string.gsub(Title,' ','') ~= '' or Options.Custom) and ((not Options.Custom and string.gsub(Text,' ','') ~= '') or Options.Custom) then
 		local Main = NotificationFrame
 		local TitleT = Main.Top.Title
 		local Button1 = Main.Button1
 		local Button2 = Main.Button2
 		local Button3 = Main.Button3
 		local TextField = Main.FieldHolder.TextField
-
-		local function Run(Title: string, Text: string, Buttons: {string}, Duration: number, Queq: boolean)
-			local Choice,skip,Conections = nil,false,{}
-			TitleT.Text = Title
-			TextField.Text = Text
+		
+		local function color3ToHex(color) return string.format("#%02X%02X%02X", color.r * 255, color.g * 255, color.b * 255) end
+		
+		local function Run(Title: string, Text, Buttons: {string}, Duration: number, Queq: boolean)
+			local Choice,skip,Conections,threads = nil,false,{},{}
+			TitleT.Text = Title or ''
+			if Options.Custom then
+				local ids = 0
+				local finaltext = ''
+				local Texts = Text or {}
+				for i,v in pairs(Texts) do
+					if type(v) == 'table' then
+						v.__index = function(t,i)
+							local Defaults = {
+								['Text'] = '',
+								['Color3'] = Color3.new(1, 1, 1),
+								['Script'] = nil
+							}
+							local v = rawget(t,string.lower(i))
+							return (v ~= nil and v) or Defaults[i]
+						end
+						if string.gsub(v.Text,' ','') ~= '' then
+							if finaltext ~= '' then finaltext = `{finaltext}\n` end
+							finaltext = `{finaltext}<font color="{color3ToHex(Color3.fromHSV(Color3.toHSV(v.Color3)))}">{v.Text}</font>`
+							if v.Script and type(v.Script) == 'function' then
+								spawn(function()
+									ids = ids + 1
+									local id = ids
+									customevent.Event:Wait()
+									threads[id] = task.spawn(pcall,v.Script,{
+										Color = function(Color: Color3)
+											local s = string.split(finaltext,'\n')
+											if s[i] then
+												v.Color3 = Color
+												s[i] = `<font color="{color3ToHex(Color3.fromHSV(Color3.toHSV(v.Color3)))}">{v.Text}</font>`
+												finaltext = `{table.concat(s,'\n')}`
+												TextField.Text = finaltext
+											end
+										end,
+										Text = function(txt: string)
+											local s = string.split(finaltext,'\n')
+											if s[i] then
+												if txt == nil or string.gsub(txt,' ','') == '' then
+													s[i] = nil
+												else
+													v.Text = txt
+													s[i] = `<font color="{color3ToHex(Color3.fromHSV(Color3.toHSV(v.Color3)))}">{v.Text}</font>`
+												end
+												finaltext = `{table.concat(s,'\n')}`
+												TextField.Text = finaltext
+											end
+										end
+									})
+								end)
+							end
+						end
+					end
+				end
+				TextField.Text = finaltext
+				customevent:Fire()
+			else
+				TextField.Text = Text
+			end
 			if #Buttons > 0 and #Buttons < 2 then
 				Button3.Text.Text = Buttons[1] -- Midle
 				Button3.Visible = true
@@ -295,9 +366,13 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			for _,v in pairs(Conections) do
 				Disconnect(v)
 			end
+			for _,v in pairs(threads) do
+				task.cancel(v)
+			end
 			if Queq then
 				table.remove(NotifyQueq,1)
 			end
+			customevent:Destroy()
 			if #NotifyQueq > 0 or mainskip then
 				local next = (not mainskip and NotifyQueq[1]) or (mainskip and OverTable)
 				mainskip = false
@@ -317,16 +392,6 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			end
 			return Choice
 		end
-		
-		Options = Options or {}
-		setmetatable(Options,{__index=function(t,i)
-			local Defaults = {
-				['NoWait'] = false,
-				['OverWrite'] = false
-			}
-			local v = rawget(t,string.lower(i))
-			return (v ~= nil and v) or Defaults[i]
-		end})
 		
 		if busy then
 			if not Options.OverWrite then
