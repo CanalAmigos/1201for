@@ -274,7 +274,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 		local function color3ToHex(color) return string.format("#%02X%02X%02X", color.r * 255, color.g * 255, color.b * 255) end
 		
 		local function Run(Title: string, Text, Buttons: {string}, Duration: number, Queq: boolean)
-			local Choice,skip,Conections,threads = nil,false,{},{}
+			local Choice,skip,Conections = nil,false,{}
 			TitleT.Text = Title or ''
 			if Options.Custom then
 				local ids = 0
@@ -295,11 +295,10 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 							if finaltext ~= '' then finaltext = `{finaltext}\n` end
 							finaltext = `{finaltext}<font color="{color3ToHex(v.Color3)}">{v.Text}</font>`
 							if v.Script and type(v.Script) == 'function' then
-								spawn(function()
-									ids = ids + 1
-									local id = ids
-									customevent.Event:Wait()
-									threads[id] = task.spawn(pcall,v.Script,{
+								local id = #Conections+1
+								Conections[id] = true
+								customevent.Event:Once(function()
+									Conections[id] = v.Script({
 										Color = function(Color: Color3)
 											local s = string.split(finaltext,'\n')
 											if s[i] then
@@ -366,9 +365,6 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			Button3.Visible = false
 			for _,v in pairs(Conections) do
 				Disconnect(v)
-			end
-			for _,v in pairs(threads) do
-				task.cancel(v)
 			end
 			if Queq then
 				table.remove(NotifyQueq,1)
