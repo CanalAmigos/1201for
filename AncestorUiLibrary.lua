@@ -321,6 +321,9 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 													finaltext = `{table.concat(s,'\n')}`
 													TextField.Text = finaltext
 												end
+											end,
+											IsNotify = function()
+												return skip
 											end
 										})
 									end)
@@ -361,6 +364,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			Main.Visible = true
 			local t = tick()
 			repeat task.wait() until tick()-t >= (tonumber(Duration) or 5) or skip or mainskip
+			skip = true
 			Main.Visible = false
 			Button1.Visible = false
 			Button2.Visible = false
