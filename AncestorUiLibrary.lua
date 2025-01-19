@@ -1072,8 +1072,8 @@ function lib:Main(mainsettings)
 					['TextColor3'] = Color or Color3.fromRGB(255, 255, 255),
 					['TextSize'] = 16.000
 				})
-				textlabels.TextWrapped = true
-				textlabels.RichText = true
+				textlabels.textlabel.TextWrapped = true
+				textlabels.textlabel.RichText = true
 
 				textlabels.textlabelframe.Parent = sections.sectioncontainer
 				--textlabels.textlabelframe2.Parent = textlabels.textlabelframe
