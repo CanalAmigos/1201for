@@ -315,6 +315,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 
 			local TextSize = lib:Create('UITextSizeConstraint',{})
 			TextSize.Parent = newtext
+			return newtext
 		end
 		
 		local function Run(Title: string, Text, Buttons: {string}, Duration: number, Queq: boolean)
