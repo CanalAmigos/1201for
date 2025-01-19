@@ -131,6 +131,18 @@ pcall(function()
 	})
 	TextHolder.Parent = NotificationFrame
 	TextHolder.AutomaticCanvasSize = Enum.AutomaticSize.Y
+	
+	local UiList = lib:Create('UIListLayout',{
+		HorizontalAlignment = Enum.HorizontalAlignment.Center,
+		VerticalAlignment = Enum.VerticalAlignment.Top
+	})
+	UiList.Parent = TextHolder
+	
+	local Padding = lib:Create('UIPadding',{
+		PaddingLeft = UDim.new(0,5),
+		PaddingRight = UDim.new(0,5)
+	})
+	Padding.Parent = TextHolder
 
 	local TextField = lib:Create('TextLabel',{
 		Name = "TextField",
@@ -250,8 +262,6 @@ end)
 
 local NotifyQueq,busy,mainskip,OverTable = {},false,false,{}
 function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,Options: {('NoWait') -> ('OverWrite') -> ('Custom') -> boolean})
-	local customevent = Instance.new('BindableEvent')
-	
 	Options = Options or {}
 	setmetatable(Options,{__index=function(t,i)
 		local Defaults = {
@@ -270,13 +280,48 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 		local Button2 = Main.Button2
 		local Button3 = Main.Button3
 		local TextField = Main.FieldHolder.TextField
+		local Holder = Main.TextHolder
 		
-		local function color3ToHex(color) return string.format("#%02X%02X%02X", color.r * 255, color.g * 255, color.b * 255) end
+		local DestroyEvent = Instance.new('BindableEvent')
+		
+		local function AddTextField()
+			local newtext = lib:Create('TextLabel',{
+				Name = "TextField",
+				BackgroundColor3 = Color3.fromRGB(17, 17, 17),
+				BackgroundTransparency = 0,
+				BorderColor3 = Color3.fromRGB(0, 0, 0),
+				BorderSizePixel = 0,
+				Position = UDim2.new(0, 5, 0, 0),
+				Size = UDim2.new(0, 290, 0, 120),
+				Font = Enum.Font.SourceSans,
+				Text = "...",
+				TextColor3 = Color3.fromRGB(255, 255, 255),
+				TextSize = 22,
+				--TextScaled = true,
+				TextXAlignment = Enum.TextXAlignment.Left,
+				TextYAlignment = Enum.TextYAlignment.Top,
+				ZIndex = 5,
+			})
+			newtext.Parent = Holder
+			newtext.TextWrapped = true
+			newtext.RichText = true
+			--TextField.AutomaticSize = Enum.AutomaticSize.Y
+			newtext.Changed:Connect(function()
+				local size = TextSrvice:GetTextSize(newtext.Text,22,Enum.Font.SourceSans,Vector2.new(290,math.huge))
+				if typeof(size) == 'Vector2' then
+					newtext.Size = UDim2.fromOffset(290,size.Y)
+				end
+			end)
+
+			local TextSize = lib:Create('UITextSizeConstraint',{})
+			TextSize.Parent = newtext
+		end
 		
 		local function Run(Title: string, Text, Buttons: {string}, Duration: number, Queq: boolean)
 			local Choice,skip,Conections = nil,false,{}
 			TitleT.Text = Title or ''
 			if Options.Custom then
+				TextField.Visible = false
 				local ids = 0
 				local finaltext = ''
 				local Texts = Text or {}
@@ -292,49 +337,20 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 							return (v ~= nil and v) or Defaults[i]
 						end
 						if string.gsub(v.Text,' ','') ~= '' then
-							if finaltext ~= '' then finaltext = `{finaltext}\n` end
-							finaltext = `{finaltext}<font color="{color3ToHex(v.Color3)}">{v.Text}</font>`
-							if v.Script and type(v.Script) == 'function' then
-								local id = #Conections+1
-								Conections[id] = true
-								customevent.Event:Once(function()
-									Conections[id] = task.spawn(pcall,function() 
-										v.Script({
-											Color = function(Color: Color3)
-												local s = string.split(finaltext,'\n')
-												if s[i] then
-													v.Color3 = Color
-													s[i] = `<font color="{color3ToHex(v.Color3)}">{v.Text}</font>`
-													finaltext = `{table.concat(s,'\n')}`
-													TextField.Text = finaltext
-												end
-											end,
-											Text = function(txt: string)
-												local s = string.split(finaltext,'\n')
-												if s[i] then
-													if txt == nil or string.gsub(txt,' ','') == '' then
-														s[i] = nil
-													else
-														v.Text = txt
-														s[i] = `<font color="{color3ToHex(v.Color3)}">{v.Text}</font>`
-													end
-													finaltext = `{table.concat(s,'\n')}`
-													TextField.Text = finaltext
-												end
-											end,
-											IsNotify = function()
-												return skip
-											end
-										})
-									end)
+							local field = AddTextField()
+							field.Text = v.Text
+							field.TextColor3 = v.Color3
+							if v.Script then
+								task.spawn(pcall,v.Script,v,field)
+								DestroyEvent.Event:Once(function()
+									field:Destroy()
 								end)
 							end
 						end
 					end
 				end
-				TextField.Text = finaltext
-				customevent:Fire()
 			else
+				TextField.Visible = true
 				TextField.Text = Text
 			end
 			if #Buttons > 0 and #Buttons < 2 then
@@ -364,6 +380,8 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			Main.Visible = true
 			local t = tick()
 			repeat task.wait() until tick()-t >= (tonumber(Duration) or 5) or skip or mainskip
+			DestroyEvent:Fire()
+			DestroyEvent:Destroy()
 			skip = true
 			Main.Visible = false
 			Button1.Visible = false
@@ -375,7 +393,6 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			if Queq then
 				table.remove(NotifyQueq,1)
 			end
-			customevent:Destroy()
 			if #NotifyQueq > 0 or mainskip then
 				local next = (not mainskip and NotifyQueq[1]) or (mainskip and OverTable)
 				mainskip = false
