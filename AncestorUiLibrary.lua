@@ -342,7 +342,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 							field.Text = v.Text
 							field.TextColor3 = v.Color3
 							if v.Script then
-								task.spawn(pcall,function() 
+								spawn(function()
 									v.Script(field)
 								end)
 								DestroyEvent.Event:Once(function()
