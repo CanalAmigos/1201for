@@ -22,6 +22,7 @@ local TweenService = game:GetService("TweenService")
 local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
 local UIS = game:GetService("UserInputService")
 local TextSrvice = game:GetService("TextService")
+local Debris = game:GetService('Debris')
 
 function GetCenter(frame: Frame)
 	return UDim2.new(0.5, -frame.AbsoluteSize.X / 2, 0.5, -frame.AbsoluteSize.Y / 2)
@@ -345,10 +346,10 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 								spawn(function()
 									v.Script(field)
 								end)
-								DestroyEvent.Event:Once(function()
-									field:Destroy()
-								end)
 							end
+							DestroyEvent.Event:Once(function()
+								field:Destroy()
+							end)
 						end
 					end
 				end
