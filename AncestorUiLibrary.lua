@@ -381,6 +381,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 				skip = true
 			end)
 			Main.Visible = true
+			Holder.CanvasPosition = Vector2.new(0,0)
 			local t = tick()
 			repeat task.wait() until tick()-t >= (tonumber(Duration) or 5) or skip or mainskip
 			DestroyEvent:Fire()
