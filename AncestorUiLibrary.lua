@@ -279,8 +279,8 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 		local Button1 = Main.Button1
 		local Button2 = Main.Button2
 		local Button3 = Main.Button3
-		local TextField = Main.FieldHolder.TextField
-		local Holder = Main.TextHolder
+		local Holder = Main.FieldHolder
+		local TextField = Holder.TextField
 		
 		local DestroyEvent = Instance.new('BindableEvent')
 		
