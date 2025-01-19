@@ -1070,10 +1070,10 @@ function lib:Main(mainsettings)
 					['Font'] = Enum.Font.GothamSemibold,
 					['Text'] = Text,
 					['TextColor3'] = Color or Color3.fromRGB(255, 255, 255),
-					['TextSize'] = 16.000,
-					['TextWrapped'] = true,
-					['RichText'] = true
+					['TextSize'] = 16.000
 				})
+				textlabels.TextWrapped = true
+				textlabels.RichText = true
 
 				textlabels.textlabelframe.Parent = sections.sectioncontainer
 				--textlabels.textlabelframe2.Parent = textlabels.textlabelframe
