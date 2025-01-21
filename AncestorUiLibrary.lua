@@ -88,7 +88,7 @@ pcall(function()
 
 	local Top = lib:Create('Frame',{
 		Name = "Top",
-		BackgroundColor3 = Color3.fromRGB(255, 0, 120),
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		BorderColor3 = Color3.fromRGB(0, 0, 0),
 		BorderSizePixel = 0,
 		Size = UDim2.new(0, 300, 0, 30),
@@ -97,7 +97,7 @@ pcall(function()
 	Top.Parent = NotificationFrame
 
 	local UIGradient = lib:Create('UIGradient',{
-		Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(8, 45, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(8, 45, 255))},
+		Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(6, 34, 176)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(8, 45, 255))},
 		Rotation = 90
 	})
 	UIGradient.Parent = Top
@@ -554,7 +554,7 @@ function lib:Main(mainsettings)
 
 	main.TopBar = lib:Create("Frame", {
 		Name = "TopBar",
-		BackgroundColor3 = Color3.fromRGB(255, 0, 120),
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		BorderSizePixel = 0,
 		Size = UDim2.new(0, 554, 0, 40),
 	})
@@ -563,7 +563,7 @@ function lib:Main(mainsettings)
 	MakeDraggable(main.MainBody,main.MainBody)
 
 	main.TopBarGradient = lib:Create("UIGradient", {
-		Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(8, 45, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(8, 45, 255))},
+		Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(6, 34, 176)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(8, 45, 255))},
 		Rotation = 90,
 	})
 
