@@ -305,37 +305,39 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 
 			return {
 				AddText = function(): TextLabel
-					local newtext = lib:Create('TextLabel',{
-						Name = "TextField",
-						BackgroundColor3 = Color3.fromRGB(17, 17, 17),
-						BackgroundTransparency = 0,
-						BorderColor3 = Color3.fromRGB(0, 0, 0),
-						BorderSizePixel = 0,
-						Position = UDim2.new(0, 5, 0, 0),
-						Size = UDim2.new(0, 0, 0, 0),
-						Font = Enum.Font.SourceSans,
-						Text = "...",
-						TextColor3 = Color3.fromRGB(255, 255, 255),
-						TextSize = 22,
-						--TextScaled = true,
-						TextXAlignment = Enum.TextXAlignment.Left,
-						TextYAlignment = Enum.TextYAlignment.Top,
-						ZIndex = 5,
-					})
-					newtext.Parent = newframe
-					newtext.TextWrapped = true
-					newtext.RichText = true
-					--TextField.AutomaticSize = Enum.AutomaticSize.Y
-					newtext.Changed:Connect(function()
-						local size = TextSrvice:GetTextSize(newtext.Text,22,Enum.Font.SourceSans,Vector2.new(290,math.huge))
-						if typeof(size) == 'Vector2' then
-							newtext.Size = UDim2.fromOffset(size.X,size.Y)
-						end
-					end)
+					if not destroyed then
+						local newtext = lib:Create('TextLabel',{
+							Name = "TextField",
+							BackgroundColor3 = Color3.fromRGB(17, 17, 17),
+							BackgroundTransparency = 0,
+							BorderColor3 = Color3.fromRGB(0, 0, 0),
+							BorderSizePixel = 0,
+							Position = UDim2.new(0, 5, 0, 0),
+							Size = UDim2.new(0, 0, 0, 0),
+							Font = Enum.Font.SourceSans,
+							Text = "...",
+							TextColor3 = Color3.fromRGB(255, 255, 255),
+							TextSize = 22,
+							--TextScaled = true,
+							TextXAlignment = Enum.TextXAlignment.Left,
+							TextYAlignment = Enum.TextYAlignment.Top,
+							ZIndex = 5,
+						})
+						newtext.Parent = newframe
+						newtext.TextWrapped = true
+						newtext.RichText = true
+						--TextField.AutomaticSize = Enum.AutomaticSize.Y
+						newtext.Changed:Connect(function()
+							local size = TextSrvice:GetTextSize(newtext.Text,22,Enum.Font.SourceSans,Vector2.new(290,math.huge))
+							if typeof(size) == 'Vector2' then
+								newtext.Size = UDim2.fromOffset(size.X,size.Y)
+							end
+						end)
 
-					local TextSize = lib:Create('UITextSizeConstraint',{})
-					TextSize.Parent = newtext
-					return newtext
+						local TextSize = lib:Create('UITextSizeConstraint',{})
+						TextSize.Parent = newtext
+						return newtext
+					end
 				end,
 				Destroy = function()
 					if not destroyed then
@@ -362,7 +364,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 						end)
 						for _,v in pairs(v) do
 							if v.Text and string.gsub(v.Text,' ','') ~= '' then
-								v.__index = function(t,i)
+								setmetatable(v,{__index=function(t,i)
 									local Defaults = {
 										['Text'] = '',
 										['Color3'] = Color3.new(1, 1, 1),
@@ -370,14 +372,16 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 									}
 									local v = rawget(t,string.lower(i))
 									return (v ~= nil and v) or Defaults[i]
-								end
+								end})
 								local Textl = field.AddText()
-								Textl.Text = v.Text
-								Textl.TextColor3 = v.Color3
-								if v.Script then
-									spawn(function()
-										v.Script(Textl)
-									end)
+								if Textl then
+									Textl.Text = v.Text
+									Textl.TextColor3 = v.Color3
+									if v.Script then
+										spawn(function()
+											v.Script(Textl)
+										end)
+									end
 								end
 							end
 						end
