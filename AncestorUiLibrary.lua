@@ -117,7 +117,7 @@ pcall(function()
 		ZIndex = 5,
 	})
 	Title.Parent = Top
-	
+
 	local TextHolder = lib:Create('ScrollingFrame',{
 		Name = "FieldHolder",
 		BackgroundColor3 = Color3.fromRGB(17, 17, 17),
@@ -132,13 +132,13 @@ pcall(function()
 	})
 	TextHolder.Parent = NotificationFrame
 	TextHolder.AutomaticCanvasSize = Enum.AutomaticSize.Y
-	
+
 	local UiList = lib:Create('UIListLayout',{
-		HorizontalAlignment = Enum.HorizontalAlignment.Center,
+		HorizontalAlignment = Enum.HorizontalAlignment.Left,
 		VerticalAlignment = Enum.VerticalAlignment.Top
 	})
 	UiList.Parent = TextHolder
-	
+
 	local Padding = lib:Create('UIPadding',{
 		PaddingLeft = UDim.new(0,5),
 		PaddingRight = UDim.new(0,5)
@@ -273,7 +273,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 		local v = rawget(t,string.lower(i))
 		return (v ~= nil and v) or Defaults[i]
 	end})
-	
+
 	if (string.gsub(Title,' ','') ~= '' or Options.Custom) and ((not Options.Custom and string.gsub(Text,' ','') ~= '') or Options.Custom) then
 		local Main = NotificationFrame
 		local TitleT = Main.Top.Title
@@ -282,43 +282,70 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 		local Button3 = Main.Button3
 		local Holder = Main.FieldHolder
 		local TextField = Holder.TextField
-		
-		local DestroyEvent = Instance.new('BindableEvent')
-		
-		local function AddTextField()
-			local newtext = lib:Create('TextLabel',{
-				Name = "TextField",
-				BackgroundColor3 = Color3.fromRGB(17, 17, 17),
-				BackgroundTransparency = 0,
-				BorderColor3 = Color3.fromRGB(0, 0, 0),
-				BorderSizePixel = 0,
-				Position = UDim2.new(0, 5, 0, 0),
-				Size = UDim2.new(0, 290, 0, 120),
-				Font = Enum.Font.SourceSans,
-				Text = "...",
-				TextColor3 = Color3.fromRGB(255, 255, 255),
-				TextSize = 22,
-				--TextScaled = true,
-				TextXAlignment = Enum.TextXAlignment.Left,
-				TextYAlignment = Enum.TextYAlignment.Top,
-				ZIndex = 5,
-			})
-			newtext.Parent = Holder
-			newtext.TextWrapped = true
-			newtext.RichText = true
-			--TextField.AutomaticSize = Enum.AutomaticSize.Y
-			newtext.Changed:Connect(function()
-				local size = TextSrvice:GetTextSize(newtext.Text,22,Enum.Font.SourceSans,Vector2.new(290,math.huge))
-				if typeof(size) == 'Vector2' then
-					newtext.Size = UDim2.fromOffset(290,size.Y)
-				end
-			end)
 
-			local TextSize = lib:Create('UITextSizeConstraint',{})
-			TextSize.Parent = newtext
-			return newtext
+		local DestroyEvent = Instance.new('BindableEvent')
+
+		local function AddTextField()
+			local destroyed = false
+			local newframe = lib:Create('Frame',{
+				Name = 'TextCustom',
+				BackgroundTransparency = 1,
+				Size = UDim2.new(1, 0, 0, 0),
+				ZIndex = 5
+			})
+			newframe.Parent = Holder
+			newframe.AutomaticSize = Enum.AutomaticSize.Y
+
+			local UiList = lib:Create('UIListLayout',{
+				HorizontalAlignment = Enum.HorizontalAlignment.Left,
+				VerticalAlignment = Enum.VerticalAlignment.Top
+			})
+			UiList.Wraps = true
+			UiList.Parent = newframe
+
+			return {
+				AddText = function(): TextLabel
+					local newtext = lib:Create('TextLabel',{
+						Name = "TextField",
+						BackgroundColor3 = Color3.fromRGB(17, 17, 17),
+						BackgroundTransparency = 0,
+						BorderColor3 = Color3.fromRGB(0, 0, 0),
+						BorderSizePixel = 0,
+						Position = UDim2.new(0, 5, 0, 0),
+						Size = UDim2.new(0, 0, 0, 0),
+						Font = Enum.Font.SourceSans,
+						Text = "...",
+						TextColor3 = Color3.fromRGB(255, 255, 255),
+						TextSize = 22,
+						--TextScaled = true,
+						TextXAlignment = Enum.TextXAlignment.Left,
+						TextYAlignment = Enum.TextYAlignment.Top,
+						ZIndex = 5,
+					})
+					newtext.Parent = newframe
+					newtext.TextWrapped = true
+					newtext.RichText = true
+					--TextField.AutomaticSize = Enum.AutomaticSize.Y
+					newtext.Changed:Connect(function()
+						local size = TextSrvice:GetTextSize(newtext.Text,22,Enum.Font.SourceSans,Vector2.new(290,math.huge))
+						if typeof(size) == 'Vector2' then
+							newtext.Size = UDim2.fromOffset(size.X,size.Y)
+						end
+					end)
+
+					local TextSize = lib:Create('UITextSizeConstraint',{})
+					TextSize.Parent = newtext
+					return newtext
+				end,
+				Destroy = function()
+					if not destroyed then
+						newframe:ClearAllChildren()
+						destroyed = true
+					end
+				end
+			}
 		end
-		
+
 		local function Run(Title: string, Text, Buttons: {string}, Duration: number, Queq: boolean)
 			local Choice,skip,Conections = nil,false,{}
 			TitleT.Text = Title or ''
@@ -327,29 +354,32 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 				local ids = 0
 				local finaltext = ''
 				local Texts = Text or {}
-				for i,v in pairs(Texts) do
+				for _,v in pairs(Texts) do
 					if type(v) == 'table' then
-						v.__index = function(t,i)
-							local Defaults = {
-								['Text'] = '',
-								['Color3'] = Color3.new(1, 1, 1),
-								['Script'] = nil
-							}
-							local v = rawget(t,string.lower(i))
-							return (v ~= nil and v) or Defaults[i]
-						end
-						if string.gsub(v.Text,' ','') ~= '' then
-							local field = AddTextField()
-							field.Text = v.Text
-							field.TextColor3 = v.Color3
-							if v.Script then
-								spawn(function()
-									v.Script(field)
-								end)
+						local field = AddTextField()
+						DestroyEvent.Event:Once(function()
+							field.Destroy()
+						end)
+						for _,v in pairs(v) do
+							if v.Text and string.gsub(v.Text,' ','') ~= '' then
+								v.__index = function(t,i)
+									local Defaults = {
+										['Text'] = '',
+										['Color3'] = Color3.new(1, 1, 1),
+										['Script'] = nil
+									}
+									local v = rawget(t,string.lower(i))
+									return (v ~= nil and v) or Defaults[i]
+								end
+								local Textl = field.AddText()
+								Textl.Text = v.Text
+								Textl.TextColor3 = v.Color3
+								if v.Script then
+									spawn(function()
+										v.Script(Textl)
+									end)
+								end
 							end
-							DestroyEvent.Event:Once(function()
-								field:Destroy()
-							end)
 						end
 					end
 				end
@@ -417,7 +447,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			end
 			return Choice
 		end
-		
+
 		if busy then
 			if not Options.OverWrite then
 				if Options.NoWait == true then
@@ -481,17 +511,17 @@ function lib:Main(mainsettings)
 		Size = UDim2.new(0, 554, 0, 304),
 	})
 	main.MainBody.Position = GetCenter(main.MainBody)
-	
+
 	UIS.InputBegan:Connect(function(k,p)
 		if k.KeyCode == keycode and not p then
 			main.MainBody.Visible = not main.MainBody.Visible
 		end
 	end)
-	
+
 	function main:ChangeToggleKey(key: Enum.KeyCode)
 		keycode = key
 	end
-	
+
 	function main:GetGui()
 		return main.ScreenGui
 	end
@@ -635,7 +665,7 @@ function lib:Main(mainsettings)
 		TextSize = 20.000,
 		TextXAlignment = Enum.TextXAlignment.Left
 	})
-	
+
 	if mainsettings.CloseButton then
 		main.CloseFrame = lib:Create("ImageLabel", {
 			Name = "CloseFrame",
@@ -671,7 +701,7 @@ function lib:Main(mainsettings)
 		main.Close.MouseLeave:Connect(function()
 			TweenService:Create(main.CloseFrame, TweenInfo.new(0.1), {ImageTransparency = 1}):Play()
 		end)
-		
+
 		main.CloseFrame.Parent = main.TopBar
 		main.Close.Parent = main.CloseFrame
 	end
@@ -751,7 +781,7 @@ function lib:Main(mainsettings)
 		function categories:Section(Name)
 			local sections = {}
 			local Keybinds = {}
-			
+
 			sections.LockKeyBind = function(all: boolean,name: string,value: boolean)
 				if all == true then
 					for _,v in pairs(Keybinds) do
@@ -766,7 +796,7 @@ function lib:Main(mainsettings)
 					end
 				end
 			end
-			
+
 			sections.sectioncontainer = lib:Create("Frame", {
 				Name = `{Name}Section`,
 				BackgroundTransparency = 1,
@@ -774,7 +804,7 @@ function lib:Main(mainsettings)
 			})
 			sections.sectioncontainer.AutomaticSize = Enum.AutomaticSize.Y
 			sections.sectioncontainer.Parent = categories.Container
-			
+
 			sections.containerLayout = lib:Create("UIListLayout", {
 				SortOrder = Enum.SortOrder.LayoutOrder,
 				Padding = UDim.new(0, 5),
@@ -1032,7 +1062,7 @@ function lib:Main(mainsettings)
 			function sections:TextLabel(Text,Color)
 				local textlabels = {}
 				local textlabelfuncs = {}
-				
+
 				textlabels.textlabelframe = lib:Create("ImageLabel", {
 					Name = "TextLabel",
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
@@ -1045,7 +1075,7 @@ function lib:Main(mainsettings)
 					SliceCenter = Rect.new(100, 100, 100, 100),
 					SliceScale = 0.040,
 				})
-				
+
 				--[[
 				textlabels.textlabelframe2 = lib:Create("ImageLabel", {
 					Name = "TextLabelFrame",
@@ -1078,11 +1108,11 @@ function lib:Main(mainsettings)
 				textlabels.textlabelframe.Parent = sections.sectioncontainer
 				--textlabels.textlabelframe2.Parent = textlabels.textlabelframe
 				textlabels.textlabel.Parent = textlabels.textlabelframe
-				
+
 				textlabelfuncs.SetText = function(text: string)
 					textlabels.textlabel.Text = text
 				end
-				
+
 				return textlabelfuncs
 			end
 
@@ -1095,7 +1125,7 @@ function lib:Main(mainsettings)
 					Size = UDim2.new(0, 484, 0, 8)
 				})
 				a.Parent = sections.sectioncontainer
-				
+
 				lib:Create("Frame", {
 					Name = "Seperator2",
 					BackgroundColor3 = Color3.fromRGB(66, 69, 74),
@@ -1103,7 +1133,7 @@ function lib:Main(mainsettings)
 					Position = UDim2.new(0, 0, 0, 4),
 					Size = UDim2.new(1, 0, 0, 1)
 				}).Parent = a
-				
+
 				--[[
 				local b = lib:Create("Frame", {
 					Name = "TextLabelFrame",
@@ -1343,7 +1373,7 @@ function lib:Main(mainsettings)
 					TextColor3 = Color3.fromRGB(255, 255, 255),
 					TextSize = 16.000,
 				})
-				
+
 				tb.textbox.Focused:Connect(function()
 					wasfocus = true
 				end)
@@ -1375,7 +1405,7 @@ function lib:Main(mainsettings)
 				tb.text.Parent = tb.textboxback
 				tb.darkoutline.Parent = tb.textboxback
 				tb.textbox.Parent = tb.darkoutline
-				
+
 				returns.ToolTip = function(Text)
 					local t = lib:Create('TextButton',{
 						Name = "ToolTip",
@@ -1403,7 +1433,7 @@ function lib:Main(mainsettings)
 					})
 					c.Parent = t
 				end
-				
+
 				returns.SetText = function(txt: string)
 					text = txt
 					tb.textbox.Text = txt
@@ -1506,7 +1536,7 @@ function lib:Main(mainsettings)
 						end
 					end)
 				end)
-				
+
 				Keybinds[Name] = function(v)
 					lock = v
 				end
@@ -1525,17 +1555,17 @@ function lib:Main(mainsettings)
 				kb.kbtext.Parent = kb.kbback
 				kb.darkoutline.Parent = kb.kbback
 				kb.kb.Parent = kb.darkoutline
-				
+
 				-->>>[Functions]<<<--
-				
+
 				kb.Lock = function(v: boolean)
 					lock = v
 				end
-				
+
 				kb.LockKey = function(v: boolean)
 					lockkey = v
 				end
-				
+
 				kb.ToolTip = function(Text)
 					local t = lib:Create('TextButton',{
 						Name = "ToolTip",
@@ -1616,7 +1646,7 @@ function lib:Main(mainsettings)
 					SliceCenter = Rect.new(100, 100, 100, 100),
 					SliceScale = 0.040,
 				})
-				
+
 				dd.ddbutton = lib:Create("TextBox", {
 					Name = "DropDownButton",
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
@@ -1677,7 +1707,7 @@ function lib:Main(mainsettings)
 					SortOrder = Enum.SortOrder.LayoutOrder,
 					Padding = UDim.new(0, 5),
 				})
-				
+
 				dd.ddscrollingpadding = lib:Create("UIPadding", {
 					PaddingLeft = UDim.new(0,3)
 				})
@@ -1728,9 +1758,9 @@ function lib:Main(mainsettings)
 
 								toggled = false
 								dd.ddbutton.Text = v
-								
+
 								dvalue = v
-								
+
 								dd.ddmp.Text = "+"
 								dd.dd.Visible = false
 								TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, 0)}):Play()
@@ -1787,7 +1817,7 @@ function lib:Main(mainsettings)
 					dd.dd.Visible = true
 					TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, dd.ddscrolling["UIListLayout"].AbsoluteContentSize.Y) + UDim2.new(0,0,0,5)}):Play()
 				end)
-				
+
 				dd.ddmp.MouseButton1Click:Connect(function()
 					toggled = not toggled
 					if toggled then 
@@ -2268,9 +2298,9 @@ function lib:Main(mainsettings)
 						setPickerLight(x,y)
 					end)
 				end)
-				
+
 				local returns = {}
-				
+
 				returns.SetColor = function(color: Color3)
 					local Default = Color3.fromHSV(Color3.toHSV(color))
 					local r,g,b = math.floor(Default.r * 255),math.floor(Default.g * 255),math.floor(Default.b * 255)
@@ -2296,7 +2326,7 @@ function lib:Main(mainsettings)
 
 		return categories
 	end
-	
+
 	if mainsettings.CloseButton then
 		main.Close.MouseButton1Click:Connect(function()
 			game:GetService('CoreGui').Ancestor:Destroy()
