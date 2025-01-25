@@ -298,7 +298,8 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 
 			local UiList = lib:Create('UIListLayout',{
 				HorizontalAlignment = Enum.HorizontalAlignment.Left,
-				VerticalAlignment = Enum.VerticalAlignment.Top
+				VerticalAlignment = Enum.VerticalAlignment.Top,
+				FillDirection = Enum.FillDirection.Horizontal
 			})
 			UiList.Wraps = true
 			UiList.Parent = newframe
@@ -353,8 +354,6 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			TitleT.Text = Title or ''
 			if Options.Custom then
 				TextField.Visible = false
-				local ids = 0
-				local finaltext = ''
 				local Texts = Text or {}
 				for _,v in pairs(Texts) do
 					if type(v) == 'table' then
