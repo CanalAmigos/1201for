@@ -324,11 +324,13 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 							TextYAlignment = Enum.TextYAlignment.Top,
 							ZIndex = 5,
 						})
+						local i = newframe:GetChildren()+1
+						newtext:SetAttribute('Index',i)
 						newtext.Parent = newframe
 						newtext.TextWrapped = true
 						newtext.RichText = true
 						--TextField.AutomaticSize = Enum.AutomaticSize.Y
-						newtext.Changed:Connect(function()
+						newtext.Changed:Connect(function(v)
 							local size = TextSrvice:GetTextSize(newtext.Text,22,Enum.Font.SourceSans,Vector2.new(290,math.huge))
 							if typeof(size) == 'Vector2' then
 								newtext.Size = UDim2.fromOffset(size.X,size.Y)
@@ -374,7 +376,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 								end})
 								local Textl = field.AddText()
 								if Textl then
-									Textl.Text = v.Text
+									Textl.Text = (Textl:GetAttribute('Index') < 2 and `> {v.Text}`) or v.Text
 									Textl.TextColor3 = v.Color3
 									if v.Script then
 										spawn(function()
