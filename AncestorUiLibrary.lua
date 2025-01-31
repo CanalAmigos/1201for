@@ -324,7 +324,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 							TextYAlignment = Enum.TextYAlignment.Top,
 							ZIndex = 5,
 						})
-						local i = newframe:GetChildren()+1
+						local i = #newframe:GetChildren()+1
 						newtext:SetAttribute('Index',i)
 						newtext.Parent = newframe
 						newtext.TextWrapped = true
