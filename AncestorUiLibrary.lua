@@ -34,35 +34,80 @@ function Disconnect(v)
 	end)
 end
 
-local MainToolTip = lib:Create('TextLabel',{
-	BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-	BackgroundTransparency = 0.5,
-	BorderColor3 = Color3.fromRGB(0, 0, 0),
-	Size = UDim2.new(0, 93, 0, 20),
-	Font = Enum.Font.SourceSans,
-	Text = "Fuuuuuuuuuuck",
-	Visible = false,
-	TextColor3 = Color3.fromRGB(200, 200, 200),
-	TextSize = 15,
-	TextStrokeTransparency = 0.750,
+local MainToolTip = {}
+MainToolTip['Holder'] = lib:Create('Frame',{
+	BackgroundColor3 = Color3.fromRGB(47, 65, 141),
+	Size = UDim2.new(0, 0, 0, 0),
+	Visible = false
 })
-MainToolTip.Parent = lib:Create('ScreenGui',{
+MainToolTip['Holder'].Parent = lib:Create('ScreenGui',{
 	Name = 'AncestorToolTip',
 	ResetOnSpawn = false,
 	DisplayOrder = 1
 })
-MainToolTip.Parent.Parent = CoreGui
+
+lib:Create('UIListLayout',{
+	Padding = UDim.new(0,3),
+}).Parent = MainToolTip['Holder']
+
+lib:Create('UIPadding',{
+	PaddingBottom = UDim.new(0,5),
+	PaddingLeft = UDim.new(0,5),
+	PaddingRight = UDim.new(0,5),
+	PaddingTop = UDim.new(0,5),
+}).Parent = MainToolTip['Holder']
 
 lib:Create('UICorner',{
 	CornerRadius = UDim.new(0, 4),
-	Parent = MainToolTip
-},true)
+}).Parent = MainToolTip['Holder']
+
+MainToolTip['Title'] = lib:Create('TextLabel',{
+	BackgroundTransparency = 1,
+	Size = UDim2.new(1, 0, 0, 20),
+	Font = Enum.Font.SourceSansBold,
+	TextSize = 20,
+	Text = 'Title',
+	TextColor3 = Color3.new(1, 1, 1),
+	TextXAlignment = Enum.TextXAlignment.Left,
+	TextYAlignment = Enum.TextYAlignment.Top,
+})
+MainToolTip.Title.Parent = MainToolTip['Holder']
+
+lib:Create('UITextSizeConstraint',{}).Parent = MainToolTip['Title']
+
+MainToolTip['Text'] = lib:Create('TextLabel',{
+	BackgroundTransparency = 1,
+	Size = UDim2.new(0, 0, 0, 0),
+	Font = Enum.Font.SourceSans,
+	TextSize = 15,
+	Text = '...',
+	TextColor3 = Color3.new(1, 1, 1),
+	TextXAlignment = Enum.TextXAlignment.Left,
+	TextYAlignment = Enum.TextYAlignment.Top,
+})
+MainToolTip.Text.Parent = MainToolTip['Holder']
+
+lib:Create('UITextSizeConstraint',{}).Parent = MainToolTip['Text']
+
+MainToolTip.Text:GetPropertyChangedSignal('Text'):Connect(function()
+	local vec = TextSrvice:GetTextSize(MainToolTip.Text.Text,15,Enum.Font.SourceSans,Vector2.new(230,math.huge))
+	if typeof(vec) == 'Vector2' then
+		MainToolTip.Text.Size = UDim2.new(0, vec.X, 0, vec.Y)
+	end
+	local vec = TextSrvice:GetTextSize(MainToolTip.Title.Text,20,Enum.Font.SourceSansBold,Vector2.new(230,math.huge))
+	if typeof(vec) == 'Vector2' then
+		MainToolTip.Title.Size = UDim2.new(0, vec.X, 0, vec.Y)
+	end
+	local size = MainToolTip.Holder.UIListLayout.AbsoluteContentSize
+	MainToolTip.Holder.Size = UDim2.new(0, math.clamp(size.x+10,0,240), 0, size.Y+10)
+end)
+
+MainToolTip.Holder.Parent.Parent = CoreGui
 
 local TTP
 TTP = game:GetService('RunService').RenderStepped:Connect(function()
-	if MainToolTip == nil then TTP:Disconnect() end
-	MainToolTip.Size = UDim2.new(0,MainToolTip.TextBounds.X + 5,0,MainToolTip.TextBounds.Y + 5)
-	MainToolTip.Position = UDim2.new(0,Mouse.X-(MainToolTip.Size.X.Offset+10),0,Mouse.Y - 5)
+	if MainToolTip['Holder'] == nil or MainToolTip['Holder'].Parent == nil then TTP:Disconnect() end
+	MainToolTip['Holder'].Position = UDim2.new(0,Mouse.X+12,0,Mouse.Y - (MainToolTip.Holder.AbsoluteSize.Y/2))
 end)
 
 --// Notification \\--
@@ -97,7 +142,7 @@ pcall(function()
 	Top.Parent = NotificationFrame
 
 	local UIGradient = lib:Create('UIGradient',{
-		Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(6, 34, 176)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(8, 45, 255))},
+		Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(38, 62, 162)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(52, 66, 141))},
 		Rotation = 90
 	})
 	UIGradient.Parent = Top
@@ -598,7 +643,7 @@ function lib:Main(mainsettings)
 	MakeDraggable(main.MainBody,main.MainBody)
 
 	main.TopBarGradient = lib:Create("UIGradient", {
-		Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(6, 34, 176)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(8, 45, 255))},
+		Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(38, 62, 162)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(52, 66, 141))},
 		Rotation = 90,
 	})
 
@@ -1050,11 +1095,12 @@ function lib:Main(mainsettings)
 						})
 						t.Parent = toggles.toggle
 						t.MouseButton1Down:Connect(function()
-							MainToolTip.Text = Text
-							MainToolTip.Visible = true
+							MainToolTip.Title.Text = Name
+							MainToolTip.Text.Text = Text
+							MainToolTip.Holder.Visible = true
 						end)
 						t.MouseLeave:Connect(function()
-							MainToolTip.Visible = false
+							MainToolTip.Holder.Visible = false
 						end)
 						local c = lib:Create('UICorner',{
 							CornerRadius = UDim.new(0, 5)
@@ -1427,11 +1473,12 @@ function lib:Main(mainsettings)
 					})
 					t.Parent = tb.textboxback
 					t.MouseButton1Down:Connect(function()
-						MainToolTip.Text = Text
-						MainToolTip.Visible = true
+						MainToolTip.Title.Text = Name
+						MainToolTip.Text.Text = Text
+						MainToolTip.Holder.Visible = true
 					end)
 					t.MouseLeave:Connect(function()
-						MainToolTip.Visible = false
+						MainToolTip.Holder.Visible = false
 					end)
 					local c = lib:Create('UICorner',{
 						CornerRadius = UDim.new(0, 5)
@@ -1587,11 +1634,12 @@ function lib:Main(mainsettings)
 					})
 					t.Parent = kb.kbback
 					t.MouseButton1Down:Connect(function()
-						MainToolTip.Text = Text
-						MainToolTip.Visible = true
+						MainToolTip.Title.Text = Name
+						MainToolTip.Text.Text = Text
+						MainToolTip.Holder.Visible = true
 					end)
 					t.MouseLeave:Connect(function()
-						MainToolTip.Visible = false
+						MainToolTip.Holder.Visible = false
 					end)
 					local c = lib:Create('UICorner',{
 						CornerRadius = UDim.new(0, 5)
