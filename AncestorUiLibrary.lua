@@ -71,6 +71,7 @@ MainToolTip['Title'] = lib:Create('TextLabel',{
 	TextXAlignment = Enum.TextXAlignment.Left,
 	TextYAlignment = Enum.TextYAlignment.Top,
 })
+MainToolTip.Title.TextWrapped = true
 MainToolTip.Title.Parent = MainToolTip['Holder']
 
 lib:Create('UITextSizeConstraint',{}).Parent = MainToolTip['Title']
@@ -85,6 +86,7 @@ MainToolTip['Text'] = lib:Create('TextLabel',{
 	TextXAlignment = Enum.TextXAlignment.Left,
 	TextYAlignment = Enum.TextYAlignment.Top,
 })
+MainToolTip.Text.TextWrapped = true
 MainToolTip.Text.Parent = MainToolTip['Holder']
 
 lib:Create('UITextSizeConstraint',{}).Parent = MainToolTip['Text']
