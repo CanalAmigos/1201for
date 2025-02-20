@@ -5,7 +5,7 @@ if game:GetService('CoreGui'):FindFirstChild('Ancestor') then
 	game:GetService('CoreGui').AncestorToolTip:Destroy()
 end
 
-function lib:Create(type, proprieties, parent)
+function lib:Create(type: string, proprieties: {}, parent: boolean): type
 	local instance = Instance.new(type)
 
 	for i, v in next, proprieties do
@@ -78,7 +78,7 @@ lib:Create('UITextSizeConstraint',{}).Parent = MainToolTip['Title']
 
 MainToolTip['Text'] = lib:Create('TextLabel',{
 	BackgroundTransparency = 1,
-	Size = UDim2.new(0, 0, 0, 0),
+	Size = UDim2.new(0, 9, 0, 15),
 	Font = Enum.Font.SourceSans,
 	TextSize = 15,
 	Text = '...',
@@ -112,7 +112,16 @@ MainToolTip.Holder.Parent.Parent = CoreGui
 
 local TTP
 TTP = game:GetService('RunService').RenderStepped:Connect(function()
-	if MainToolTip['Holder'] == nil or MainToolTip['Holder'].Parent == nil then TTP:Disconnect() end
+	if MainToolTip['Holder'] == nil or MainToolTip['Holder'].Parent == nil then 
+		TTP:Disconnect() 
+		for i,v in pairs(MainToolTip) do
+			if typeof(v) == 'Instance' then
+				Debris:AddItem(v,0)
+				MainToolTip[i] = nil
+			end
+		end
+		return
+	end
 	MainToolTip['Holder'].Position = UDim2.new(0,Mouse.X+12,0,Mouse.Y - (MainToolTip.Holder.AbsoluteSize.Y/2))
 end)
 
@@ -407,7 +416,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			TitleT.Text = Title or ''
 			if Options.Custom then
 				TextField.Visible = false
-				local Texts = Text or {}
+				local Texts = (typeof(Text) == 'table' and Text) or {}
 				for _,v in pairs(Texts) do
 					if type(v) == 'table' then
 						local field = AddTextField()
@@ -529,13 +538,13 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			return
 		else
 			busy = true
-		end
-		if Options.NoWait == true then
-			spawn(function()
-				Run(Title,Text,Buttons or {},Duration or 5,false)
-			end)
-		else
-			return Run(Title,Text,Buttons or {},Duration or 5,false)
+			if Options.NoWait == true then
+				spawn(function()
+					Run(Title,Text,Buttons or {},Duration or 5,false)
+				end)
+			else
+				return Run(Title,Text,Buttons or {},Duration or 5,false)
+			end
 		end
 	end
 end
