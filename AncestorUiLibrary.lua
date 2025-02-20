@@ -96,10 +96,14 @@ MainToolTip.Text:GetPropertyChangedSignal('Text'):Connect(function()
 	if typeof(vec) == 'Vector2' then
 		MainToolTip.Text.Size = UDim2.new(0, vec.X, 0, vec.Y)
 	end
+end)
+MainToolTip.Title:GetPropertyChangedSignal('Text'):Connect(function()
 	local vec = TextSrvice:GetTextSize(MainToolTip.Title.Text,20,Enum.Font.SourceSansBold,Vector2.new(230,math.huge))
 	if typeof(vec) == 'Vector2' then
 		MainToolTip.Title.Size = UDim2.new(0, vec.X, 0, vec.Y)
 	end
+end)
+MainToolTip.Holder.UIListLayout:GetPropertyChangedSignal('AbsoluteContentSize'):Connect(function()
 	local size = MainToolTip.Holder.UIListLayout.AbsoluteContentSize
 	MainToolTip.Holder.Size = UDim2.new(0, math.clamp(size.x+10,0,240), 0, size.Y+10)
 end)
