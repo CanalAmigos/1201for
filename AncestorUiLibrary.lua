@@ -1095,12 +1095,15 @@ function lib:Main(mainsettings)
 						toggleBlock = v
 					end,
 					ToolTip = function(Text)
+						if toggles.toggle:FindFirstChild('ToolTip') then
+							Debris:AddItem(toggles.toggle.ToolTip,0)
+						end
 						local t = lib:Create('TextButton',{
 							Name = "ToolTip",
 							BackgroundColor3 = Color3.fromRGB(55, 55, 55),
 							BorderColor3 = Color3.fromRGB(0, 0, 0),
 							BorderSizePixel = 0,
-							Position = UDim2.new(0.795, 0, 0.086, 0),
+							Position = (toggles.toggle:FindFirstChild('KeyBind') and UDim2.new(0.716, 0, 0.086, 0)) or UDim2.new(0.795, 0, 0.086, 0),
 							Size = UDim2.new(0, 29, 0, 29),
 							Font = Enum.Font.SourceSans,
 							Text = "?",
@@ -1121,6 +1124,83 @@ function lib:Main(mainsettings)
 							CornerRadius = UDim.new(0, 5)
 						})
 						c.Parent = t
+						toggles.toggle.ChildAdded:Connect(function(v)
+							if v.Name == 'KeyBind' then
+								t.Position = UDim2.new(0.716, 0, 0.086, 0)
+							end
+						end)
+					end,
+					KeyBind = function(KeyCode: Enum.KeyCode,CallBack)
+						if not toggles.toggle:FindFirstChild('KeyBind') then
+							local key = nil
+							local debounce = false
+							local lockkey = false
+							
+							local t = lib:Create('TextButton',{
+								Name = "KeyBind",
+								BackgroundColor3 = Color3.fromRGB(55, 55, 55),
+								BorderColor3 = Color3.fromRGB(0, 0, 0),
+								BorderSizePixel = 0,
+								Position = UDim2.new(0.795, 0, 0.086, 0),
+								Size = UDim2.new(0, 29, 0, 29),
+								Font = Enum.Font.SourceSans,
+								Text = '...',
+								AutoButtonColor = false,
+								TextColor3 = Color3.fromRGB(255, 255, 255),
+								TextSize = 24
+							})
+							t.Parent = toggles.toggle
+							
+							if typeof(KeyCode) == 'Enum' then
+								key = KeyCode
+								t.Text = KeyCode.Name
+							end
+							
+							local c
+							t.MouseButton1Down:Connect(function()
+								if debounce or lockkey then
+									return
+								end
+								debounce = true
+								t.Text = '...'
+								c = UIS.InputBegan:Connect(function(i)
+									if i.UserInputType.Name == "Keyboard" and i.KeyCode ~= Enum.KeyCode.Backspace then
+										t.Text = i.KeyCode.Name
+										key = i.KeyCode
+										debounce = false
+										if c then
+											Disconnect(c)
+											c = nil
+										end
+									elseif i.KeyCode == Enum.KeyCode.Backspace then
+										t.Text = "None"
+										key = nil
+										if c then
+											Disconnect(c)
+											c = nil
+											debounce = false
+										end
+									end
+								end)
+							end)
+							game:GetService('UserInputService').InputBegan:Connect(function(k,q)
+								if not q and k.KeyCode == key and not toggleBlock then
+									if CallBack then
+										pcall(function()
+											CallBack(key)
+										end)
+									end
+								end
+							end)
+							return {
+								Lock = function(v: boolean)
+									toggleBlock = v
+								end,
+								LockKey = function(v: boolean)
+									lockkey = v
+								end,
+							}
+						end
 					end,
 				}
 			end
@@ -1943,6 +2023,74 @@ function lib:Main(mainsettings)
 							optionstable = v or {}
 							refreshlist()
 						end
+					end,
+					ClearOptions = function()
+						for i,v in next, dd.ddscrolling:GetChildren() do
+							if v:IsA("ImageLabel") then
+								v:Destroy()
+							end
+						end
+					end,
+					AddOption = function(text, callback)
+						local buttonback = lib:Create("ImageLabel", {
+							Name = string.lower(text),
+							BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+							BackgroundTransparency = 1.000,
+							Position = UDim2.new(0.009999929, 0, 0.0857142881, 0),
+							Size = UDim2.new(0, 476, 0, 29),
+							ZIndex = 5,
+							Image = "rbxassetid://3570695787",
+							ImageColor3 = Color3.fromRGB(55, 55, 55),
+							ScaleType = Enum.ScaleType.Slice,
+							SliceCenter = Rect.new(100, 100, 100, 100),
+							SliceScale = 0.040,
+						})
+
+						local button = lib:Create("TextButton", {
+							Name = "Button",
+							BackgroundColor3 = Color3.fromRGB(55, 55, 55),
+							BackgroundTransparency = 1.000,
+							BorderSizePixel = 0,
+							Position = UDim2.new(0, 0, 0, 0),
+							Size = UDim2.new(0, 475, 0, 29),
+							ZIndex = 5,
+							AutoButtonColor = false,
+							Font = Enum.Font.GothamSemibold,
+							Text = text,
+							TextColor3 = Color3.fromRGB(255, 255, 255),
+							TextSize = 16.000,
+						})
+
+						buttonback.Parent = dd.ddscrolling
+						button.Parent = buttonback
+
+						button.MouseButton1Click:Connect(function()
+							if toggled then
+
+								toggled = false
+								dd.ddbutton.Text = text
+
+								dvalue = text
+
+								dd.ddmp.Text = "+"
+								dd.dd.Visible = false
+								TweenService:Create(dd.ddscrolling, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, 0)}):Play()
+								for i,v in next, dd.ddscrolling:GetChildren() do 
+									if v:IsA("ImageLabel") then
+										v.Visible = true
+									end
+								end
+
+								if callback then
+									callback(dvalue)
+								end
+							end
+						end)
+						return {
+							TextColor = function(col: Color3)
+								button.TextColor3 = col
+							end,
+						}
 					end,
 				}
 			end 
