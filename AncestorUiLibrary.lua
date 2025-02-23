@@ -1144,17 +1144,19 @@ function lib:Main(mainsettings)
 								Position = UDim2.new(0.795, 0, 0.086, 0),
 								Size = UDim2.new(0, 29, 0, 29),
 								Font = Enum.Font.SourceSans,
-								Text = '...',
+								Text = 'None',
 								AutoButtonColor = false,
 								TextColor3 = Color3.fromRGB(255, 255, 255),
 								TextSize = 24
 							})
 							t.Parent = toggles.toggle
 							
-							if typeof(KeyCode) == 'Enum' then
+							if KeyCode then
 								key = KeyCode
 								t.Text = KeyCode.Name
 							end
+							
+							local Blacklist = {"W","A","S","D","Slash","Tab","Backspace","Escape","Space","Delete","Unknown","Backquote"}
 							
 							local c
 							t.MouseButton1Down:Connect(function()
@@ -1164,21 +1166,23 @@ function lib:Main(mainsettings)
 								debounce = true
 								t.Text = '...'
 								c = UIS.InputBegan:Connect(function(i)
-									if i.UserInputType.Name == "Keyboard" and i.KeyCode ~= Enum.KeyCode.Backspace then
-										t.Text = i.KeyCode.Name
-										key = i.KeyCode
-										debounce = false
-										if c then
-											Disconnect(c)
-											c = nil
-										end
-									elseif i.KeyCode == Enum.KeyCode.Backspace then
-										t.Text = "None"
-										key = nil
-										if c then
-											Disconnect(c)
-											c = nil
+									if i.UserInputType.Name == "Keyboard" then
+										if not table.find(Blacklist, i.KeyCode.Name) then
+											t.Text = i.KeyCode.Name
+											key = i.KeyCode
 											debounce = false
+											if c then
+												Disconnect(c)
+												c = nil
+											end
+										else
+											t.Text = "None"
+											key = nil
+											if c then
+												Disconnect(c)
+												c = nil
+												debounce = false
+											end
 										end
 									end
 								end)
@@ -1656,6 +1660,7 @@ function lib:Main(mainsettings)
 					kbind = Default
 					kb.kb.Text = kbind.Name
 				end
+				local Blacklist = {"W","A","S","D","Slash","Tab","Backspace","Escape","Space","Delete","Unknown","Backquote"}
 				local debounce = false
 				kb.kb.MouseButton1Click:Connect(function()
 					if debounce or lockkey then 
@@ -1664,21 +1669,23 @@ function lib:Main(mainsettings)
 					debounce = true
 					kb.kb.Text = "..."
 					c = UIS.InputBegan:Connect(function(i)
-						if i.UserInputType.Name == "Keyboard" and i.KeyCode ~= Enum.KeyCode.Backspace then
-							kb.kb.Text = i.KeyCode.Name
-							kbind = i.KeyCode
-							debounce = false
-							if c then
-								Disconnect(c)
-								c = nil
-							end
-						elseif i.KeyCode == Enum.KeyCode.Backspace then
-							kb.kb.Text = "None"
-							kbind = nil
-							if c then
-								Disconnect(c)
-								c = nil
+						if i.UserInputType.Name == "Keyboard" then
+							if not table.find(Blacklist, i.KeyCode.Name) then
+								kb.kb.Text = i.KeyCode.Name
+								kbind = i.KeyCode
 								debounce = false
+								if c then
+									Disconnect(c)
+									c = nil
+								end
+							else
+								kb.kb.Text = "None"
+								kbind = nil
+								if c then
+									Disconnect(c)
+									c = nil
+									debounce = false
+								end
 							end
 						end
 					end)
