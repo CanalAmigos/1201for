@@ -1076,7 +1076,7 @@ function lib:Main(mainsettings)
 
 						if CallBack then 
 							CallBack(toggled)
-						end 
+						end
 					end,
 					ChangeToggle = function(v)
 						toggled = v
@@ -1130,7 +1130,7 @@ function lib:Main(mainsettings)
 							end
 						end)
 					end,
-					KeyBind = function(KeyCode: Enum.KeyCode,CallBack)
+					KeyBind = function(KeyCode: Enum.KeyCode,callBack: (any))
 						if not toggles.toggle:FindFirstChild('KeyBind') then
 							local key = nil
 							local debounce = false
@@ -1189,9 +1189,20 @@ function lib:Main(mainsettings)
 							end)
 							game:GetService('UserInputService').InputBegan:Connect(function(k,q)
 								if not q and k.KeyCode == key and not toggleBlock then
-									if CallBack then
+									toggled = not toggled
+									if toggled then 
+										TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0.700523198, 0, 0, 0)}):Play()
+									else 
+										TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0, 0, 0, 0)}):Play()
+									end
+									if CallBack then 
 										pcall(function()
-											CallBack(key)
+											CallBack(toggled)
+										end)
+									end
+									if callBack then
+										pcall(function()
+											callBack(key)
 										end)
 									end
 								end
