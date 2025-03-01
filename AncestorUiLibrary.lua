@@ -322,13 +322,14 @@ pcall(function()
 end)
 
 local NotifyQueq,busy,mainskip,OverTable = {},false,false,{}
-function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,Options: {('NoWait') -> ('OverWrite') -> ('Custom') -> boolean})
+function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,Options: {('NoWait') -> ('OverWrite') -> ('Custom') -> ('RightSide') -> boolean})
 	Options = Options or {}
 	setmetatable(Options,{__index=function(t,i)
 		local Defaults = {
 			['NoWait'] = false,
 			['OverWrite'] = false,
-			['Custom'] = false
+			['Custom'] = false,
+			['RightSide'] = false
 		}
 		local v = rawget(t,string.lower(i))
 		return (v ~= nil and v) or Defaults[i]
@@ -342,6 +343,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 		local Button3 = Main.Button3
 		local Holder = Main.FieldHolder
 		local TextField = Holder.TextField
+		Main.Position = (Options.RightSide and UDim2.new(0.799, -150,0.789, -100)) or GetCenter(Main)
 
 		local DestroyEvent = Instance.new('BindableEvent')
 
