@@ -226,7 +226,8 @@ pcall(function()
 	TextField.TextWrapped = true
 	TextField.RichText = true
 	--TextField.AutomaticSize = Enum.AutomaticSize.Y
-	TextField.Changed:Connect(function()
+	TextField.Changed:Connect(function(v)
+		if v ~= 'Text' then return end
 		local size = TextSrvice:GetTextSize(TextField.Text,22,Enum.Font.SourceSans,Vector2.new(290,math.huge))
 		if typeof(size) == 'Vector2' then
 			TextField.Size = UDim2.fromOffset(290,size.Y)
@@ -393,6 +394,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 						newtext.RichText = true
 						--TextField.AutomaticSize = Enum.AutomaticSize.Y
 						newtext.Changed:Connect(function(v)
+							if v ~= 'Text' then return end
 							local size = TextSrvice:GetTextSize(newtext.Text,22,Enum.Font.SourceSans,Vector2.new(290,math.huge))
 							if typeof(size) == 'Vector2' then
 								newtext.Size = UDim2.fromOffset(size.X,size.Y)
@@ -407,6 +409,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 				Destroy = function()
 					if not destroyed then
 						newframe:ClearAllChildren()
+						newframe:Destroy()
 						destroyed = true
 					end
 				end
