@@ -445,7 +445,9 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 									Textl.TextColor3 = v.Color3
 									if v.Script then
 										spawn(function()
-											v.Script(Textl)
+											-- for you tath don't understands DestroyEvent is a bindable event, it will fire when the notification ends
+											-- Textl Is a textlabel for the function you gave.
+											v.Script(Textl,DestroyEvent.Event)
 										end)
 									end
 								end
