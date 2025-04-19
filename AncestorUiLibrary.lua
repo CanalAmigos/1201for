@@ -34,6 +34,15 @@ function Disconnect(v)
 	end)
 end
 
+function SafeCall(func: (any), ...: any)
+	local args = {...}
+	spawn(function()
+		pcall(function()
+			func(unpack(args))
+		end)
+	end)
+end
+
 local MainToolTip = {}
 MainToolTip['Holder'] = lib:Create('Frame',{
 	BackgroundColor3 = Color3.fromRGB(47, 65, 141),
@@ -961,7 +970,7 @@ function lib:Main(mainsettings)
 				buttons.buttonb.Parent = sections.sectioncontainer
 				buttons.buttonframe.Parent = buttons.buttonb
 				buttons.button.Parent = buttons.buttonframe
-
+				
 				return buttons 
 			end
 
@@ -1045,7 +1054,7 @@ function lib:Main(mainsettings)
 					TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0.700523198, 0, 0, 0)}):Play()
 
 					if CallBack then 
-						CallBack(toggled)
+						SafeCall(CallBack,toggled)
 					end 
 				end
 
@@ -1066,11 +1075,12 @@ function lib:Main(mainsettings)
 						end
 
 						if CallBack then 
-							CallBack(toggled)
+							SafeCall(CallBack,toggled)
 						end 
 					end
 				end)
-
+				
+				SafeCall(CallBack,toggled)
 				return {
 					Toggle = function()
 						toggled = not toggled
@@ -1203,14 +1213,10 @@ function lib:Main(mainsettings)
 										TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0, 0, 0, 0)}):Play()
 									end
 									if CallBack then 
-										pcall(function()
-											CallBack(toggled)
-										end)
+										SafeCall(CallBack,toggled)
 									end
 									if callBack then
-										pcall(function()
-											callBack(key)
-										end)
+										SafeCall(callBack,toggled)
 									end
 								end
 							end)
@@ -1441,7 +1447,7 @@ function lib:Main(mainsettings)
 						sliders.slidervalue.Text = tostring(slidervalue)
 
 						if CallBack then
-							CallBack(slidervalue)
+							SafeCall(CallBack,slidervalue)
 						end
 
 						TweenService:Create(sliders.sliderinner, TweenInfo.new(0.04), {Size = UDim2.new(Scale, 0, 1, -2)}):Play()
@@ -1472,7 +1478,7 @@ function lib:Main(mainsettings)
 						TweenService:Create(sliders.sliderinner, TweenInfo.new(0.04), {Size = UDim2.new(Porcentage, 0, 1, -2)}):Play()
 						sliders.slidervalue.Text = tostring(v)
 						if CallBack then
-							CallBack(tostring(v))
+							SafeCall(CallBack,tostring(v))
 						end
 						return SetValue
 					end
@@ -1553,7 +1559,7 @@ function lib:Main(mainsettings)
 					else
 						if not AutoName and CallBack then
 							text = tb.textbox.Text
-							CallBack(tb.textbox.Text)
+							SafeCall(CallBack,tb.textbox.Text)
 						elseif AutoName then
 							for i,v in pairs(game.Players:GetChildren()) do
 								if string.match(v.Name:lower(),tb.textbox.Text:lower()) then
@@ -1563,7 +1569,7 @@ function lib:Main(mainsettings)
 								end
 							end
 							if CallBack then
-								CallBack(tb.textbox.Text)
+								SafeCall(CallBack,tb.textbox.Text)
 							end
 						end
 					end
@@ -1716,9 +1722,7 @@ function lib:Main(mainsettings)
 				game:GetService("UserInputService").InputBegan:Connect(function(i, GPE)
 					if kbind and i.KeyCode == kbind and not GPE and not lock then
 						if CallBack then
-							pcall(function()
-								CallBack(kbind)
-							end)
+							SafeCall(CallBack,kbind)
 						end
 					end
 				end)
@@ -1944,7 +1948,7 @@ function lib:Main(mainsettings)
 								end
 
 								if CallBack then
-									CallBack(dvalue)
+									SafeCall(CallBack,dvalue)
 								end
 							end
 						end)
@@ -2040,7 +2044,7 @@ function lib:Main(mainsettings)
 						dvalue = v
 
 						if CallBack then
-							CallBack(dvalue)
+							SafeCall(CallBack,dvalue)
 						end
 					end,
 					Refresh = function(v)
@@ -2107,7 +2111,7 @@ function lib:Main(mainsettings)
 								end
 
 								if callback then
-									callback(dvalue)
+									SafeCall(callback,dvalue)
 								end
 							end
 						end)
@@ -2470,7 +2474,7 @@ function lib:Main(mainsettings)
 					colorstuff.colorpickerbutton.ImageColor3 = colourPickColour
 
 					if CallBack then
-						CallBack(colorvalue)
+						SafeCall(CallBack,colorvalue)
 					end
 				end
 
