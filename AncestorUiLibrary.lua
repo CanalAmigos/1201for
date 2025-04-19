@@ -602,8 +602,16 @@ function lib:Main(mainsettings)
 	function main:ChangeToggleKey(key: Enum.KeyCode)
 		keycode = key
 	end
+	
+	function main:GetGuiVisibility(): boolean
+		return main.MainBody.Visible
+	end
+	
+	function main:SetGuiVisibility(v: boolean)
+		main.MainBody.Visible = v
+	end
 
-	function main:GetGui()
+	function main:GetGui(): ScreenGui
 		return main.ScreenGui
 	end
 
