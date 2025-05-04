@@ -1482,7 +1482,7 @@ function lib:Main(mainsettings)
 				sliders.slider.MouseButton1Down:Connect(function()
 					local connection = game:GetService("RunService").Heartbeat:Connect(function()
 						local Scale = math.clamp(Mouse.X - sliders.slider.AbsolutePosition.X,0,sliders.slider.AbsoluteSize.X) / sliders.slider.AbsoluteSize.X
-						slidervalue = (Precise and math.floor(Min + ((Max-Min) * Scale))) or Min + ((Max-Min) * Scale)
+						slidervalue = (Precise and math.floor(Min + ((Max-Min) * Scale))) or tonumber(string.format('%.1f', tostring(Min + ((Max-Min) * Scale))))
 						sliders.slidervalue.Text = tostring(slidervalue)
 
 						if CallBack then
@@ -1511,7 +1511,7 @@ function lib:Main(mainsettings)
 
 				local SetValue do
 					SetValue = function(v)
-						local v = (Precise and math.floor(v or 0)) or (v or 0)
+						local v = (Precise and math.floor(v or 0)) or (tonumber(string.format('%.1f', tostring(v))) or 0)
 						local def = math.clamp(v, Min, Max)
 						local Porcentage = (def - Min) / (Max - Min)
 						TweenService:Create(sliders.sliderinner, TweenInfo.new(0.04), {Size = UDim2.new(Porcentage, 0, 1, -2)}):Play()
