@@ -25,7 +25,11 @@ local TextSrvice = game:GetService("TextService")
 local Debris = game:GetService('Debris')
 
 function GetCenter(frame: Frame)
-	return UDim2.new(0.5, -frame.AbsoluteSize.X / 2, 0.5, -frame.AbsoluteSize.Y / 2)
+	return UDim2.new(0.5, -frame.AbsoluteSize.X/2, 0.5, -frame.AbsoluteSize.Y/2)
+end
+
+function GetCorner(frame: Frame)
+	return UDim2.new(1, -frame.AbsoluteSize.X/2, 1, -frame.AbsoluteSize.Y/2)
 end
 
 function Disconnect(v)
@@ -353,7 +357,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 		local Button3 = Main.Button3
 		local Holder = Main.FieldHolder
 		local TextField = Holder.TextField
-		Main.Position = (Options.RightSide and UDim2.new(0.7, 0, 0.68, 0)) or GetCenter(Main)
+		Main.Position = (Options.RightSide and GetCorner(Main)-UDim2.new(0,-3,0,-3)) or GetCenter(Main)
 
 		local CurrentIs = nil
 
