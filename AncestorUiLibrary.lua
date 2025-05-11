@@ -353,7 +353,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 		local Button3 = Main.Button3
 		local Holder = Main.FieldHolder
 		local TextField = Holder.TextField
-		Main.Position = (Options.RightSide and UDim2.new(0.7, 0, 0.7, 0)) or GetCenter(Main)
+		Main.Position = (Options.RightSide and UDim2.new(0.7, 0, 0.69, 0)) or GetCenter(Main)
 
 		local CurrentIs = nil
 
