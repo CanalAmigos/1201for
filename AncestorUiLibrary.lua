@@ -29,7 +29,7 @@ function GetCenter(frame: Frame)
 end
 
 function GetCorner(frame: Frame)
-	return UDim2.new(1, -frame.AbsoluteSize.X/2, 1, -frame.AbsoluteSize.Y/2)
+	return UDim2.new(1, -frame.AbsoluteSize.X, 1, -frame.AbsoluteSize.Y)
 end
 
 function Disconnect(v)
