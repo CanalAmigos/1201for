@@ -28,10 +28,6 @@ function GetCenter(frame: Frame)
 	return UDim2.new(0.5, -frame.AbsoluteSize.X/2, 0.5, -frame.AbsoluteSize.Y/2)
 end
 
-function GetCorner(frame: Frame)
-	return UDim2.new(1, -frame.AbsoluteSize.X, 1, -frame.AbsoluteSize.Y)
-end
-
 function Disconnect(v)
 	pcall(function()
 		v:Disconnect()
@@ -357,7 +353,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 		local Button3 = Main.Button3
 		local Holder = Main.FieldHolder
 		local TextField = Holder.TextField
-		Main.Position = (Options.RightSide and GetCorner(Main)-UDim2.new(0,-3,0,-3)) or GetCenter(Main)
+		Main.Position = (Options.RightSide and UDim2.new(1,-305,1,-205)) or GetCenter(Main)
 
 		local CurrentIs = nil
 
