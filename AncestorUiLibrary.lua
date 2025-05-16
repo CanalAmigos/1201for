@@ -17,6 +17,61 @@ function lib:Create(type: string, proprieties: {}, parent: boolean): type
 	return instance
 end
 
+lib.SaveFunctions = {}
+function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) | ("value" & {any})}
+	if typeof(v) == 'CFrame' then
+		return {type='CFrame',value={v:GetComponents()}}
+	elseif typeof(v) == 'Vector3' then
+		return {type='Vector3',value={v.X,v.Y,v.Z}}
+	elseif typeof(v) == 'Vector2' then
+		return {type='Vector2',value={v.X,v.Y}}
+	elseif typeof(v) == 'UDim' then
+		return {type='UDim',value={v.Scale,v.Offset}}
+	elseif typeof(v) == 'UDim2' then
+		return {type='UDim2',value={v.X.Scale,v.X.Offset,v.Y.Scale,v.Y.Offset}}
+	elseif typeof(v) == 'Color3' then
+		return {type='Color3',value={v.R,v.G,v.B}}
+	elseif typeof(v) == 'BrickColor' then
+		return {type='BrickColor',value={v.Number}}
+	elseif typeof(v) == 'Enum' then
+		return {type='Enum',value={v.EnumType,v.Name}}
+	elseif typeof(v) == 'Ray' then
+		return {type='Ray',value={v.Origin,v.Direction}}
+	elseif typeof(v) == 'NumberSequence' then
+		return {type='NumberSequence',value=v.Keypoints}
+	elseif typeof(v) == 'ColorSequence' then
+		return {type='ColorSequence',value=v.Keypoints}
+	end
+	return v
+end
+
+function lib.SaveFunctions:UnTransformJson(v: {(("type") & string) | (("value") & {any})})
+	if v.type == 'CFrame' then
+		return CFrame.new(unpack(v.value))
+	elseif v.type == 'Vector3' then
+		return Vector3.new(unpack(v.value))
+	elseif v.type == 'Vector2' then
+		return Vector2.new(unpack(v.value))
+	elseif v.type == 'UDim' then
+		return UDim.new(unpack(v.value))
+	elseif v.type == 'UDim2' then
+		return UDim2.new(unpack(v.value))
+	elseif v.type == 'Color3' then
+		return Color3.new(unpack(v.value))
+	elseif v.type == 'BrickColor' then
+		return BrickColor.new(v.value[1])
+	elseif v.type == 'Enum' then
+		return Enum[v.value[1]][v.value[2]]
+	elseif v.type == 'Ray' then
+		return Ray.new(unpack(v.value))
+	elseif v.type == 'NumberSequence' then
+		return NumberSequence.new(unpack(v.value))
+	elseif v.type == 'ColorSequence' then
+		return ColorSequence.new(unpack(v.value))
+	end
+	return v
+end
+
 local CoreGui = game:GetService('CoreGui')
 local TweenService = game:GetService("TweenService")
 local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
