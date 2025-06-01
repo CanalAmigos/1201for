@@ -46,28 +46,30 @@ function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) |
 end
 
 function lib.SaveFunctions:UnTransformJson(v: {(("type") & string) | (("value") & {any})})
-	if v.type == 'CFrame' then
-		return CFrame.new(unpack(v.value))
-	elseif v.type == 'Vector3' then
-		return Vector3.new(unpack(v.value))
-	elseif v.type == 'Vector2' then
-		return Vector2.new(unpack(v.value))
-	elseif v.type == 'UDim' then
-		return UDim.new(unpack(v.value))
-	elseif v.type == 'UDim2' then
-		return UDim2.new(unpack(v.value))
-	elseif v.type == 'Color3' then
-		return Color3.new(unpack(v.value))
-	elseif v.type == 'BrickColor' then
-		return BrickColor.new(v.value[1])
-	elseif v.type == 'Enum' then
-		return Enum[v.value[1]][v.value[2]]
-	elseif v.type == 'Ray' then
-		return Ray.new(unpack(v.value))
-	elseif v.type == 'NumberSequence' then
-		return NumberSequence.new(unpack(v.value))
-	elseif v.type == 'ColorSequence' then
-		return ColorSequence.new(unpack(v.value))
+	if type(v) == 'table' and v.type ~= nil then
+		if v.type == 'CFrame' then
+			return CFrame.new(unpack(v.value))
+		elseif v.type == 'Vector3' then
+			return Vector3.new(unpack(v.value))
+		elseif v.type == 'Vector2' then
+			return Vector2.new(unpack(v.value))
+		elseif v.type == 'UDim' then
+			return UDim.new(unpack(v.value))
+		elseif v.type == 'UDim2' then
+			return UDim2.new(unpack(v.value))
+		elseif v.type == 'Color3' then
+			return Color3.new(unpack(v.value))
+		elseif v.type == 'BrickColor' then
+			return BrickColor.new(v.value[1])
+		elseif v.type == 'Enum' then
+			return Enum[v.value[1]][v.value[2]]
+		elseif v.type == 'Ray' then
+			return Ray.new(unpack(v.value))
+		elseif v.type == 'NumberSequence' then
+			return NumberSequence.new(unpack(v.value))
+		elseif v.type == 'ColorSequence' then
+			return ColorSequence.new(unpack(v.value))
+		end
 	end
 	return v
 end
