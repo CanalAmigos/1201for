@@ -388,19 +388,21 @@ pcall(function()
 	Text_2.Parent = Button3
 end)
 
-local NotifyQueq,busy,mainskip,OverTable = {},false,false,{}
-function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,Options: {('NoWait') -> ('OverWrite') -> ('Custom') -> ('RightSide') -> boolean})
+local NotifyQueq,busy,mainskip,OverTable,OverEvent,LastOptions = {},false,false,{},Instance.new('BindableEvent'),{}
+function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,Options: {('NoWait') -> ('OverWrite') -> ('Custom') -> ('RightSide') -> ('CanBeOverWrite') -> boolean})
 	Options = Options or {}
 	setmetatable(Options,{__index=function(t,i)
 		local Defaults = {
 			['NoWait'] = false,
 			['OverWrite'] = false,
 			['Custom'] = false,
-			['RightSide'] = false
+			['RightSide'] = false,
+			['CanBeOverWrite'] = true
 		}
 		local v = rawget(t,string.lower(i))
 		return (v ~= nil and v) or Defaults[i]
 	end})
+	LastOptions = Options
 
 	if (string.gsub(Title,' ','') ~= '' or Options.Custom) and ((not Options.Custom and string.gsub(Text,' ','') ~= '') or Options.Custom) then
 		local Main = NotificationFrame
@@ -482,7 +484,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			}
 		end
 
-		local function Run(Title: string, Text, Buttons: {string}, Duration: number, Queq: boolean,Event: BindableEvent)
+		local function Run(Queq: boolean,Event: BindableEvent)
 			local Choice,skip,Conections = nil,false,{}
 			local DestroyEvent = Event or Instance.new('BindableEvent')
 			TitleT.Text = Title or ''
@@ -557,10 +559,11 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			end)
 			CurrentIs = DestroyEvent
 			local t = tick()
-			repeat task.wait() until tick()-t >= (tonumber(Duration) or 5) or skip or mainskip
+			repeat task.wait() until tick()-t >= (tonumber(Duration) or 5) or skip or (mainskip and Options.CanBeOverWrite)
 			DestroyEvent:Fire()
 			DestroyEvent:Destroy()
-			skip = true
+			LastOptions = {}
+			skip = false
 			Main.Visible = false
 			Button1.Visible = false
 			Button2.Visible = false
@@ -575,13 +578,13 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 				local next = (not mainskip and NotifyQueq[1]) or (mainskip and OverTable)
 				mainskip = false
 				if next then
-					if type(next[5]) == 'function' then
+					if type(next[3]) == 'function' then
 						spawn(function()
-							(next[5])(Run(next[1],next[2],next[3] or {},next[4] or 5,true))
+							(next[3])((next[1])(next[2],next[4]))
 						end)
 					else
 						spawn(function()
-							Run(next[1],next[2],next[3] or {},next[4] or 5,true,next[6])
+							(next[1])(next[2],next[4])
 						end)
 					end
 				end
@@ -595,7 +598,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			if not Options.OverWrite then
 				if Options.NoWait == true then
 					local event = Instance.new('BindableEvent')
-					NotifyQueq[#NotifyQueq+1] = {Title,Text,Buttons or {},Duration or 5,nil,event}
+					NotifyQueq[#NotifyQueq+1] = {[1]=Run,[2]=true,[4]=event}
 					return function()
 						if event and CurrentIs == event then
 							event:Fire()
@@ -606,28 +609,40 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 					end
 				else
 					local s,r = nil,nil
-					NotifyQueq[#NotifyQueq+1] = {Title,Text,Buttons or {},Duration or 5,function(v) s=true;r=v end}
+					NotifyQueq[#NotifyQueq+1] = {[1]=Run,[2]=true,[3]=function(v) s=true;r=v end}
 					repeat task.wait() until s
 					return r
 				end
 			else
 				if Options.NoWait == true then
 					local event = Instance.new('BindableEvent')
-					OverTable = {Title,Text,Buttons or {},Duration or 5,nil,event}
+					OverTable = {[1]=Run,[4]=event}
+					OverEvent:Fire()
+					local c = OverEvent.Event:Once(function()
+						event:Fire()
+						event:Destroy()
+					end)
 					mainskip = true
 					return function()
 						if event and CurrentIs == event then
 							event:Fire()
+							Disconnect(c)
 							return true
 						else
+							Disconnect(c)
 							return false
 						end
 					end
 				else
 					local s,r = nil,nil
-					OverTable = {Title,Text,Buttons or {},Duration or 5,function(v) s=true;r=v end}
+					OverTable = {[1]=Run,[3]=function(v) s=true;r=v end}
+					OverEvent:Fire()
+					local c = OverEvent.Event:Once(function()
+						return
+					end)
 					mainskip = true
 					repeat task.wait() until s
+					Disconnect(c)
 					return r
 				end
 			end
@@ -636,7 +651,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			if Options.NoWait == true then
 				local event = Instance.new('BindableEvent')
 				spawn(function()
-					Run(Title,Text,Buttons or {},Duration or 5,false,event)
+					Run(false,event)
 				end)
 				return function()
 					if event and CurrentIs == event then
@@ -647,7 +662,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 					end
 				end
 			else
-				return Run(Title,Text,Buttons or {},Duration or 5,false)
+				return Run(false)
 			end
 		end
 	end
