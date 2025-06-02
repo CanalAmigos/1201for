@@ -653,11 +653,17 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 				spawn(function()
 					Run(false,event)
 				end)
+				local c = OverEvent.Event:Once(function()
+					event:Fire()
+					event:Destroy()
+				end)
 				return function()
 					if event and CurrentIs == event then
 						event:Fire()
+						Disconnect(c)
 						return true
 					else
+						Disconnect(c)
 						return false
 					end
 				end
