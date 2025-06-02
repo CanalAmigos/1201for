@@ -412,7 +412,6 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 		local Button3 = Main.Button3
 		local Holder = Main.FieldHolder
 		local TextField = Holder.TextField
-		Main.Position = (Options.RightSide and UDim2.new(1,-305,1,-205)) or GetCenter(Main)
 
 		local CurrentIs = nil
 
@@ -488,6 +487,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			local Choice,skip,Conections = nil,false,{}
 			local DestroyEvent = Event or Instance.new('BindableEvent')
 			TitleT.Text = Title or ''
+			Main.Position = (Options.RightSide and UDim2.new(1,-305,1,-205)) or GetCenter(Main)
 			if Options.Custom then
 				TextField.Visible = false
 				local Texts = (typeof(Text) == 'table' and Text) or {}
