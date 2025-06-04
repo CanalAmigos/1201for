@@ -402,7 +402,6 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 		local v = rawget(t,string.lower(i))
 		return (v ~= nil and v) or Defaults[i]
 	end})
-	LastOptions = Options
 
 	if (string.gsub(Title,' ','') ~= '' or Options.Custom) and ((not Options.Custom and string.gsub(Text,' ','') ~= '') or Options.Custom) then
 		local Main = NotificationFrame
@@ -487,6 +486,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			local Choice,skip,Conections = nil,false,{}
 			local DestroyEvent = Event or Instance.new('BindableEvent')
 			TitleT.Text = Title or ''
+			LastOptions = Options
 			Main.Position = (Options.RightSide and UDim2.new(1,-305,1,-205)) or GetCenter(Main)
 			if Options.Custom then
 				TextField.Visible = false
@@ -562,6 +562,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 			repeat task.wait() until tick()-t >= (tonumber(Duration) or 5) or skip or (mainskip and Options.CanBeOverWrite)
 			DestroyEvent:Fire()
 			DestroyEvent:Destroy()
+			CurrentIs = nil
 			LastOptions = {}
 			skip = false
 			Main.Visible = false
