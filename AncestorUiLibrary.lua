@@ -41,6 +41,25 @@ function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) |
 		return {type='NumberSequence',value=v.Keypoints}
 	elseif typeof(v) == 'ColorSequence' then
 		return {type='ColorSequence',value=v.Keypoints}
+	elseif typeof(v) == 'Rect' then
+		return {type='Rect',value={v.Min.X,v.Min.Y,v.Max.X,v.Max.Y}}
+	elseif typeof(v) == 'Region3' then
+		local min, max = v.CFrame.Position - v.Size/2, v.CFrame.Position + v.Size/2
+		return {type='Region3',value={{min.X,min.Y,min.Z},{max.X,max.Y,max.Z}}}
+	elseif typeof(v) == 'NumberRange' then
+		return {type='NumberRange',value={v.Min,v.Max}}
+	elseif typeof(v) == 'DateTime' then
+		return {type='DateTime',value=v.UnixTimestamp}
+	elseif typeof(v) == 'Faces' then
+		local faces = {}
+		for _,e in pairs(Enum.NormalId:GetEnumItems()) do
+			if v[e.Name] then
+				table.insert(faces, Enum.NormalId[e.Name])
+			end
+		end
+		return {type='Faces',value=faces}
+	elseif typeof(v) == 'PhysicalProperties' then
+		return {type='PhysicalProperties', value={v.Density,v.Friction,v.Elasticity,v.FrictionWeight,v.ElasticityWeight}}
 	end
 	return v
 end
@@ -69,6 +88,18 @@ function lib.SaveFunctions:UnTransformJson(v: {(("type") & string) | (("value") 
 			return NumberSequence.new(v.value)
 		elseif v.type == 'ColorSequence' then
 			return ColorSequence.new(v.value)
+		elseif v.type == 'Rect' then
+			return Rect.new(unpack(v.value))
+		elseif v.type == 'Region3' then
+			return Region3.new(Vector3.new(unpack(v.value[1])),Vector3.new(unpack(v.value[2])))
+		elseif v.type == 'NumberRange' then
+			return NumberRange.new(unpack(v.value))
+		elseif v.type == 'DateTime' then
+			return DateTime.fromUnixTimestamp(v.value)
+		elseif v.type == 'Faces' then
+			return Faces.new(unpack(v.value))
+		elseif v.type == 'PhysicalProperties' then
+			return PhysicalProperties.new(unpack(v.value))
 		end
 	end
 	return v
