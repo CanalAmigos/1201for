@@ -66,9 +66,9 @@ function lib.SaveFunctions:UnTransformJson(v: {(("type") & string) | (("value") 
 		elseif v.type == 'Ray' then
 			return Ray.new(unpack(v.value))
 		elseif v.type == 'NumberSequence' then
-			return NumberSequence.new(unpack(v.value))
+			return NumberSequence.new(v.value)
 		elseif v.type == 'ColorSequence' then
-			return ColorSequence.new(unpack(v.value))
+			return ColorSequence.new(v.value)
 		end
 	end
 	return v
