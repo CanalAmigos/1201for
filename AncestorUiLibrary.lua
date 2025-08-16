@@ -119,6 +119,62 @@ function GetCenter(frame: Frame)
 	return UDim2.new(0.5, -frame.AbsoluteSize.X/2, 0.5, -frame.AbsoluteSize.Y/2)
 end
 
+local function MakeDraggable(topbarobject, object)
+	local Dragging = nil
+	local DragInput = nil
+	local DragStart = nil
+	local StartPosition = nil
+
+	local function Update(input)
+		local Delta = input.Position - DragStart
+		local pos =
+			UDim2.new(
+				StartPosition.X.Scale,
+				StartPosition.X.Offset + Delta.X,
+				StartPosition.Y.Scale,
+				StartPosition.Y.Offset + Delta.Y
+			)
+		object.Position = pos
+	end
+
+	topbarobject.InputBegan:Connect(
+		function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				Dragging = true
+				DragStart = input.Position
+				StartPosition = object.Position
+
+				input.Changed:Connect(
+					function()
+						if input.UserInputState == Enum.UserInputState.End then
+							Dragging = false
+						end
+					end
+				)
+			end
+		end
+	)
+
+	topbarobject.InputChanged:Connect(
+		function(input)
+			if
+				input.UserInputType == Enum.UserInputType.MouseMovement or
+				input.UserInputType == Enum.UserInputType.Touch
+			then
+				DragInput = input
+			end
+		end
+	)
+
+	UIS.InputChanged:Connect(
+		function(input)
+			if input == DragInput and Dragging then
+				Update(input)
+			end
+		end
+	)
+end
+
 function lib:MobileButton(pos: UDim2)
 	local MobileMain = lib:Create('TextButton',{
 		Name = 'Mobile',
@@ -129,6 +185,7 @@ function lib:MobileButton(pos: UDim2)
 		Position = pos or UDim2.new(0.929049551, 0, 0.0258964151, 0),
 		Size = UDim2.new(0, 40, 0, 40)
 	})
+	MakeDraggable(MobileMain,MobileMain)
 	MobileMain.Parent = lib:Create('ScreenGui',{
 		Name = 'AncestorMobile',
 		ResetOnSpawn = false,
@@ -835,62 +892,6 @@ function lib:Main(mainsettings)
 
 	function main:GetGui(): ScreenGui
 		return main.ScreenGui
-	end
-
-	local function MakeDraggable(topbarobject, object)
-		local Dragging = nil
-		local DragInput = nil
-		local DragStart = nil
-		local StartPosition = nil
-
-		local function Update(input)
-			local Delta = input.Position - DragStart
-			local pos =
-				UDim2.new(
-					StartPosition.X.Scale,
-					StartPosition.X.Offset + Delta.X,
-					StartPosition.Y.Scale,
-					StartPosition.Y.Offset + Delta.Y
-				)
-			object.Position = pos
-		end
-
-		topbarobject.InputBegan:Connect(
-			function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-					Dragging = true
-					DragStart = input.Position
-					StartPosition = object.Position
-
-					input.Changed:Connect(
-						function()
-							if input.UserInputState == Enum.UserInputState.End then
-								Dragging = false
-							end
-						end
-					)
-				end
-			end
-		)
-
-		topbarobject.InputChanged:Connect(
-			function(input)
-				if
-					input.UserInputType == Enum.UserInputType.MouseMovement or
-					input.UserInputType == Enum.UserInputType.Touch
-				then
-					DragInput = input
-				end
-			end
-		)
-
-		UIS.InputChanged:Connect(
-			function(input)
-				if input == DragInput and Dragging then
-					Update(input)
-				end
-			end
-		)
 	end
 
 	main.TopBar = lib:Create("Frame", {
