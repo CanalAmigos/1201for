@@ -119,7 +119,7 @@ function GetCenter(frame: Frame)
 	return UDim2.new(0.5, -frame.AbsoluteSize.X/2, 0.5, -frame.AbsoluteSize.Y/2)
 end
 
-function MobileButton(pos: UDim2)
+function lib:MobileButton(pos: UDim2)
 	local MobileMain = lib:Create('TextButton',{
 		Name = 'Mobile',
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
@@ -194,6 +194,7 @@ function MobileButton(pos: UDim2)
 			game:GetService('CoreGui').Ancestor.MainBody.Visible = not game:GetService('CoreGui').Ancestor.MainBody.Visible
 		end
 	end)
+	return MobileMain
 end
 
 function Disconnect(v)
