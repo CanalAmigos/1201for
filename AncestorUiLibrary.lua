@@ -191,6 +191,7 @@ function lib:MobileButton(pos: UDim2)
 		ResetOnSpawn = false,
 		DisplayOrder = 1
 	})
+	MobileMain.Parent.Parent = game:GetService('CoreGui')
 	lib:Create('UIGradient',{
 		Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(38, 62, 162)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(52, 66, 141))},
 		Rotation = 90,
