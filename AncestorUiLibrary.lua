@@ -228,7 +228,7 @@ function lib:MobileButton(pos: UDim2)
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
-		Position = UDim2.new(-0.0204404835, 0, 0.125, 0),
+		Position = UDim2.new(-0.04, 0, 0.125, 0),
 		Size = UDim2.new(0, 36, 0, 30),
 		Font = Enum.Font.GothamMedium,
 		Text = 'k',
