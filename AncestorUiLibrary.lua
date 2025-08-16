@@ -3,6 +3,9 @@ if game:GetService('CoreGui'):FindFirstChild('Ancestor') then
 	game:GetService('CoreGui').Ancestor:Destroy()
 	game:GetService('CoreGui').AncestorNotify:Destroy()
 	game:GetService('CoreGui').AncestorToolTip:Destroy()
+	if game:GetService('CoreGui'):FindFirstChild('AncestorMobile') then
+		game:GetService('CoreGui').AncestorMobile:Destroy()
+	end
 end
 
 function lib:Create(type: string, proprieties: {}, parent: boolean): type
@@ -114,6 +117,83 @@ local Debris = game:GetService('Debris')
 
 function GetCenter(frame: Frame)
 	return UDim2.new(0.5, -frame.AbsoluteSize.X/2, 0.5, -frame.AbsoluteSize.Y/2)
+end
+
+function MobileButton(pos: UDim2)
+	local MobileMain = lib:Create('TextButton',{
+		Name = 'Mobile',
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		BorderSizePixel = 0,
+		Text = '',
+		AutoButtonColor = false,
+		Position = pos or UDim2.new(0.929049551, 0, 0.0258964151, 0),
+		Size = UDim2.new(0, 40, 0, 40)
+	})
+	MobileMain.Parent = lib:Create('ScreenGui',{
+		Name = 'AncestorMobile',
+		ResetOnSpawn = false,
+		DisplayOrder = 1
+	})
+	lib:Create('UIGradient',{
+		Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(38, 62, 162)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(52, 66, 141))},
+		Rotation = 90,
+	}).Parent = MobileMain
+	local TextFolder = lib:Create('Folder',{
+		Name = 'LogoTextFolder'
+	})
+	TextFolder.Parent = MobileMain
+	lib:Create('TextLabel',{
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+		Position = UDim2.new(-0.0204404835, 0, 0.125, 0),
+		Size = UDim2.new(0, 40, 0, 30),
+		Font = Enum.Font.GothamMedium,
+		Text = 'l',
+		TextColor3 = Color3.fromRGB(65, 255, 65),
+		TextSize = 27,
+		TextTransparency = 0.2
+	}).Parent = TextFolder
+	lib:Create('TextLabel',{
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+		Position = UDim2.new(0.113, 0, 0.125, 0),
+		Size = UDim2.new(0, 28, 0, 30),
+		Font = Enum.Font.GothamMedium,
+		Text = '-',
+		TextColor3 = Color3.fromRGB(17, 124, 255),
+		TextSize = 27,
+		TextTransparency = 0.2
+	}).Parent = TextFolder
+	lib:Create('TextLabel',{
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+		Position = UDim2.new(-0.0204404835, 0, 0.125, 0),
+		Size = UDim2.new(0, 36, 0, 30),
+		Font = Enum.Font.GothamMedium,
+		Text = 'k',
+		TextColor3 = Color3.fromRGB(255, 28, 100),
+		TextSize = 27,
+		TextTransparency = 0.2
+	}).Parent = TextFolder
+	lib:Create('TextLabel',{
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+		Position = UDim2.new(0.0331138819, 0, 0.125, 0),
+		Size = UDim2.new(0, 40, 0, 30),
+		Font = Enum.Font.GothamBold,
+		Text = 'A',
+		TextColor3 = Color3.fromRGB(255, 255, 255),
+		TextSize = 27
+	}).Parent = TextFolder
+	MobileMain.MouseButton1Click:Connect(function()
+		if game:GetService('CoreGui'):FindFirstChild('Ancestor') then
+			game:GetService('CoreGui').Ancestor.MainBody.Visible = not game:GetService('CoreGui').Ancestor.MainBody.Visible
+		end
+	end)
 end
 
 function Disconnect(v)
@@ -2725,6 +2805,11 @@ function lib:Main(mainsettings)
 	if mainsettings.CloseButton then
 		main.Close.MouseButton1Click:Connect(function()
 			game:GetService('CoreGui').Ancestor:Destroy()
+			game:GetService('CoreGui').AncestorNotify:Destroy()
+			game:GetService('CoreGui').AncestorToolTip:Destroy()
+			if game:GetService('CoreGui'):FindFirstChild('AncestorMobile') then
+				game:GetService('CoreGui').AncestorMobile:Destroy()
+			end
 			mainsettings.CloseCall()
 		end)
 	end
