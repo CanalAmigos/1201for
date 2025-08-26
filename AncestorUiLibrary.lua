@@ -566,7 +566,7 @@ pcall(function()
 	Text_2.Parent = Button3
 end)
 
-local NotifyQueq,busy,mainskip,OverTable,OverEvent,LastOptions = {},false,false,{},Instance.new('BindableEvent'),{}
+local NotifyQueq,busy,mainskip,OverTable,LastOptions = {},false,false,{},{}
 function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,Options: {('NoWait') -> ('OverWrite') -> ('Custom') -> ('RightSide') -> ('CanBeOverWrite') -> boolean})
 	Options = Options or {}
 	setmetatable(Options,{__index=function(t,i)
@@ -796,32 +796,20 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 				if Options.NoWait == true then
 					local event = Instance.new('BindableEvent')
 					OverTable = {[1]=Run,[4]=event}
-					OverEvent:Fire()
-					local c = OverEvent.Event:Once(function()
-						event:Fire()
-						event:Destroy()
-					end)
 					mainskip = true
 					return function()
 						if event and CurrentIs == event then
 							event:Fire()
-							Disconnect(c)
 							return true
 						else
-							Disconnect(c)
 							return false
 						end
 					end
 				else
 					local s,r = nil,nil
 					OverTable = {[1]=Run,[3]=function(v) s=true;r=v end}
-					OverEvent:Fire()
-					local c = OverEvent.Event:Once(function()
-						return
-					end)
 					mainskip = true
 					repeat task.wait() until s
-					Disconnect(c)
 					return r
 				end
 			end
@@ -832,17 +820,11 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,
 				spawn(function()
 					Run(false,event)
 				end)
-				local c = OverEvent.Event:Once(function()
-					event:Fire()
-					event:Destroy()
-				end)
 				return function()
 					if event and CurrentIs == event then
 						event:Fire()
-						Disconnect(c)
 						return true
 					else
-						Disconnect(c)
 						return false
 					end
 				end
