@@ -21,54 +21,62 @@ function lib:Create(type: string, proprieties: {}, parent: boolean): type
 end
 
 lib.SaveFunctions = {}
-function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) | ("value" & {any})}
+lib.SaveFunctions.Version = 'Ancestor_v1'
+lib.SaveFunctions.Template = {type='',value={},version=lib.SaveFunctions.Version}
+lib.SaveFunctions.TemplateTable = function(type,value)
+	local temp = table.clone(lib.SaveFunctions.Template)
+	temp.type = type
+	temp.value = value
+	return temp
+end
+function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) | ("value" & {any}) | ("version" & string)}
 	if typeof(v) == 'CFrame' then
-		return {type='CFrame',value={v:GetComponents()}}
+		return lib.SaveFunctions.TemplateTable('CFrame',{v:GetComponents()})
 	elseif typeof(v) == 'Vector3' then
-		return {type='Vector3',value={v.X,v.Y,v.Z}}
+		return lib.SaveFunctions.TemplateTable('Vector3',{v.X,v.Y,v.Z})
 	elseif typeof(v) == 'Vector2' then
-		return {type='Vector2',value={v.X,v.Y}}
+		return lib.SaveFunctions.TemplateTable('Vector2',{v.X,v.Y})
 	elseif typeof(v) == 'UDim' then
-		return {type='UDim',value={v.Scale,v.Offset}}
+		return lib.SaveFunctions.TemplateTable('UDim',{v.Scale,v.Offset})
 	elseif typeof(v) == 'UDim2' then
-		return {type='UDim2',value={v.X.Scale,v.X.Offset,v.Y.Scale,v.Y.Offset}}
+		return lib.SaveFunctions.TemplateTable('UDim2',{v.X.Scale,v.X.Offset,v.Y.Scale,v.Y.Offset})
 	elseif typeof(v) == 'Color3' then
-		return {type='Color3',value={v.R,v.G,v.B}}
+		return lib.SaveFunctions.TemplateTable('Color3',{v.R,v.G,v.B})
 	elseif typeof(v) == 'BrickColor' then
-		return {type='BrickColor',value={v.Number}}
+		return lib.SaveFunctions.TemplateTable('BrickColor',{v.Number})
 	elseif typeof(v) == 'Enum' then
-		return {type='Enum',value={v.EnumType,v.Name}}
+		return lib.SaveFunctions.TemplateTable('Enum',{v.EnumType,v.Name})
 	elseif typeof(v) == 'Ray' then
-		return {type='Ray',value={v.Origin,v.Direction}}
+		return lib.SaveFunctions.TemplateTable('Ray',{v.Origin,v.Direction})
 	elseif typeof(v) == 'NumberSequence' then
-		return {type='NumberSequence',value=v.Keypoints}
+		return lib.SaveFunctions.TemplateTable('NumberSequence',v.Keypoints)
 	elseif typeof(v) == 'ColorSequence' then
-		return {type='ColorSequence',value=v.Keypoints}
+		return lib.SaveFunctions.TemplateTable('ColorSequence',v.Keypoints)
 	elseif typeof(v) == 'Rect' then
-		return {type='Rect',value={v.Min.X,v.Min.Y,v.Max.X,v.Max.Y}}
+		return lib.SaveFunctions.TemplateTable('Rect',{v.Min.X,v.Min.Y,v.Max.X,v.Max.Y})
 	elseif typeof(v) == 'Region3' then
 		local min, max = v.CFrame.Position - v.Size/2, v.CFrame.Position + v.Size/2
-		return {type='Region3',value={{min.X,min.Y,min.Z},{max.X,max.Y,max.Z}}}
+		return lib.SaveFunctions.TemplateTable('Region3',{{min.X,min.Y,min.Z},{max.X,max.Y,max.Z}})
 	elseif typeof(v) == 'NumberRange' then
-		return {type='NumberRange',value={v.Min,v.Max}}
+		return lib.SaveFunctions.TemplateTable('NumberRange',{v.Min,v.Max})
 	elseif typeof(v) == 'DateTime' then
-		return {type='DateTime',value=v.UnixTimestamp}
+		return lib.SaveFunctions.TemplateTable('DateTime',v.UnixTimestamp)
 	elseif typeof(v) == 'Faces' then
 		local faces = {}
 		for _,e in pairs(Enum.NormalId:GetEnumItems()) do
 			if v[e.Name] then
-				table.insert(faces, Enum.NormalId[e.Name])
+				table.insert(faces, e.Name)
 			end
 		end
-		return {type='Faces',value=faces}
+		return lib.SaveFunctions.TemplateTable('Faces',faces)
 	elseif typeof(v) == 'PhysicalProperties' then
-		return {type='PhysicalProperties', value={v.Density,v.Friction,v.Elasticity,v.FrictionWeight,v.ElasticityWeight}}
+		return lib.SaveFunctions.TemplateTable('PhysicalProperties',{v.Density,v.Friction,v.Elasticity,v.FrictionWeight,v.ElasticityWeight})
 	end
 	return v
 end
 
-function lib.SaveFunctions:UnTransformJson(v: {(("type") & string) | (("value") & {any})})
-	if type(v) == 'table' and v.type ~= nil then
+function lib.SaveFunctions:UnTransformJson(v: {("type" & string) | ("value" & {any}) | ("version" & string)})
+	if type(v) == 'table' and v.type ~= nil and (v.version ~= nil and v.version == lib.SaveFunctions.Version) then
 		if v.type == 'CFrame' then
 			return CFrame.new(unpack(v.value))
 		elseif v.type == 'Vector3' then
@@ -100,6 +108,9 @@ function lib.SaveFunctions:UnTransformJson(v: {(("type") & string) | (("value") 
 		elseif v.type == 'DateTime' then
 			return DateTime.fromUnixTimestamp(v.value)
 		elseif v.type == 'Faces' then
+			for i,v in pairs(v.value) do
+				v.value[i] = Enum.NormalId[v]
+			end
 			return Faces.new(unpack(v.value))
 		elseif v.type == 'PhysicalProperties' then
 			return PhysicalProperties.new(unpack(v.value))
