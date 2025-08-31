@@ -20,6 +20,20 @@ function lib:Create(type: string, proprieties: {}, parent: boolean): type
 	return instance
 end
 
+function lib:CreateSong(id: (number & string),volume: number)
+	spawn(function()
+		local song = Instance.new('Sound',workspace.CurrentCamera)
+		song.SoundId = `rbxassetid://{id or nil}`
+		song.Volume = volume or 0.5
+		song.Looped = true
+		local t = tick()
+		repeat task.wait() until song.IsLoaded or tick()-t > 5
+		song:Play()
+		game:GetService('Debris'):AddItem(song,(song.IsLoaded and song.TimeLength/song.PlaybackSpeed) or 0)
+	end)
+	return
+end
+
 lib.SaveFunctions = {}
 lib.SaveFunctions.Version = 'Ancestor_v1'
 lib.SaveFunctions.Template = {type='',value={},version=lib.SaveFunctions.Version}
@@ -577,8 +591,28 @@ pcall(function()
 	Text_2.Parent = Button3
 end)
 
+function lib:NotificationQuickOptions(Options: {('NoWait') -> ('OverWrite') -> ('Custom') -> ('RightSide') -> ('CanBeOverWrite') -> boolean}): {('Notification') -> (('Title') -> (string) | ('Text') -> (string) | ('Buttons') -> ({string}))}
+	local Noty = {}
+	Options = Options or {}
+	setmetatable(Options,{__index=function(t,i)
+		local Defaults = {
+			['NoWait'] = false,
+			['OverWrite'] = false,
+			['Custom'] = false,
+			['RightSide'] = false,
+			['CanBeOverWrite'] = true
+		}
+		local v = rawget(t,string.lower(i))
+		return (v ~= nil and v) or Defaults[i]
+	end})
+	function Noty:Notification(Title: string,Text: string,Buttons: {string},Duration: number)
+		return lib:Notification(Title,Text,Buttons,Duration,Options)
+	end
+	return Noty
+end
+
 local NotifyQueq,busy,mainskip,OverTable,LastOptions = {},false,false,{},{}
-function lib:Notification(Title: string,Text: string,Buttons: {string},Duration,Options: {('NoWait') -> ('OverWrite') -> ('Custom') -> ('RightSide') -> ('CanBeOverWrite') -> boolean})
+function lib:Notification(Title: string,Text: string,Buttons: {string},Duration: number,Options: {('NoWait') -> ('OverWrite') -> ('Custom') -> ('RightSide') -> ('CanBeOverWrite') -> boolean})
 	Options = Options or {}
 	setmetatable(Options,{__index=function(t,i)
 		local Defaults = {
