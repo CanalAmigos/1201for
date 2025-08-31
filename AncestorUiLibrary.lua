@@ -1061,7 +1061,7 @@ function lib:Main(mainsettings)
 		BorderSizePixel = 0,
 		Position = UDim2.new(0, 0, 0.131578952, 0),
 		Size = UDim2.new(0, 50, 0, 264),
-		CanvasSize = UDim2.new(0, 0, 0, 1),
+		CanvasSize = UDim2.new(0, 0, 0, 0),
 		ScrollBarThickness = 0,
 		ScrollBarImageColor3=Color3.fromRGB(75,75,75)
 	})
@@ -1097,7 +1097,7 @@ function lib:Main(mainsettings)
 			Size = UDim2.new(0, 503, 0, 262),
 			ScrollBarThickness = 7,
 			ScrollBarImageColor3=Color3.fromRGB(75,75,75),
-			CanvasSize = UDim2.new(0,0,.2,1.3),
+			CanvasSize = UDim2.new(0,0,.2,0),
 			Visible = false,
 		})
 		categories.Container.AutomaticCanvasSize = Enum.AutomaticSize.Y
