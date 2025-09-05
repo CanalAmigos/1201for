@@ -1100,7 +1100,6 @@ function lib:Main(mainsettings)
 			CanvasSize = UDim2.new(0,0,.2,0),
 			Visible = false,
 		})
-		categories.Container.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
 		if firstC then
 			categories.Container.Visible = true 
@@ -1110,6 +1109,9 @@ function lib:Main(mainsettings)
 			SortOrder = Enum.SortOrder.LayoutOrder,
 			Padding = UDim.new(0, 5),
 		})
+		categories.ContainerLayout:GetPropertyChangedSignal('AbsoluteContentSize'):Connect(function()
+			categories.Container.CanvasSize = UDim2.new(0,0,0,categories.ContainerLayout.AbsoluteContentSize.Y)
+		end)
 
 		categories.ContainerPadding = lib:Create("UIPadding", {
 			PaddingLeft = UDim.new(0, 0),
