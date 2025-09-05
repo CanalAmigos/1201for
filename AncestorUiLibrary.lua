@@ -1890,6 +1890,7 @@ function lib:Main(mainsettings)
 				local lock = false
 				local lockkey = false
 				local kbind
+				local keybindtype = 'Desktop'
 
 				kb.kbback = lib:Create("ImageLabel", {
 					Name = Name.."KeyBind",
@@ -1955,32 +1956,41 @@ function lib:Main(mainsettings)
 				local Blacklist = {"W","A","S","D","Slash","Tab","Backspace","Escape","Space","Delete","Unknown","Backquote"}
 				local debounce = false
 				kb.kb.MouseButton1Click:Connect(function()
-					if debounce or lockkey then 
-						return
-					end
-					debounce = true
-					kb.kb.Text = "..."
-					c = UIS.InputBegan:Connect(function(i)
-						if i.UserInputType.Name == "Keyboard" then
-							if not table.find(Blacklist, i.KeyCode.Name) then
-								kb.kb.Text = i.KeyCode.Name
-								kbind = i.KeyCode
-								debounce = false
-								if c then
-									Disconnect(c)
-									c = nil
-								end
-							else
-								kb.kb.Text = "None"
-								kbind = nil
-								if c then
-									Disconnect(c)
-									c = nil
+					if keybindtype == 'Desktop' then
+						if debounce or lockkey then 
+							return
+						end
+						debounce = true
+						kb.kb.Text = "..."
+						c = UIS.InputBegan:Connect(function(i)
+							if i.UserInputType.Name == "Keyboard" then
+								if not table.find(Blacklist, i.KeyCode.Name) then
+									kb.kb.Text = i.KeyCode.Name
+									kbind = i.KeyCode
 									debounce = false
+									if c then
+										Disconnect(c)
+										c = nil
+									end
+								else
+									kb.kb.Text = "None"
+									kbind = nil
+									if c then
+										Disconnect(c)
+										c = nil
+										debounce = false
+									end
 								end
 							end
+						end)
+					elseif keybindtype == 'Mobile' then
+						if debounce or lockkey then 
+							return
 						end
-					end)
+						if CallBack then
+							SafeCall(`Keybind {Name}`,CallBack,kbind)
+						end
+					end
 				end)
 
 				Keybinds[Name] = function(v)
@@ -2037,6 +2047,18 @@ function lib:Main(mainsettings)
 						CornerRadius = UDim.new(0, 5)
 					})
 					c.Parent = t
+				end
+				
+				kb.ChangeType = function(Type: 'Desktop'|'Mobile')
+					if keybindtype ~= Type then
+						if Type == 'Desktop' then
+							keybindtype = Type
+							kb.kb.Text = kbind or 'None'
+						elseif Type == 'Mobile' then
+							keybindtype = Type
+							kb.kb.Text = 'Click'
+						end
+					end
 				end
 
 				return kb
