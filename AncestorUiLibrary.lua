@@ -122,8 +122,8 @@ function lib.SaveFunctions:UnTransformJson(v: {("type" & string) | ("value" & {a
 		elseif v.type == 'DateTime' then
 			return DateTime.fromUnixTimestamp(v.value)
 		elseif v.type == 'Faces' then
-			for i,v in pairs(v.value) do
-				v.value[i] = Enum.NormalId[v]
+			for i,e in pairs(v.value) do
+				v.value[i] = Enum.NormalId[e]
 			end
 			return Faces.new(unpack(v.value))
 		elseif v.type == 'PhysicalProperties' then
