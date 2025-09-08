@@ -85,6 +85,11 @@ function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) |
 		return lib.SaveFunctions.TemplateTable('Faces',faces)
 	elseif typeof(v) == 'PhysicalProperties' then
 		return lib.SaveFunctions.TemplateTable('PhysicalProperties',{v.Density,v.Friction,v.Elasticity,v.FrictionWeight,v.ElasticityWeight})
+	elseif typeof(v) == 'number' then
+		local string = tostring(v)
+		if string:find('inf',1,true) or string == 'nan' then
+			return lib.SaveFunctions.TemplateTable('number',string)
+		end
 	end
 	return v
 end
@@ -128,6 +133,8 @@ function lib.SaveFunctions:UnTransformJson(v: {("type" & string) | ("value" & {a
 			return Faces.new(unpack(v.value))
 		elseif v.type == 'PhysicalProperties' then
 			return PhysicalProperties.new(unpack(v.value))
+		elseif v.type == 'number' then
+			return (v.value == 'nan' and math.huge-math.huge) or (v.value:sub(1,1) == '-' and -math.huge) or math.huge
 		end
 	end
 	return v
