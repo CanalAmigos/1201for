@@ -93,6 +93,16 @@ function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) |
 	end
 	return v
 end
+function lib.SaveFunctions:TransformTableInJson(v: {any}) -- don't transform in json just jsonencode friendly
+	for i,e in pairs(v) do
+		if typeof(e) == 'table' and not e.version then
+			lib.SaveFunctions:TransformTableInJson(e)
+		else
+			v[i] = lib.SaveFunctions:TransformInJson(e)
+		end
+	end
+	return v
+end
 
 function lib.SaveFunctions:UnTransformJson(v: {("type" & string) | ("value" & {any}) | ("version" & string)})
 	if type(v) == 'table' and v.type ~= nil and (v.version ~= nil and v.version == lib.SaveFunctions.Version) then
@@ -135,6 +145,16 @@ function lib.SaveFunctions:UnTransformJson(v: {("type" & string) | ("value" & {a
 			return PhysicalProperties.new(unpack(v.value))
 		elseif v.type == 'number' then
 			return (v.value == 'nan' and math.huge-math.huge) or (v.value:sub(1,1) == '-' and -math.huge) or math.huge
+		end
+	end
+	return v
+end
+function lib.SaveFunctions:UnTransformTableInJson(v: {any}) -- don't add json encoded directly
+	for i,e in pairs(v) do
+		if typeof(e) == 'table' and not e.version then
+			lib.SaveFunctions:UnTransformTableInJson(e)
+		else
+			v[i] = lib.SaveFunctions:UnTransformJson(e)
 		end
 	end
 	return v
