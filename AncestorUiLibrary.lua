@@ -58,14 +58,22 @@ function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) |
 		return lib.SaveFunctions.TemplateTable('Color3',{v.R,v.G,v.B})
 	elseif typeof(v) == 'BrickColor' then
 		return lib.SaveFunctions.TemplateTable('BrickColor',{v.Number})
-	elseif typeof(v) == 'Enum' then
-		return lib.SaveFunctions.TemplateTable('Enum',{v.EnumType,v.Name})
+	elseif typeof(v) == 'EnumItem' then
+		return lib.SaveFunctions.TemplateTable('EnumItem',{tostring(v.EnumType),v.Name})
 	elseif typeof(v) == 'Ray' then
-		return lib.SaveFunctions.TemplateTable('Ray',{v.Origin,v.Direction})
+		return lib.SaveFunctions.TemplateTable('Ray',{{v.Origin.X,v.Origin.Y,v.Origin.Z},{v.Direction.X,v.Direction.Y,v.Direction.Z}})
 	elseif typeof(v) == 'NumberSequence' then
-		return lib.SaveFunctions.TemplateTable('NumberSequence',v.Keypoints)
+		local keypoints = {}
+		for _, kp in ipairs(v.Keypoints) do
+			table.insert(keypoints, {kp.Time, kp.Value, kp.Envelope})
+		end
+		return lib.SaveFunctions.TemplateTable('NumberSequence', keypoints)
 	elseif typeof(v) == 'ColorSequence' then
-		return lib.SaveFunctions.TemplateTable('ColorSequence',v.Keypoints)
+		local keypoints = {}
+		for _, kp in ipairs(v.Keypoints) do
+			table.insert(keypoints, {kp.Time, {kp.Value.R, kp.Value.G, kp.Value.B}})
+		end
+		return lib.SaveFunctions.TemplateTable('ColorSequence', keypoints)
 	elseif typeof(v) == 'Rect' then
 		return lib.SaveFunctions.TemplateTable('Rect',{v.Min.X,v.Min.Y,v.Max.X,v.Max.Y})
 	elseif typeof(v) == 'Region3' then
@@ -120,14 +128,23 @@ function lib.SaveFunctions:UnTransformJson(v: {("type" & string) | ("value" & {a
 			return Color3.new(unpack(v.value))
 		elseif v.type == 'BrickColor' then
 			return BrickColor.new(v.value[1])
-		elseif v.type == 'Enum' then
+		elseif v.type == 'EnumItem' then
 			return Enum[v.value[1]][v.value[2]]
 		elseif v.type == 'Ray' then
-			return Ray.new(unpack(v.value))
+			return Ray.new(Vector3.new(unpack(v.value[1])),Vector3.new(unpack(v.value[2])))
 		elseif v.type == 'NumberSequence' then
-			return NumberSequence.new(v.value)
+			local keypoints = {}
+			for _, kpData in ipairs(v.value) do
+				table.insert(keypoints, NumberSequenceKeypoint.new(kpData[1], kpData[2], kpData[3] or 0))
+			end
+			return NumberSequence.new(keypoints)
 		elseif v.type == 'ColorSequence' then
-			return ColorSequence.new(v.value)
+			local keypoints = {}
+			for _, kpData in ipairs(v.value) do
+				local color = Color3.new(kpData[2][1], kpData[2][2], kpData[2][3])
+				table.insert(keypoints, ColorSequenceKeypoint.new(kpData[1], color))
+			end
+			return ColorSequence.new(keypoints)
 		elseif v.type == 'Rect' then
 			return Rect.new(unpack(v.value))
 		elseif v.type == 'Region3' then
