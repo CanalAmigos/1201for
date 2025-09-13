@@ -44,22 +44,6 @@ lib.SaveFunctions.TemplateTable = function(type,value)
 	return temp
 end
 
-function lib.SaveFunctions:TransformTableInJson(v: {any}) -- don't transform in json just jsonencode friendly
-	local newtbl = {}
-	for i,e in pairs(v) do
-		newtbl[i] = lib.SaveFunctions:TransformInJson(e)
-	end
-	return newtbl
-end
-
-function lib.SaveFunctions:UnTransformTableInJson(v: {any}) -- don't add json encoded directly
-	local newtbl = {}
-	for i,e in pairs(v) do
-		newtbl[i] = lib.SaveFunctions:UnTransformJson(e)
-	end
-	return newtbl
-end
-
 function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) | ("value" & {any}) | ("version" & string)}
 	if typeof(v) == 'CFrame' then
 		return lib.SaveFunctions.TemplateTable('CFrame',{v:GetComponents()})
@@ -115,8 +99,12 @@ function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) |
 		if string:find('inf',1,true) or string == 'nan' then
 			return lib.SaveFunctions.TemplateTable('number',string)
 		end
-	elseif typeof(v) == 'table' and not v.version then
-		return lib.SaveFunctions:TransformTableInJson(v)
+	elseif typeof(v) == 'table' and (not v.version or v.version ~= lib.SaveFunctions.Version) then
+		local t = {}
+		for i,e in pairs(v) do
+			t[i] = lib.SaveFunctions:TransformInJson(e)
+		end
+		return t
 	end
 	return v
 end
@@ -172,8 +160,12 @@ function lib.SaveFunctions:UnTransformJson(v: {("type" & string) | ("value" & {a
 		elseif v.type == 'number' then
 			return (v.value == 'nan' and math.huge-math.huge) or (v.value:sub(1,1) == '-' and -math.huge) or math.huge
 		end
-	elseif typeof(v) == 'table' and not v.version then
-		return lib.SaveFunctions:UnTransformTableInJson(v)
+	elseif typeof(v) == 'table' and (not v.version or v.version ~= lib.SaveFunctions.Version) then
+		local t = {}
+		for i,e in pairs(v) do
+			t[i] = lib.SaveFunctions:UnTransformJson(e)
+		end
+		return t
 	end
 	return v
 end
