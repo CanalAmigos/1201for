@@ -1415,9 +1415,9 @@ local defaults = nil; do
 					table.remove(NotifyQueq,1)
 				end
 				if #NotifyQueq > 0 or MainSkip then
-					local next = (not MainSkip and NotifyQueq[1]) or (MainSkip and OverTable)
+					local next = (not MainSkip and NotifyQueq[1]) or (MainSkip and OverTable) or {}
 					MainSkip = false
-					if next then
+					if #next > 0 then
 						if typeof(next[3]) == 'function' then
 							spawn(function()
 								(next[3])((next[1]):Invoke(next[2],true))
