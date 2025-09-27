@@ -1585,23 +1585,19 @@ local defaults = nil; do
 	library.options = setmetatable({}, {__index = default})
 
 	spawn(function()
-		local event = Instance.new('BindableEvent')
-		local table = library.rainbowtable
-		setmetatable(table,{__newindex=function(t,i,v)
-			event:Fire()
-			rawset(t,i,v)
-		end})
 		while not library.deleted do
 			pcall(function()
 				if #library.rainbowtable > 0 then
 					for i = 0, 1, 1 / 300 do
 						for e,obj in next, library.rainbowtable do
-							library.rainbowtable[e].BackgroundColor3 = Color3.fromHSV(i, 1, 1)
+							pcall(function()
+								obj.BackgroundColor3 = Color3.fromHSV(i, 1, 1)
+							end)
 						end
 						task.wait()
 					end
 				else
-					event.Event:Wait()
+					task.wait()
 				end
 			end)
 		end
