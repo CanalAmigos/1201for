@@ -45,6 +45,7 @@ lib.SaveFunctions.TemplateTable = function(type,value)
 end
 
 function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) | ("value" & {any}) | ("version" & string)}
+	local NormalStrings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
 	if typeof(v) ~= 'table' then
 		if typeof(v) == 'CFrame' then
 			return lib.SaveFunctions.TemplateTable('CFrame',{v:GetComponents()})
@@ -99,6 +100,15 @@ function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) |
 			local string = tostring(v)
 			if string:find('inf',1,true) or string == 'nan' then
 				return lib.SaveFunctions.TemplateTable('number',string)
+			end
+		elseif typeof(v) == 'string' then
+			local a = string.gsub(v,`[{NormalStrings}]`,'')
+			if a ~= '' then
+				local Bytes = {}
+				for i,v in pairs(v:split('')) do
+					Bytes[i] = string.byte(v)
+				end
+				return lib.SaveFunctions.TemplateTable('string',v)
 			end
 		end
 	elseif typeof(v) == 'table' and (not v.version or v.version ~= lib.SaveFunctions.Version) then
@@ -161,6 +171,12 @@ function lib.SaveFunctions:UnTransformJson(v: {("type" & string) | ("value" & {a
 			return PhysicalProperties.new(unpack(v.value))
 		elseif v.type == 'number' then
 			return (v.value == 'nan' and math.huge-math.huge) or (v.value:sub(1,1) == '-' and -math.huge) or math.huge
+		elseif v.type == 'string' then
+			local strin = ''
+			for i,v in pairs(v.value) do
+				strin = `{strin}{string.char(v)}`
+			end
+			return strin
 		end
 	elseif typeof(v) == 'table' and (not v.version or v.version ~= lib.SaveFunctions.Version) then
 		local t = {}
@@ -179,7 +195,7 @@ local UIS = game:GetService("UserInputService")
 local TextSrvice = game:GetService("TextService")
 local Debris = game:GetService('Debris')
 
-function GetCenter(frame: Frame)
+function GetCenter(frame: Frame) 
 	return UDim2.new(0.5, -frame.AbsoluteSize.X/2, 0.5, -frame.AbsoluteSize.Y/2)
 end
 
@@ -395,6 +411,7 @@ MainToolTip['Text'] = lib:Create('TextLabel',{
 	TextYAlignment = Enum.TextYAlignment.Top,
 })
 MainToolTip.Text.TextWrapped = true
+MainToolTip.Text.AutomaticSize = Enum.AutomaticSize.Y
 MainToolTip.Text.Parent = MainToolTip['Holder']
 
 lib:Create('UITextSizeConstraint',{}).Parent = MainToolTip['Text']
@@ -646,6 +663,14 @@ function lib:NotificationQuickOptions(Options: {('NoWait') -> ('OverWrite') -> (
 	end})
 	function Noty:Notification(Title: string,Text: string,Buttons: {string},Duration: number)
 		return lib:Notification(Title,Text,Buttons,Duration,Options)
+	end
+	Noty.ChangeOptions = function(Op: {('NoWait') -> ('OverWrite') -> ('Custom') -> ('RightSide') -> ('CanBeOverWrite') -> boolean})
+		local Op = Op or {}
+		for i,v in pairs(Op) do
+			if Options[i] ~= v and v ~= nil then
+				Options[i] = v
+			end
+		end
 	end
 	return Noty
 end
@@ -1125,7 +1150,7 @@ function lib:Main(mainsettings)
 			Selectable = false,
 			Size = UDim2.new(1, 0, 0, 50),
 			AutoButtonColor = false,
-			Image = "rbxassetid://"..ImageId,
+			Image = "rbxassetid://"..(ImageId and ImageId:gsub('%D+','')) or '',
 		})
 
 		categories.Container = lib:Create("ScrollingFrame", {
