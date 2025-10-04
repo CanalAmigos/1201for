@@ -1386,8 +1386,10 @@ function lib:Main(mainsettings)
 
 					TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0.700523198, 0, 0, 0)}):Play()
 
-					if CallBack then 
-						SafeCall(`Toggle {Name}`,CallBack,toggled)
+					if CallBack then
+						spawn(function()
+							SafeCall(`Toggle {Name}`,CallBack,toggled)
+						end)
 					end 
 				end
 
@@ -1407,13 +1409,16 @@ function lib:Main(mainsettings)
 							TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0, 0, 0, 0)}):Play()
 						end
 
-						if CallBack then 
-							SafeCall(`Toggle {Name}`,CallBack,toggled)
+						if CallBack then
+							spawn(function()
+								SafeCall(`Toggle {Name}`,CallBack,toggled)
+							end)
 						end 
 					end
 				end)
-				
-				SafeCall(`Toggle {Name}`,CallBack,toggled)
+				spawn(function()
+					SafeCall(`Toggle {Name}`,CallBack,toggled)
+				end)
 				return {
 					Toggle = function()
 						toggled = not toggled
@@ -1546,10 +1551,14 @@ function lib:Main(mainsettings)
 										TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0, 0, 0, 0)}):Play()
 									end
 									if CallBack then 
-										SafeCall(`Toggle {Name} | Keybind`,CallBack,toggled)
+										spawn(function()
+											SafeCall(`Toggle {Name} | Keybind`,CallBack,toggled)
+										end)
 									end
 									if callBack then
-										SafeCall(`Toggle {Name} | Keybind`,callBack,toggled)
+										spawn(function()
+											SafeCall(`Toggle {Name} | Keybind`,callBack,toggled)
+										end)
 									end
 								end
 							end)
@@ -1781,7 +1790,9 @@ function lib:Main(mainsettings)
 						sliders.slidervalue.Text = tostring(slidervalue)
 
 						if CallBack then
-							SafeCall(`Slider {Name}`,CallBack,slidervalue)
+							spawn(function()
+								SafeCall(`Slider {Name}`,CallBack,slidervalue)
+							end)
 						end
 
 						TweenService:Create(sliders.sliderinner, TweenInfo.new(0.04), {Size = UDim2.new(Scale, 0, 1, -2)}):Play()
@@ -1812,7 +1823,9 @@ function lib:Main(mainsettings)
 						TweenService:Create(sliders.sliderinner, TweenInfo.new(0.04), {Size = UDim2.new(Porcentage, 0, 1, -2)}):Play()
 						sliders.slidervalue.Text = tostring(v)
 						if CallBack then
-							SafeCall(`Slider {Name}`,CallBack,tostring(v))
+							spawn(function()
+								SafeCall(`Slider {Name}`,CallBack,tostring(v))
+							end)
 						end
 						return SetValue
 					end
@@ -1893,7 +1906,9 @@ function lib:Main(mainsettings)
 					else
 						if not AutoName and CallBack then
 							text = tb.textbox.Text
-							SafeCall(`TextBox {Name}`,CallBack,tb.textbox.Text)
+							spawn(function()
+								SafeCall(`TextBox {Name}`,CallBack,tb.textbox.Text)
+							end)
 						elseif AutoName then
 							for i,v in pairs(game.Players:GetChildren()) do
 								if string.match(v.Name:lower(),tb.textbox.Text:lower()) then
@@ -1903,7 +1918,9 @@ function lib:Main(mainsettings)
 								end
 							end
 							if CallBack then
-								SafeCall(`TextBox {Name}`,CallBack,tb.textbox.Text)
+								spawn(function()
+									SafeCall(`TextBox {Name}`,CallBack,tb.textbox.Text)
+								end)
 							end
 						end
 					end
@@ -2054,7 +2071,9 @@ function lib:Main(mainsettings)
 							return
 						end
 						if CallBack then
-							SafeCall(`Keybind {Name}`,CallBack,kbind)
+							spawn(function()
+								SafeCall(`Keybind {Name}`,CallBack,kbind)
+							end)
 						end
 					end
 				end)
@@ -2066,7 +2085,9 @@ function lib:Main(mainsettings)
 				game:GetService("UserInputService").InputBegan:Connect(function(i, GPE)
 					if kbind and i.KeyCode == kbind and not GPE and not lock then
 						if CallBack then
-							SafeCall(`Keybind {Name}`,CallBack,kbind)
+							spawn(function()
+								SafeCall(`Keybind {Name}`,CallBack,kbind)
+							end)
 						end
 					end
 				end)
@@ -2304,7 +2325,9 @@ function lib:Main(mainsettings)
 								end
 
 								if CallBack then
-									SafeCall(`DropDown {Name}`,CallBack,dvalue)
+									spawn(function()
+										SafeCall(`DropDown {Name}`,CallBack,dvalue)
+									end)
 								end
 							end
 						end)
@@ -2400,7 +2423,9 @@ function lib:Main(mainsettings)
 						dvalue = v
 
 						if CallBack then
-							SafeCall(`DropDown {Name}`,CallBack,dvalue)
+							spawn(function()
+								SafeCall(`DropDown {Name}`,CallBack,dvalue)
+							end)
 						end
 					end,
 					Refresh = function(v)
@@ -2467,7 +2492,9 @@ function lib:Main(mainsettings)
 								end
 
 								if callback then
-									SafeCall(`DropDown {Name} | AddOption {text}`,callback,dvalue)
+									spawn(function()
+										SafeCall(`DropDown {Name} | AddOption {text}`,callback,dvalue)
+									end)
 								end
 							end
 						end)
@@ -2830,7 +2857,9 @@ function lib:Main(mainsettings)
 					colorstuff.colorpickerbutton.ImageColor3 = colourPickColour
 
 					if CallBack then
-						SafeCall(`ColorPicker {Name}`,CallBack,colorvalue)
+						spawn(function()
+							SafeCall(`ColorPicker {Name}`,CallBack,colorvalue)
+						end)
 					end
 				end
 
