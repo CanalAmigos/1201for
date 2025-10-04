@@ -35,7 +35,7 @@ function lib:CreateSong(id: (number & string),volume: number)
 end
 
 lib.SaveFunctions = {}
-lib.SaveFunctions.Version = 'Ancestor_v1'
+lib.SaveFunctions.Version = 'Ancestor_v1.1'
 lib.SaveFunctions.Template = {type='',value={},version=lib.SaveFunctions.Version}
 lib.SaveFunctions.TemplateTable = function(type,value)
 	local temp = table.clone(lib.SaveFunctions.Template)
@@ -45,7 +45,7 @@ lib.SaveFunctions.TemplateTable = function(type,value)
 end
 
 function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) | ("value" & {any}) | ("version" & string)}
-	local NormalStrings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
+	local NormalStrings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890.,/*-+\\\'"|;:?><][}{=_()%$#@!¨&§ºª°`'
 	if typeof(v) ~= 'table' then
 		if typeof(v) == 'CFrame' then
 			return lib.SaveFunctions.TemplateTable('CFrame',{v:GetComponents()})
@@ -105,10 +105,15 @@ function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) |
 			local a = string.gsub(v,`[{NormalStrings}]`,'')
 			if a ~= '' then
 				local Bytes = {}
+				local Numbers = {}
 				for i,v in pairs(v:split('')) do
-					Bytes[i] = string.byte(v)
+					if tonumber(v) then
+						Numbers[i] = v
+					else
+						Bytes[i] = string.byte(v)
+					end
 				end
-				return lib.SaveFunctions.TemplateTable('string',v)
+				return lib.SaveFunctions.TemplateTable('string',{Bytes,Numbers})
 			end
 		end
 	elseif typeof(v) == 'table' and (not v.version or v.version ~= lib.SaveFunctions.Version) then
@@ -173,10 +178,13 @@ function lib.SaveFunctions:UnTransformJson(v: {("type" & string) | ("value" & {a
 			return (v.value == 'nan' and math.huge-math.huge) or (v.value:sub(1,1) == '-' and -math.huge) or math.huge
 		elseif v.type == 'string' then
 			local strin = ''
-			for i,v in pairs(v.value) do
-				strin = `{strin}{string.char(v)}`
+			local pack = {}
+			for i = 1,2 do
+				for o,v in pairs(v.value[i]) do
+					pack[o] = (i < 2 and string.char(v)) or v
+				end
 			end
-			return strin
+			return table.concat(pack,'')
 		end
 	elseif typeof(v) == 'table' and (not v.version or v.version ~= lib.SaveFunctions.Version) then
 		local t = {}
