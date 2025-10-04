@@ -186,6 +186,8 @@ function lib.SaveFunctions:UnTransformJson(v: {("type" & string) | ("value" & {a
 			end
 			return table.concat(pack,'')
 		end
+	elseif typeof(v) == 'table' and v.type ~= nil and (v.version ~= nil and v.version ~= lib.SaveFunctions.Version) then
+		return nil
 	elseif typeof(v) == 'table' and (not v.version or tostring(v.version):sub(1,8) ~= 'Ancestor') then
 		local t = {}
 		for i,e in pairs(v) do
