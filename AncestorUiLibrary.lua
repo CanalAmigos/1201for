@@ -1297,8 +1297,10 @@ function lib:Main(mainsettings)
 				})
 
 				buttons.button.MouseButton1Click:Connect(function()
-					if CallBack then 
-						CallBack()
+					if CallBack then
+						spawn(function()
+							SafeCall(`Button {Name}`,CallBack)
+						end)
 					end
 
 					if Animated then 
@@ -1439,8 +1441,10 @@ function lib:Main(mainsettings)
 							TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0, 0, 0, 0)}):Play()
 						end
 
-						if CallBack then 
-							CallBack(toggled)
+						if CallBack then
+							spawn(function()
+								SafeCall(`Toggle {Name}`,CallBack,toggled)
+							end)
 						end
 					end,
 					ChangeToggle = function(v)
@@ -1452,8 +1456,10 @@ function lib:Main(mainsettings)
 							TweenService:Create(toggles.t3, TweenInfo.new(0.1), {Position = UDim2.new(0, 0, 0, 0)}):Play()
 						end
 
-						if CallBack then 
-							CallBack(toggled)
+						if CallBack then
+							spawn(function()
+								SafeCall(`Toggle {Name}`,CallBack,toggled)
+							end)
 						end 
 					end,
 					Lock = function(v)
