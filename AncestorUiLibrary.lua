@@ -116,7 +116,7 @@ function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) |
 				return lib.SaveFunctions.TemplateTable('string',{Bytes,Numbers})
 			end
 		end
-	elseif typeof(v) == 'table' and (not v.version or v.version ~= lib.SaveFunctions.Version) then
+	elseif typeof(v) == 'table' and (not v.version or tostring(v.version):sub(1,8) ~= 'Ancestor') then
 		local t = {}
 		for i,e in pairs(v) do
 			t[i] = lib.SaveFunctions:TransformInJson(e)
@@ -186,7 +186,7 @@ function lib.SaveFunctions:UnTransformJson(v: {("type" & string) | ("value" & {a
 			end
 			return table.concat(pack,'')
 		end
-	elseif typeof(v) == 'table' and (not v.version or v.version ~= lib.SaveFunctions.Version) then
+	elseif typeof(v) == 'table' and (not v.version or tostring(v.version):sub(1,8) ~= 'Ancestor') then
 		local t = {}
 		for i,e in pairs(v) do
 			t[i] = lib.SaveFunctions:UnTransformJson(e)
