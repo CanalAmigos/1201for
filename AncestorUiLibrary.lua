@@ -45,7 +45,7 @@ lib.SaveFunctions.TemplateTable = function(type,value)
 end
 
 function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) | ("value" & {any}) | ("version" & string)}
-	local NormalStrings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890.,/*-+\\\'"|;:?><][}{=_()%$#@!¨&§ºª°`'
+	local NormalStrings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890.,/*-+\\\'"|;:?><][}{=_()%$#@!¨&§ºª°` '
 	if typeof(v) ~= 'table' then
 		if typeof(v) == 'CFrame' then
 			return lib.SaveFunctions.TemplateTable('CFrame',{v:GetComponents()})
@@ -105,15 +105,15 @@ function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) |
 			local a = string.gsub(v,`[{NormalStrings}]`,'')
 			if a ~= '' then
 				local Bytes = {}
-				local Numbers = {}
+				local Normal = {}
 				for i,v in pairs(v:split('')) do
-					if tonumber(v) then
-						Numbers[i] = v
-					else
+					if string.gsub(v,`[{NormalStrings}]`,'') == '' then
+						Normal[i] = v
+					elseif string.byte(v) then
 						Bytes[i] = string.byte(v)
 					end
 				end
-				return lib.SaveFunctions.TemplateTable('string',{Bytes,Numbers})
+				return lib.SaveFunctions.TemplateTable('string',{Bytes,Normal})
 			end
 		end
 	elseif typeof(v) == 'table' and (not v.version or tostring(v.version):sub(1,8) ~= 'Ancestor') then
@@ -177,7 +177,6 @@ function lib.SaveFunctions:UnTransformJson(v: {("type" & string) | ("value" & {a
 		elseif v.type == 'number' then
 			return (v.value == 'nan' and math.huge-math.huge) or (v.value:sub(1,1) == '-' and -math.huge) or math.huge
 		elseif v.type == 'string' then
-			local strin = ''
 			local pack = {}
 			for i = 1,2 do
 				for o,v in pairs(v.value[i]) do
