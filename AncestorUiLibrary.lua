@@ -1643,6 +1643,7 @@ function lib:Main(mainsettings)
 				textlabelfuncs.SetText = function(text: string)
 					textlabels.textlabel.Text = text
 				end
+				textlabelfuncs.TextLabel = textlabels.textlabel
 
 				return textlabelfuncs
 			end
