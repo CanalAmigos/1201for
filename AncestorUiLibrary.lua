@@ -1621,18 +1621,18 @@ function lib:Main(mainsettings)
 					SliceScale = 0.04,
 				})
 				--]]
-
-				textlabels.textlabel = lib:Create("TextLabel", {          
-					['BackgroundColor3'] = Color3.fromRGB(255, 255, 255),
-					['BackgroundTransparency'] = 1.000,
-					['BorderSizePixel'] = 0,
-					['Position'] = GetCenter(textlabels.textlabelframe),
-					['Size'] = UDim2.new(0, 476, 0, 35),
-					['Font'] = Enum.Font.GothamSemibold,
-					['Text'] = Text,
-					['TextColor3'] = Color or Color3.fromRGB(255, 255, 255),
-					['TextSize'] = 16.000
-				})
+				
+				
+				textlabels.textlabel = Instance.new('TextLabel')          
+				textlabels.textlabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				textlabels.textlabel.BackgroundTransparency = 1.000
+				textlabels.textlabel.BorderSizePixel = 0
+				textlabels.textlabel.Position = GetCenter(textlabels.textlabelframe)
+				textlabels.textlabel.Size = UDim2.new(0, 476, 0, 35)
+				textlabels.textlabel.Font = Enum.Font.GothamSemibold
+				textlabels.textlabel.Text = Text
+				textlabels.textlabel.TextColor3 = Color or Color3.fromRGB(255, 255, 255)
+				textlabels.textlabel.TextSize = 16.000
 				textlabels.textlabel.TextWrapped = true
 				textlabels.textlabel.RichText = true
 
