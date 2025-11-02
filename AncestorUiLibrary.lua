@@ -2163,6 +2163,14 @@ function lib:Main(mainsettings)
 						end
 					end
 				end
+				
+				kb.Fire = function()
+					if CallBack then
+						spawn(function()
+							SafeCall(`Keybind {Name}`,CallBack,kbind)
+						end)
+					end
+				end
 
 				return kb
 			end
