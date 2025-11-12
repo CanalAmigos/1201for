@@ -2443,8 +2443,8 @@ function lib:Main(mainsettings)
 
 				return {
 					SetCurrent = function(v)
-						dd.ddbutton.Text = v
-						dvalue = v
+						dd.ddbutton.Text = v or 'None'
+						dvalue = v or nil
 
 						if CallBack then
 							spawn(function()
@@ -2515,9 +2515,9 @@ function lib:Main(mainsettings)
 									end
 								end
 
-								if callback then
+								if callback or CallBack then
 									spawn(function()
-										SafeCall(`DropDown {Name} | AddOption {text}`,callback,dvalue)
+										SafeCall(`DropDown {Name} | AddOption {text}`,(callback or CallBack),dvalue)
 									end)
 								end
 							end
