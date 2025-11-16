@@ -45,7 +45,6 @@ lib.SaveFunctions.TemplateTable = function(type,value)
 end
 
 function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) | ("value" & {any}) | ("version" & string)}
-	local NormalStrings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890.,/*-+\\\'"|;:?><][}{=_()%$#@!¨&§ºª°` '
 	if typeof(v) ~= 'table' then
 		if typeof(v) == 'CFrame' then
 			return lib.SaveFunctions.TemplateTable('CFrame',{v:GetComponents()})
@@ -101,6 +100,8 @@ function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) |
 			if string:find('inf',1,true) or string == 'nan' then
 				return lib.SaveFunctions.TemplateTable('number',string)
 			end
+		elseif typeof(v) == 'Instance' then
+			return nil
 		end
 	elseif typeof(v) == 'table' and (not v.version or tostring(v.version):sub(1,8) ~= 'Ancestor') then
 		local t = {}
@@ -1682,7 +1683,7 @@ function lib:Main(mainsettings)
 				local Precise = Settings.Precise
 
 				sliders.sliderb = lib:Create("ImageLabel", {
-					Name = Name.."Slider",
+					Name = (Name or '').."Slider",
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 1.000,
 					Position = UDim2.new(0.00415800419, 0, 0.86175108, 0),
