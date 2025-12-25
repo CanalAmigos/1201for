@@ -183,8 +183,10 @@ local UIS = game:GetService("UserInputService")
 local TextSrvice = game:GetService("TextService")
 local Debris = game:GetService('Debris')
 
-function GetCenter(frame: Frame) 
-	return UDim2.new(0.5, -frame.AbsoluteSize.X/2, 0.5, -frame.AbsoluteSize.Y/2)
+function SetCenter(frame: Frame)
+	frame.AnchorPoint = Vector2.new(0.5,0.5)
+	frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+	return frame.Position
 end
 
 local function MakeDraggable(topbarobject, object)
@@ -451,7 +453,7 @@ pcall(function()
 		Visible = false,
 		ZIndex = 5,
 	})
-	NotificationFrame.Position = GetCenter(NotificationFrame)
+	SetCenter(NotificationFrame)
 	NotificationFrame.Parent = lib:Create('ScreenGui',{
 		Name = 'AncestorNotify',
 		ResetOnSpawn = false,
@@ -762,7 +764,7 @@ function lib:Notification(Title: string,Text: string,Buttons: {string},Duration:
 			local DestroyEvent = Event or Instance.new('BindableEvent')
 			TitleT.Text = Title or ''
 			LastOptions = Options
-			Main.Position = (Options.RightSide and UDim2.new(1,-305,1,-205)) or GetCenter(Main)
+			Main.Position = (Options.RightSide and UDim2.new(1,-305,1,-205)) or SetCenter(Main)
 			if Options.Custom then
 				TextField.Visible = false
 				local Texts = (typeof(Text) == 'table' and Text) or {}
@@ -958,7 +960,7 @@ function lib:Main(mainsettings)
 		BorderSizePixel = 2,
 		Size = UDim2.new(0, 554, 0, 304),
 	})
-	main.MainBody.Position = GetCenter(main.MainBody)
+	SetCenter(main.MainBody)
 
 	UIS.InputBegan:Connect(function(k,p)
 		if k.KeyCode == keycode and not p then
@@ -1294,6 +1296,24 @@ function lib:Main(mainsettings)
 				buttons.buttonframe.Parent = buttons.buttonb
 				buttons.button.Parent = buttons.buttonframe
 				
+				function buttons:Fire(...)
+					local Args = {...}
+					if CallBack then
+						spawn(function()
+							SafeCall(`Button {Name}`,CallBack,unpack(Args))
+						end)
+					end
+					spawn(function()
+						if Animated then
+							TweenService:Create(buttons.buttonframe, TweenInfo.new(0.1), {Size = UDim2.new(0, 440,0, 25),  Position = UDim2.new(0.047, 0,0.143, 0)}):Play()
+							TweenService:Create(buttons.button, TweenInfo.new(0.1), {Size = UDim2.new(0, 437,0, 25), Position = UDim2.new(0,0,0,0)}):Play()
+							wait(0.05)
+							TweenService:Create(buttons.buttonframe, TweenInfo.new(0.1), {Size = UDim2.new(0, 476,0, 29), Position = UDim2.new(0.01, 0,0.086, 0)}):Play()
+							TweenService:Create(buttons.button, TweenInfo.new(0.1), {Size = UDim2.new(0, 476,0, 29), Position = UDim2.new(0, 0,0, 0)}):Play()
+						end
+					end)
+				end
+				
 				return buttons 
 			end
 
@@ -1606,7 +1626,7 @@ function lib:Main(mainsettings)
 				textlabels.textlabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 				textlabels.textlabel.BackgroundTransparency = 1.000
 				textlabels.textlabel.BorderSizePixel = 0
-				textlabels.textlabel.Position = GetCenter(textlabels.textlabelframe)
+				SetCenter(textlabels.textlabel)
 				textlabels.textlabel.Size = UDim2.new(0, 476, 0, 35)
 				textlabels.textlabel.Font = Enum.Font.GothamSemibold
 				textlabels.textlabel.Text = Text
@@ -1703,7 +1723,7 @@ function lib:Main(mainsettings)
 					TextXAlignment = Enum.TextXAlignment.Left,
 					Position = UDim2.new(0, 5, 0, 0),
 					Font = Enum.Font.GothamSemibold,
-					Text = Name,
+					Text = Name or '',
 					TextColor3 = Color3.fromRGB(255, 255, 255),
 					TextSize = 16.000,
 					TextScaled = true,
@@ -1786,7 +1806,7 @@ function lib:Main(mainsettings)
 
 						if CallBack then
 							spawn(function()
-								SafeCall(`Slider {Name}`,CallBack,slidervalue)
+								SafeCall(`Slider {Name or ''}`,CallBack,slidervalue)
 							end)
 						end
 
@@ -1819,7 +1839,7 @@ function lib:Main(mainsettings)
 						sliders.slidervalue.Text = tostring(v)
 						if CallBack then
 							spawn(function()
-								SafeCall(`Slider {Name}`,CallBack,tostring(v))
+								SafeCall(`Slider {Name or ''}`,CallBack,tostring(v))
 							end)
 						end
 						return SetValue
