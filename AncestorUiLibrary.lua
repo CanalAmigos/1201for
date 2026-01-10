@@ -2358,6 +2358,12 @@ function lib:Main(mainsettings)
 				end
 
 				if Options.Playerlist then
+					if (Options.Options or Options.List) then
+						optionstable = Options.Options or Options.List
+					else
+						optionstable = {}
+					end
+					
 					local pls = game:GetService("Players")
 					pls.PlayerAdded:Connect(function(v)
 						if not table.find(optionstable,v.Name) then
@@ -2373,7 +2379,6 @@ function lib:Main(mainsettings)
 						end
 						refreshlist()
 					end)
-					optionstable = {}
 					local list = game.Players:GetChildren()
 					for i,v in pairs(list) do
 						if v:IsA("Player") then
