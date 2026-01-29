@@ -8,7 +8,7 @@ if game:GetService('CoreGui'):FindFirstChild('Ancestor') then
 	end
 end
 
-function lib:Create(type: string, proprieties: {}, parent: boolean): type
+function lib:Create(type: string, proprieties: {}, parent: boolean): Instance
 	local instance = Instance.new(type)
 
 	for i, v in next, proprieties do
@@ -97,7 +97,7 @@ function lib.SaveFunctions:TransformInJson(v: 'Primitive'): {("type" & string) |
 			return lib.SaveFunctions.TemplateTable('PhysicalProperties',{v.Density,v.Friction,v.Elasticity,v.FrictionWeight,v.ElasticityWeight})
 		elseif typeof(v) == 'number' then
 			local string = tostring(v)
-			if string:find('inf',1,true) or string == 'nan' then
+			if string:match('inf') or string:match('nan') then
 				return lib.SaveFunctions.TemplateTable('number',string)
 			end
 		elseif typeof(v) == 'Instance' then
