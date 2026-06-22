@@ -671,12 +671,16 @@ function Library:AddWindow(options)
 	Window.Sidebar.Frame = Window.Frame.Sidebar
 	Window.Frame.Parent = ScreenGui
 	
-	local LastMouseBehavior = UIS.MouseBehavior
+	local LastMouseBehavior,LastMouseIcon = UIS.MouseBehavior,UIS.MouseIconEnabled
 	UIS.InputBegan:Connect(function(input, gameProcessed)
 		if not gameProcessed and input.KeyCode == Window.Key and not ListenForInput then
 			local Toggle = not Window.Toggled
 			if Toggle then
 				LastMouseBehavior = UIS.MouseBehavior
+				LastMouseIcon = UIS.MouseIconEnabled
+			else
+				UIS.MouseBehavior = LastMouseBehavior
+				UIS.MouseIconEnabled = LastMouseIcon
 			end
 			Window:Toggle(Toggle)
 		end
@@ -685,6 +689,7 @@ function Library:AddWindow(options)
 	RS:BindToRenderStep(`ShowMouse{HS:GenerateGUID()}`, Enum.RenderPriority.Camera.Value+1, function()
 		if Window.Toggled then
 			UIS.MouseBehavior = Enum.MouseBehavior.Default
+			UIS.MouseIconEnabled = true
 		end
 	end)
 
