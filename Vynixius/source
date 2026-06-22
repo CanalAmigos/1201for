@@ -670,10 +670,18 @@ function Library:AddWindow(options)
 	SelfModules.UI.MakeDraggable(Window.Frame, Window.Frame.Topbar, 0.1)
 	Window.Sidebar.Frame = Window.Frame.Sidebar
 	Window.Frame.Parent = ScreenGui
-
+	
+	local LastMouseBehavior = UIS.MouseBehavior
 	UIS.InputBegan:Connect(function(input, gameProcessed)
 		if not gameProcessed and input.KeyCode == Window.Key and not ListenForInput then
-			Window:Toggle(not Window.Toggled)
+			local Toggle = not Window.Toggled
+			if Toggle then
+				LastMouseBehavior = UIS.MouseBehavior
+				UIS.MouseBehavior = Enum.MouseBehavior.Default
+			else
+				UIS.MouseBehavior = LastMouseBehavior
+			end
+			Window:Toggle(Toggle)
 		end
 	end)
 
