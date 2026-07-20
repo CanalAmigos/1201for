@@ -67,7 +67,7 @@ function library:CreateGui(title)
 	end
 
 	Ui.Name = "[[{Ui}]]"
-	Ui.Parent = gethui and gethui() or game:GetService("CoreGui")
+	Ui.Parent = game:GetService("CoreGui")
 	Ui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 	Main.Name = "Main"
