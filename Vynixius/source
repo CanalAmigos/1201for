@@ -671,7 +671,7 @@ function Library:AddWindow(options)
 	Window.Sidebar.Frame = Window.Frame.Sidebar
 	Window.Frame.Parent = ScreenGui
 	
-	local LastMouseBehavior,LastMouseIcon,LastHide = UIS.MouseBehavior,UIS.MouseIconEnabled,UIS.OverrideMouseIconBehavior
+	local LastMouseBehavior,LastMouseIcon,LastHide,HasDone = UIS.MouseBehavior,UIS.MouseIconEnabled,UIS.OverrideMouseIconBehavior,false
 	UIS.InputBegan:Connect(function(input, gameProcessed)
 		if not gameProcessed and input.KeyCode == Window.Key and not ListenForInput then
 			local Toggle = not Window.Toggled
@@ -693,6 +693,12 @@ function Library:AddWindow(options)
 			UIS.MouseBehavior = Enum.MouseBehavior.Default
 			UIS.MouseIconEnabled = true
             UIS.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.ForceShow
+			HasDone = false
+		elseif not HasDone then
+			HasDone = true
+			UIS.MouseBehavior = LastMouseBehavior
+			UIS.MouseIconEnabled = LastMouseIcon
+            UIS.OverrideMouseIconBehavior = LastHide
 		end
 	end)
 
