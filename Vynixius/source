@@ -688,6 +688,7 @@ function Library:AddWindow(options)
 			if Toggle then
 				LastMouseBehavior = UIS.MouseBehavior
 			else
+				CustomMouseFrame.Visible = false
 				UIS.MouseBehavior = LastMouseBehavior
 			end
 			Window:Toggle(Toggle)
