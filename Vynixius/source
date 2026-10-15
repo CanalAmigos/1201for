@@ -671,27 +671,37 @@ function Library:AddWindow(options)
 	Window.Sidebar.Frame = Window.Frame.Sidebar
 	Window.Frame.Parent = ScreenGui
 	
-	local LastMouseBehavior,LastMouseIcon = UIS.MouseBehavior,UIS.MouseIconEnabled
+	local CustomMouseFrame = SelfModules.UI.Create('ImageLabel',{
+		Name = 'CustomMouse',
+		BackgroundTransparency = 1,
+		Size = UDim2.new(0, 24, 0, 24),
+		Image = 'rbxassetid://10734898194'
+	})
+	CustomMouseFrame.Visible = false
+	CustomMouseFrame.Position = UDim2.fromOffset(Mouse.X,Mouse.Y)
+	CustomMouseFrame.Parent = ScreenGui
+	
+	local LastMouseBehavior = UIS.MouseBehavior
 	UIS.InputBegan:Connect(function(input, gameProcessed)
 		if not gameProcessed and input.KeyCode == Window.Key and not ListenForInput then
 			local Toggle = not Window.Toggled
 			if Toggle then
 				LastMouseBehavior = UIS.MouseBehavior
-				LastMouseIcon = UIS.MouseIconEnabled
 			else
 				UIS.MouseBehavior = LastMouseBehavior
-				UIS.MouseIconEnabled = LastMouseIcon
-				UIS.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.None
 			end
 			Window:Toggle(Toggle)
 		end
 	end)
 	
+	Mouse.Move:Connect(function()
+		CustomMouseFrame.Position = UDim2.fromOffset(Mouse.X,Mouse.Y)
+	end)
+	
 	RS:BindToRenderStep(`ShowMouse{HS:GenerateGUID()}`, Enum.RenderPriority.Camera.Value+1, function()
 		if Window.Toggled then
+			CustomMouseFrame.Visible = true
 			UIS.MouseBehavior = Enum.MouseBehavior.Default
-			UIS.MouseIconEnabled = true
-            UIS.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.ForceShow
 		end
 	end)
 
