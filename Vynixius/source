@@ -703,8 +703,8 @@ function Library:AddWindow(options)
 	end)
 	
 	local Id = `{HS:GenerateGUID(false)}{HS:GenerateGUID(false)}`
-	RS:BindToRenderStep(`ShowMouseIconVynixius{Id}`,Enum.RenderPriority.Camera + 1,function()
-		if Window.Toggled and LastMouseBehavior then
+	RS:BindToRenderStep(`ShowMouseIconVynixius{Id}`,Enum.RenderPriority.Camera.Value + 1,function()
+		if Window.Toggled and LastMouseBehavior then 
 			UIS.MouseBehavior = Enum.MouseBehavior.Default
 			UIS.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.ForceHide
 		end
