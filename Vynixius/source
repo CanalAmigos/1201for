@@ -687,22 +687,23 @@ function Library:AddWindow(options)
 			local Toggle = not Window.Toggled
 			if Toggle then
 				LastMouseBehavior = UIS.MouseBehavior
+				local Id = `{HS:GenerateGUID(false)}{HS:GenerateGUID(false)}`
+				RS:BindToRenderStep(`ShowMouseIconVynixius{Id}`,1,function()
+					if Window.Toggled then
+						CustomMouseFrame.Visible = true
+						UIS.MouseBehavior = Enum.MouseBehavior.Default
+						UIS.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.ForceHide
+						CustomMouseFrame.Position = UDim2.fromOffset(Mouse.X,Mouse.Y)
+					else
+						RS:UnbindFromRenderStep(`ShowMouseIconVynixius{Id}`)
+					end
+				end)
 			else
 				CustomMouseFrame.Visible = false
 				UIS.MouseBehavior = LastMouseBehavior
+				UIS.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.None
 			end
 			Window:Toggle(Toggle)
-		end
-	end)
-	
-	Mouse.Move:Connect(function()
-		CustomMouseFrame.Position = UDim2.fromOffset(Mouse.X,Mouse.Y)
-	end)
-	
-	RS:BindToRenderStep(`ShowMouse{HS:GenerateGUID()}`, Enum.RenderPriority.Camera.Value+1, function()
-		if Window.Toggled then
-			CustomMouseFrame.Visible = true
-			UIS.MouseBehavior = Enum.MouseBehavior.Default
 		end
 	end)
 
