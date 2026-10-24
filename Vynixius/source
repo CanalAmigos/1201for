@@ -677,6 +677,7 @@ function Library:AddWindow(options)
 		Size = UDim2.new(0, 24, 0, 24),
 		Image = 'rbxassetid://10734898194'
 	})
+	CustomMouseFrame.ZIndex = 9e5
 	CustomMouseFrame.Visible = false
 	CustomMouseFrame.Position = UDim2.fromOffset(Mouse.X,Mouse.Y)
 	CustomMouseFrame.Parent = ScreenGui
