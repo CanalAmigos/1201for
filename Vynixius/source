@@ -682,6 +682,20 @@ function Library:AddWindow(options)
 	CustomMouseFrame.Position = UDim2.fromOffset(Mouse.X,Mouse.Y)
 	CustomMouseFrame.Parent = ScreenGui
 	
+	local CustomMouseFrameShadow = SelfModules.UI.Create('ImageLabel',{
+		Name = 'CustomMouseShadow',
+		BackgroundTransparency = 1,
+		Size = UDim2.new(0, 28, 0, 28),
+		Image = 'rbxassetid://10734898194'
+	})
+	CustomMouseFrameShadow.ZIndex = 9e5-1
+	CustomMouseFrameShadow.Visible = false
+	CustomMouseFrameShadow.Position = UDim2.fromOffset(Mouse.X-2,Mouse.Y-2)
+	CustomMouseFrameShadow.Parent = ScreenGui
+	CustomMouseFrame:GetPropertyChangedSignal('Visible'):Connect(function()
+		CustomMouseFrameShadow.Visible = CustomMouseFrame.Visible
+	end)
+	
 	local LastMouseBehavior = UIS.MouseBehavior
 	UIS.InputBegan:Connect(function(input, gameProcessed)
 		if not gameProcessed and input.KeyCode == Window.Key and not ListenForInput then
@@ -703,6 +717,7 @@ function Library:AddWindow(options)
 	
 	Mouse.Move:Connect(function()
 		CustomMouseFrame.Position = UDim2.fromOffset(Mouse.X,Mouse.Y)
+		CustomMouseFrameShadow.Position = UDim2.fromOffset(Mouse.X-2,Mouse.Y-2)
 	end)
 	
 	local Id = `{HS:GenerateGUID(false)}{HS:GenerateGUID(false)}`
