@@ -686,15 +686,13 @@ function Library:AddWindow(options)
 		Name = 'CustomMouseShadow',
 		BackgroundTransparency = 1,
 		Size = UDim2.new(0, 28, 0, 28),
-		Image = 'rbxassetid://10734898194'
+		Image = 'rbxassetid://10734898194',
+		ImageColor3 = Color3.new(0,0,0)
 	})
 	CustomMouseFrameShadow.ZIndex = 9e5-1
 	CustomMouseFrameShadow.Visible = false
 	CustomMouseFrameShadow.Position = UDim2.fromOffset(Mouse.X-2,Mouse.Y-2)
 	CustomMouseFrameShadow.Parent = ScreenGui
-	CustomMouseFrame:GetPropertyChangedSignal('Visible'):Connect(function()
-		CustomMouseFrameShadow.Visible = CustomMouseFrame.Visible
-	end)
 	
 	local LastMouseBehavior = UIS.MouseBehavior
 	UIS.InputBegan:Connect(function(input, gameProcessed)
@@ -702,11 +700,13 @@ function Library:AddWindow(options)
 			local Toggle = not Window.Toggled
 			if Toggle then
 				CustomMouseFrame.Visible = true
+				CustomMouseFrameShadow.Visible = true
 				LastMouseBehavior = UIS.MouseBehavior
 				UIS.MouseBehavior = Enum.MouseBehavior.Default
 				UIS.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.ForceHide
 			else
 				CustomMouseFrame.Visible = false
+				CustomMouseFrameShadow.Visible = false
 				UIS.MouseBehavior = LastMouseBehavior
 				UIS.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.None
 				LastMouseBehavior = nil
