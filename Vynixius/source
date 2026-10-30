@@ -724,10 +724,12 @@ function Library:AddWindow(options)
 	RS:BindToRenderStep(`ShowMouseIconVynixius{Id}`,Enum.RenderPriority.Camera.Value + 1,function()
 		if Window.Toggled and LastMouseBehavior ~= nil then 
 			CustomMouseFrame.Visible = true
+			CustomMouseFrameShadow.Visible = true
 			UIS.MouseBehavior = Enum.MouseBehavior.Default
 			UIS.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.ForceHide
 		elseif CustomMouseFrame.Visible and not Window.Toggled then
 			CustomMouseFrame.Visible = false
+			CustomMouseFrameShadow.Visible = false
 		end
 	end)
 
